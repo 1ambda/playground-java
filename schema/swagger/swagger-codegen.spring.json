@@ -1,0 +1,14 @@
+{
+  "modelPackage" : "com.github.lambda.playground.swagger.model",
+  "apiPackage"   : "com.github.lambda.playground.swagger.api",
+  "invokerPackage" : "com.github.lambda.playground.swagger",
+  "configPackage" : "com.github.lambda.playground.swagger.config",
+  "basePackage" : "com.github.lambda.playground.swagger",
+  "interfaceOnly" : true,
+  "groupId" : "com.github.lambda",
+  "artifactId"  : "playground-api",
+  "useTags"  : true,
+  "useBeanValidation": true,
+  "dateLibrary" : "java8",
+  "library" :  "spring-boot"
+}

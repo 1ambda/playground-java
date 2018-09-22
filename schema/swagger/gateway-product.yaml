@@ -1,0 +1,71 @@
+api:
+
+  findOneProductWithOptions:
+    get:
+      tags:
+      - product
+      operationId: findOneWithOptions
+      parameters:
+      - in: path
+        name: productID
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-product.yaml#/definitions/Product"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Exception"
+
+definitions:
+  ProductContainer:
+
+  Product:
+    type: object
+    properties:
+      id:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      description:
+        type: string
+      onSale:
+        type: string
+      categoryID:
+        type: string
+      categoryDisplayName:
+        type: string
+      categoryPath:
+        type: string
+      imageID:
+        type: string
+      imageType:
+        type: string
+      imagePath:
+        type: string
+      options:
+        type: array
+        items:
+          "$ref": "./gateway-product.yaml#/definitions/ProductOption"
+
+  ProductOption:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      description:
+        type: string
+      onSale:
+        type: string
