@@ -1,8 +1,11 @@
 definitions:
   Empty:
     type: object
+    properties:
+      message:
+        type: string
 
-  Exception:
+  Failure:
     type: object
     properties:
       timestamp:

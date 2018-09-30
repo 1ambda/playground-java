@@ -32,7 +32,7 @@ import lombok.ToString;
 public class RoleToUser extends BaseIdEntity {
   @ToString.Exclude
   @ManyToOne(
-      fetch = FetchType.LAZY
+      fetch = FetchType.EAGER
   )
   @JoinColumn(
       name = "`role_id`",

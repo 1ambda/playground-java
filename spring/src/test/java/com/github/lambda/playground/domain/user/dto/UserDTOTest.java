@@ -2,10 +2,13 @@ package com.github.lambda.playground.domain.user.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lambda.playground.domain.user.entity.Role;
+import com.github.lambda.playground.swagger.model.UserDTO;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +39,10 @@ public class UserDTOTest {
   @Test
   public void shouldIgnoreRoles_inDeserialization() throws Exception {
     // given
-    Set<Role.Code> roles = Sets.newHashSet(Role.Code.ROLE_USER, Role.Code.ROLE_CUSTOMER);
+    List<String> roles = Sets.newHashSet(Role.Code.ROLE_USER, Role.Code.ROLE_CUSTOMER).stream()
+        .map(Role.Code::value)
+        .collect(Collectors.toList());
+
     UserDTO given = UserDTO.builder()
         .roles(roles)
         .build();

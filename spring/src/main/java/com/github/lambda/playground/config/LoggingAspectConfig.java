@@ -1,4 +1,4 @@
-package com.github.lambda.playground.common;
+package com.github.lambda.playground.config;
 
 
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,6 @@ import org.springframework.core.env.Environment;
 @Configuration
 @EnableAspectJAutoProxy
 public class LoggingAspectConfig {
-
   @Bean
   @Profile(ProfileManager.PROFILE_LOCAL)
   public LoggingAspect loggingAspect(Environment env) {

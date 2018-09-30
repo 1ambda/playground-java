@@ -3,98 +3,100 @@ api:
   register:
     post:
       tags:
-      - auth
+      - auth-controller
       operationId: Register
       parameters:
       - name: body
         in: body
         schema:
-          $ref: "./gateway-auth.yaml#/definitions/RegisterRequest"
+          $ref: "./gateway-auth.yaml#/definitions/UserDTO"
       responses:
         200:
           description: OK
           schema:
-            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
+            $ref: "./gateway-auth.yaml#/definitions/UserDTO"
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Exception"
+            $ref: "./common.yaml#/definitions/Failure"
   login:
-    post:
+    get:
       tags:
-      - auth
+      - auth-controller
       operationId: Login
-      parameters:
-      - name: body
-        in: body
-        schema:
-          $ref: "./gateway-auth.yaml#/definitions/LoginRequest"
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+      - basicAuth: []
       responses:
         200:
           description: OK
           schema:
-            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
+            $ref: "./gateway-auth.yaml#/definitions/UserDTO"
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Exception"
+            $ref: "./common.yaml#/definitions/Failure"
 
   logout:
     post:
       tags:
-      - auth
+      - auth-controller
       operationId: Logout
-      parameters:
-      - name: body
-        in: body
-        schema:
-          $ref: "./common.yaml#/definitions/Empty"
       responses:
         200:
           description: OK
-          schema:
-            $ref: "./common.yaml#/definitions/Empty"
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Exception"
+            $ref: "./common.yaml#/definitions/Failure"
 
   whoami:
     get:
       tags:
-      - auth
+      - auth-controller
       operationId: Whoami
       responses:
         200:
           description: OK
           schema:
-            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
+            $ref: "./gateway-auth.yaml#/definitions/UserDTO"
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Exception"
+            $ref: "./common.yaml#/definitions/Failure"
 
 definitions:
   LoginRequest:
     type: object
     properties:
-      uid:
+      username:
         type: string
       password:
         type: string
 
-  RegisterRequest:
+  UserDTO:
     type: object
     properties:
-      uid:
+      username:
+        type: string
+      password:
+        type: string
+      provider:
+        type: string
+      name:
         type: string
       email:
         type: string
-      password:
+      address:
         type: string
+      roles:
+        type: array
+        items:
+          type: string
 
-  AuthResponse:
-    type: object
-    properties:
-      uid:
-        type: string
+securityDefinitions:
+  basicAuth:
+    type: basic

@@ -1,4 +1,4 @@
-package com.github.lambda.playground.common;
+package com.github.lambda.playground.config;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -41,7 +41,7 @@ public class LoggingAspect {
   /**
    * Pointcut that matches all Spring beans in the application's main packages.
    */
-  @Pointcut("within(com.github.lambda.playground.common..*)"+
+  @Pointcut("within(com.github.lambda.playground.config..*)"+
       " || within(com.github.lambda.playground.domain..*)")
   public void applicationPackagePointcut() {
     // Method is empty as this is just a Pointcut, the implementations are in the advices.

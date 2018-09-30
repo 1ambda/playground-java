@@ -5,11 +5,8 @@
  */
 package com.github.lambda.playground.swagger.api;
 
-import com.github.lambda.playground.swagger.model.AuthResponse;
-import com.github.lambda.playground.swagger.model.Empty;
-import com.github.lambda.playground.swagger.model.Exception;
-import com.github.lambda.playground.swagger.model.LoginRequest;
-import com.github.lambda.playground.swagger.model.RegisterRequest;
+import com.github.lambda.playground.swagger.model.Failure;
+import com.github.lambda.playground.swagger.model.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -32,12 +29,12 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-22T12:23:52.059+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
 
-@Api(value = "Auth", description = "the Auth API")
-public interface AuthApi {
+@Api(value = "AuthController", description = "the AuthController API")
+public interface AuthControllerApi {
 
-    Logger log = LoggerFactory.getLogger(AuthApi.class);
+    Logger log = LoggerFactory.getLogger(AuthControllerApi.class);
 
     default Optional<ObjectMapper> getObjectMapper() {
         return Optional.empty();
@@ -51,101 +48,93 @@ public interface AuthApi {
         return getRequest().map(r -> r.getHeader("Accept"));
     }
 
-    @ApiOperation(value = "", nickname = "login", notes = "", response = AuthResponse.class, tags={ "auth", })
+    @ApiOperation(value = "", nickname = "login", notes = "", response = UserDTO.class, tags={ "auth-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = AuthResponse.class),
-        @ApiResponse(code = 200, message = "error", response = Exception.class) })
+        @ApiResponse(code = 200, message = "OK", response = UserDTO.class),
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/login",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.POST)
-    default ResponseEntity<AuthResponse> login(@ApiParam(value = ""  )  @Valid @RequestBody LoginRequest body) {
+        method = RequestMethod.GET)
+    default ResponseEntity<UserDTO> login() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"uid\" : \"uid\"}", AuthResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"password\" : \"password\",  \"address\" : \"address\",  \"provider\" : \"provider\",  \"roles\" : [ \"roles\", \"roles\" ],  \"name\" : \"name\",  \"email\" : \"email\",  \"username\" : \"username\"}", UserDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthApi interface so no example is generated");
+            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthControllerApi interface so no example is generated");
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 
-    @ApiOperation(value = "", nickname = "logout", notes = "", response = Empty.class, tags={ "auth", })
+    @ApiOperation(value = "", nickname = "logout", notes = "", tags={ "auth-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = Empty.class),
-        @ApiResponse(code = 200, message = "error", response = Exception.class) })
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/logout",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<Empty> logout(@ApiParam(value = ""  )  @Valid @RequestBody Empty body) {
+    default ResponseEntity<Void> logout() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{ }", Empty.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
         } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthApi interface so no example is generated");
+            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthControllerApi interface so no example is generated");
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 
-    @ApiOperation(value = "", nickname = "register", notes = "", response = AuthResponse.class, tags={ "auth", })
+    @ApiOperation(value = "", nickname = "register", notes = "", response = UserDTO.class, tags={ "auth-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = AuthResponse.class),
-        @ApiResponse(code = 200, message = "error", response = Exception.class) })
+        @ApiResponse(code = 200, message = "OK", response = UserDTO.class),
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/register",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<AuthResponse> register(@ApiParam(value = ""  )  @Valid @RequestBody RegisterRequest body) {
+    default ResponseEntity<UserDTO> register(@ApiParam(value = ""  )  @Valid @RequestBody UserDTO body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"uid\" : \"uid\"}", AuthResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"password\" : \"password\",  \"address\" : \"address\",  \"provider\" : \"provider\",  \"roles\" : [ \"roles\", \"roles\" ],  \"name\" : \"name\",  \"email\" : \"email\",  \"username\" : \"username\"}", UserDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthApi interface so no example is generated");
+            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthControllerApi interface so no example is generated");
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 
-    @ApiOperation(value = "", nickname = "whoami", notes = "", response = AuthResponse.class, tags={ "auth", })
+    @ApiOperation(value = "", nickname = "whoami", notes = "", response = UserDTO.class, tags={ "auth-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = AuthResponse.class),
-        @ApiResponse(code = 200, message = "error", response = Exception.class) })
+        @ApiResponse(code = 200, message = "OK", response = UserDTO.class),
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/whoami",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.GET)
-    default ResponseEntity<AuthResponse> whoami() {
+    default ResponseEntity<UserDTO> whoami() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"uid\" : \"uid\"}", AuthResponse.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"password\" : \"password\",  \"address\" : \"address\",  \"provider\" : \"provider\",  \"roles\" : [ \"roles\", \"roles\" ],  \"name\" : \"name\",  \"email\" : \"email\",  \"username\" : \"username\"}", UserDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthApi interface so no example is generated");
+            log.warn("ObjectMapper or HttpServletRequest not configured in default AuthControllerApi interface so no example is generated");
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

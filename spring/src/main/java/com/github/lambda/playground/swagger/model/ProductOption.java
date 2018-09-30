@@ -23,23 +23,23 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-22T12:23:52.059+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
 
 public class ProductOption   {
   @JsonProperty(value = "id")
-  private String id = null;
+  private String id;
 
   @JsonProperty(value = "name")
-  private String name = null;
+  private String name;
 
   @JsonProperty(value = "price")
-  private String price = null;
+  private String price;
 
   @JsonProperty(value = "description")
-  private String description = null;
+  private String description;
 
   @JsonProperty(value = "onSale")
-  private String onSale = null;
+  private String onSale;
 
 
 

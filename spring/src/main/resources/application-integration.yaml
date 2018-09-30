@@ -1,0 +1,11 @@
+spring.profiles.include:
+- test
+
+spring:
+
+#
+# spring session and redis
+#
+  session.store-type: redis
+  data.redis.repositories.enabled: true
+

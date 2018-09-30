@@ -3,14 +3,16 @@ TAG = "Makefile"
 DOCKER = docker
 MYSQLCLIENT = mycli
 PIP = pip
+GOCMD = go
 
 VCS = github.com
 REPOSITORY = 1ambda/playground-java
 
-.PHONY: prepare
+.PHONY: install.tool
 prepare:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 	@ $(PIP) install -U mycli
+	@ $(GOCMD) get -u -v github.com/holys/redis-cli
 
 .PHONY: compose
 compose:
@@ -25,3 +27,10 @@ compose:
 mycli:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Connecting to mysql"
 	@ $(MYSQLCLIENT) -u root -h localhost application -p root
+
+.PHONY: redis-cli
+redis-cli:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Connecting to redis"
+	@ redis-cli
+
+

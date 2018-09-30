@@ -1,18 +1,26 @@
 package com.github.lambda.playground.security;
 
+import com.github.lambda.playground.config.ProfileManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+  @Autowired
+  private AuthenticationHandler authenticationHandler;
+
+  @Autowired
+  private ProfileManager profileManager;
 
   @Autowired
   private UserDetailsServiceImpl userDetailsService;
@@ -37,17 +45,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+        .cors().and().csrf().disable()
+        .exceptionHandling().authenticationEntryPoint()
+        .formLogin().successHandler(authenticationHandler).failureHandler(authenticationHandler).and()
+        .httpBasic().and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
+        .rememberMe().disable();
+
+    http
         .authorizeRequests()
-        .anyRequest()
-        .permitAll();
-    // https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-Security-2.0#custom-security-example
-//    http
-//        .authorizeRequests()
-//        .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
-//        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//        .antMatchers("/**").hasRole("ROLE_USER")
-//        .and()
-//        .httpBasic();
+        .antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
+        .antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/configuration/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/documentation/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/auth/whoami").permitAll()
+        .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
+        .antMatchers("/api/**").hasRole("USER")
+        .anyRequest().authenticated();
   }
 
 }

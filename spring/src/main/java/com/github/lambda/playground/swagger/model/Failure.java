@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Exception
+ * Failure
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,17 +24,17 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-22T12:23:52.059+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
 
-public class Exception   {
+public class Failure   {
   @JsonProperty(value = "timestamp")
-  private String timestamp = null;
+  private String timestamp;
 
   @JsonProperty(value = "code")
-  private Long code = null;
+  private Long code;
 
   @JsonProperty(value = "message")
-  private String message = null;
+  private String message;
 
   /**
    * Gets or Sets type
@@ -74,7 +74,7 @@ public class Exception   {
   }
 
   @JsonProperty(value = "type")
-  private TypeEnum type = null;
+  private TypeEnum type;
 
 
 

@@ -5,7 +5,7 @@
  */
 package com.github.lambda.playground.swagger.api;
 
-import com.github.lambda.playground.swagger.model.Exception;
+import com.github.lambda.playground.swagger.model.Failure;
 import com.github.lambda.playground.swagger.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -29,12 +29,12 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-22T12:23:52.059+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
 
-@Api(value = "Product", description = "the Product API")
-public interface ProductApi {
+@Api(value = "ProductController", description = "the ProductController API")
+public interface ProductControllerApi {
 
-    Logger log = LoggerFactory.getLogger(ProductApi.class);
+    Logger log = LoggerFactory.getLogger(ProductControllerApi.class);
 
     default Optional<ObjectMapper> getObjectMapper() {
         return Optional.empty();
@@ -48,10 +48,10 @@ public interface ProductApi {
         return getRequest().map(r -> r.getHeader("Accept"));
     }
 
-    @ApiOperation(value = "", nickname = "findOneWithOptions", notes = "", response = Product.class, tags={ "product", })
+    @ApiOperation(value = "", nickname = "findOneWithOptions", notes = "", response = Product.class, tags={ "product-controller", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = Product.class),
-        @ApiResponse(code = 200, message = "error", response = Exception.class) })
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/product/{productID}",
         produces = { "application/json" }, 
         consumes = { "application/json" },
@@ -67,7 +67,7 @@ public interface ProductApi {
                 }
             }
         } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default ProductApi interface so no example is generated");
+            log.warn("ObjectMapper or HttpServletRequest not configured in default ProductControllerApi interface so no example is generated");
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

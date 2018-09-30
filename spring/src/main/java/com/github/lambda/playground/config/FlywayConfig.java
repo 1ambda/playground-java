@@ -1,4 +1,4 @@
-package com.github.lambda.playground.common;
+package com.github.lambda.playground.config;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer;

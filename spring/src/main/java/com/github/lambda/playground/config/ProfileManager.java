@@ -1,4 +1,4 @@
-package com.github.lambda.playground.common;
+package com.github.lambda.playground.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -10,6 +10,10 @@ public class ProfileManager {
 
   public static final String PROFILE_LOCAL = "local";
   public static final String PROFILE_TEST = "test";
+  public static final String PROFILE_NON_TEST = "!test";
+  public static final String PROFILE_INTEGRATION = "integration";
+  public static final String PROFILE_STAGING = "stag";
+  public static final String PROFILE_PROD = "prod";
 
   @Autowired
   public ProfileManager(Environment environment) {
@@ -18,7 +22,7 @@ public class ProfileManager {
 
   public boolean hasLocalProfile() {
     for (final String profileName : environment.getActiveProfiles()) {
-      if (PROFILE_LOCAL.equals(profileName)) {
+      if (PROFILE_LOCAL.equalsIgnoreCase(profileName)) {
         return true;
       }
     }
@@ -28,7 +32,7 @@ public class ProfileManager {
 
   public boolean hasTestProfile() {
     for (final String profileName : environment.getActiveProfiles()) {
-      if (PROFILE_TEST.equals(profileName)) {
+      if (PROFILE_TEST.equalsIgnoreCase(profileName)) {
         return true;
       }
     }

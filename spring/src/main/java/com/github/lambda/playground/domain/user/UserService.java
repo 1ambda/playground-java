@@ -1,12 +1,12 @@
 package com.github.lambda.playground.domain.user;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 import com.github.lambda.playground.common.Time;
-import com.github.lambda.playground.domain.user.dto.UserDTO;
 import com.github.lambda.playground.domain.user.entity.AuthIdentity;
 import com.github.lambda.playground.domain.user.entity.Role;
 import com.github.lambda.playground.domain.user.entity.RoleToUser;
@@ -17,6 +17,7 @@ import com.github.lambda.playground.domain.user.repository.PermissionToRoleRepos
 import com.github.lambda.playground.domain.user.repository.RoleRepository;
 import com.github.lambda.playground.domain.user.repository.RoleToUserRepository;
 import com.github.lambda.playground.domain.user.repository.UserRepository;
+import com.github.lambda.playground.swagger.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,10 +58,15 @@ public class UserService {
 
   @Transactional(rollbackOn = Exception.class)
   public UserDTO addNewCustomer(@NotNull UserDTO userDTO) {
+
+    // TODO: custom exception for invalid provider
+    AuthIdentity.Provider provider = AuthIdentity.Provider.valueOf(userDTO.getProvider());
+    String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+
     AuthIdentity authIdentity = AuthIdentity.builder()
         .username(userDTO.getUsername())
-        .password(passwordEncoder.encode(userDTO.getPassword()))
-        .provider(userDTO.getProvider())
+        .password(encodedPassword)
+        .provider(provider)
         .build();
 
     User user = User.builder()
@@ -91,7 +97,14 @@ public class UserService {
     Set<Role.Code> currentRoles = user.getRoleToUsers().stream()
         .map(roleToUser -> roleToUser.getRole().getCode())
         .collect(Collectors.toSet());
-    userDTO.setRoles(currentRoles);
+
+    // set DTO fields and clean some sensitive fields
+    Set<String> roles = currentRoles.stream()
+        .map(Role.Code::value)
+        .collect(Collectors.toSet());
+    userDTO.setRoles(new ArrayList<>(roles));
+    userDTO.setPassword(null);
+    userDTO.setEmail(null);
 
     return userDTO;
   }

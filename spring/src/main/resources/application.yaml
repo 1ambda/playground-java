@@ -14,8 +14,6 @@ logging:
 spring.jpa.show-sql: false # Use logger output instead
 spring.jpa.properties.hibernate.format_sql: true
 
-
-
 #
 # spring actuactor
 #
@@ -102,6 +100,16 @@ spring:
       password: ${ACTUACTOR_PASSWORD}
       roles: ACTUACTOR
 
+#
+# spring session and redis
+#
+  session.redis.namespace: spring:session:playground
+  session.store-type: redis
+  data.redis.repositories.enabled: true
+  redis.host: localhost
+  redis.port: 6379
+  redis.password:
+  redis.ssl: false
 #
 # server
 #

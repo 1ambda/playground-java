@@ -1,13 +1,13 @@
 package com.github.lambda.playground.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.lambda.playground.domain.user.entity.Permission;
 import com.github.lambda.playground.domain.user.entity.Role;
-import com.github.lambda.playground.domain.user.entity.RoleToUser;
-import com.github.lambda.playground.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,33 +20,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@ToString(exclude = {"user"})
+@ToString(exclude = {"username", "password"})
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserPrincipal implements UserDetails {
-  private User user;
+  private String username;
+
+  private String password;
+
+  @Builder.Default
+  private List<GrantedAuthority> authorities = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<RoleToUser> roleToUsers = user.getRoleToUsers();
-
-    List<GrantedAuthority> authorities = roleToUsers.stream().flatMap(r -> {
-      return r.getRole().getPermissionToRoles().stream().map(p -> {
-        return new SimpleGrantedAuthority(p.getPermission().getCode().value());
-      });
-    }).collect(Collectors.toList());
-
-    return authorities;
+    return new ArrayList<>(authorities);
   }
 
   @Override
   public String getPassword() {
-    return user.getAuthIdentity().getPassword();
+    return password;
   }
 
   @Override
   public String getUsername() {
-    return user.getAuthIdentity().getUsername();
+    return username;
   }
 
   @Override

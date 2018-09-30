@@ -26,47 +26,47 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-22T12:23:52.059+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
 
 public class Product   {
   @JsonProperty(value = "id")
-  private String id = null;
+  private String id;
 
   @JsonProperty(value = "createdAt")
-  private String createdAt = null;
+  private String createdAt;
 
   @JsonProperty(value = "updatedAt")
-  private String updatedAt = null;
+  private String updatedAt;
 
   @JsonProperty(value = "name")
-  private String name = null;
+  private String name;
 
   @JsonProperty(value = "price")
-  private String price = null;
+  private String price;
 
   @JsonProperty(value = "description")
-  private String description = null;
+  private String description;
 
   @JsonProperty(value = "onSale")
-  private String onSale = null;
+  private String onSale;
 
   @JsonProperty(value = "categoryID")
-  private String categoryID = null;
+  private String categoryID;
 
   @JsonProperty(value = "categoryDisplayName")
-  private String categoryDisplayName = null;
+  private String categoryDisplayName;
 
   @JsonProperty(value = "categoryPath")
-  private String categoryPath = null;
+  private String categoryPath;
 
   @JsonProperty(value = "imageID")
-  private String imageID = null;
+  private String imageID;
 
   @JsonProperty(value = "imageType")
-  private String imageType = null;
+  private String imageType;
 
   @JsonProperty(value = "imagePath")
-  private String imagePath = null;
+  private String imagePath;
 
   @JsonProperty(value = "options")
   @Valid

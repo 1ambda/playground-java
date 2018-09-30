@@ -69,7 +69,7 @@ public class User extends SoftDeleteEntity {
   @ToString.Exclude
   @Builder.Default
   @OneToMany(
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       mappedBy = "user"
   )
   private List<RoleToUser> roleToUsers = new ArrayList<>();

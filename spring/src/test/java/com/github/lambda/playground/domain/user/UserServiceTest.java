@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.transaction.Transactional;
 
-import com.github.lambda.playground.domain.user.dto.UserDTO;
 import com.github.lambda.playground.domain.user.entity.AuthIdentity;
 import com.github.lambda.playground.domain.user.entity.Role;
 import com.github.lambda.playground.domain.user.entity.User;
+import com.github.lambda.playground.swagger.model.UserDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserServiceTest {
         .name("Kun")
         .email("user@test.com")
         .address("Seoul, South Korea")
-        .provider(AuthIdentity.Provider.PASSWORD)
+        .provider(AuthIdentity.Provider.PASSWORD.value())
         .username("user")
         .password("password")
         .build();
@@ -49,8 +49,9 @@ public class UserServiceTest {
 
     // then
     assertThat(created.getRoles()).containsAnyOf(
-        Role.Code.ROLE_USER,
-        Role.Code.ROLE_CUSTOMER);
+        Role.Code.ROLE_USER.value(),
+        Role.Code.ROLE_CUSTOMER.value()
+    );
   }
 
   @Test
