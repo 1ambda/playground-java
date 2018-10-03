@@ -26,32 +26,20 @@ public class AuthController implements AuthControllerApi {
     this.userService = userService;
   }
 
-//  @Override
-//  public ResponseEntity<UserDTO> login(@Valid @RequestBody LoginRequest body) {
-//    UserPrincipal principal = SecurityManager.getPrincipal();
-//
-//    UserDTO userDTO = UserDTO.builder()
-//        .username(principal.getUsername())
-//        .build();
-//
-//    return ResponseEntity.ok(userDTO);
-//  }
-
   @ApiOperation(
       value = "",
       nickname = "login",
       notes = "",
       response = UserDTO.class,
-      tags = {"auth-controller",},
-      authorizations = {@Authorization(value = "basicAuth")}
-  )
+      tags = {
+        "auth-controller",
+      },
+      authorizations = {@Authorization(value = "basicAuth")})
   @Override
   public ResponseEntity<UserDTO> login() {
     UserPrincipal principal = SecurityManager.getPrincipal();
 
-    UserDTO dto = UserDTO.builder()
-        .username(principal.getUsername())
-        .build();
+    UserDTO dto = UserDTO.builder().username(principal.getUsername()).build();
     return ResponseEntity.ok(dto);
   }
 
@@ -69,7 +57,16 @@ public class AuthController implements AuthControllerApi {
   }
 
   @Override
-  public ResponseEntity<UserDTO> whoami() {
-    return null;
+  public ResponseEntity<UserDTO> whoiam() {
+    UserPrincipal principal = SecurityManager.getPrincipalOrNull();
+    String username = null;
+
+    if (principal != null) {
+      username = principal.getUsername();
+    }
+
+    UserDTO userDTO = UserDTO.builder().username(username).build();
+
+    return ResponseEntity.ok(userDTO);
   }
 }

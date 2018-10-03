@@ -1,28 +1,57 @@
 package com.github.lambda.playground.security;
 
+import com.github.lambda.playground.exception.type.custom.InvalidUserPrincipalException;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-/**
- * SecurityManager returns user principal (UserDetails).
- */
+import javax.servlet.http.HttpServletRequest;
+
+/** SecurityManager returns user principal (UserDetails). */
 public class SecurityManager {
 
   /**
    * @return null if principal is invalid.
+   * @throws InvalidUserPrincipalException when username is null.
    */
   public static UserPrincipal getPrincipal() {
+    UserPrincipal principal = getPrincipalOrNull();
+
+    if (principal == null) {
+      throw new InvalidUserPrincipalException("User principal is invalid.");
+    }
+
+    return principal;
+  }
+
+  public static UserPrincipal getPrincipalOrNull() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth == null) {
       return null;
     }
 
-    if (!(auth instanceof UserPrincipal)) {
+    Object raw = auth.getPrincipal();
+    if (!(raw instanceof UserPrincipal)) {
       return null;
     }
 
-    return (UserPrincipal) auth.getPrincipal();
+    UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+
+    if (StringUtils.isEmpty(principal.getUsername())) {
+      return null;
+    }
+
+    return principal;
+  }
+
+  public static String getOriginalRequestUri(HttpServletRequest request) {
+    Object forwarded = request.getAttribute("javax.servlet.forward.request_uri");
+    if (forwarded == null) {
+      return request.getServletPath();
+    }
+
+    return forwarded.toString();
   }
 }

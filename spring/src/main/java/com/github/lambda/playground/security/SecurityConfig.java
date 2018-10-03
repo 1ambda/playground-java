@@ -1,6 +1,8 @@
 package com.github.lambda.playground.security;
 
 import com.github.lambda.playground.config.ProfileManager;
+import com.github.lambda.playground.exception.SecurityExceptionHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,12 +14,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private AuthenticationHandler authenticationHandler;
+  SecurityExceptionHandler securityEntryPoint;
 
   @Autowired
   private ProfileManager profileManager;
@@ -27,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   PasswordEncoder passwordEncoder;
+
+  @Autowired
+  SecurityLogoutHandler securityLogoutHandler;
 
   @Bean
   public DaoAuthenticationProvider buildAuthenticationProvider() {
@@ -44,14 +50,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    // @formatter:off
+
     http
         .cors().and().csrf().disable()
-        .exceptionHandling().authenticationEntryPoint()
-        .formLogin().successHandler(authenticationHandler).failureHandler(authenticationHandler).and()
-        .httpBasic().and()
+        .exceptionHandling().authenticationEntryPoint(securityEntryPoint).and()
+        .httpBasic().authenticationEntryPoint(securityEntryPoint).realmName(SecurityExceptionHandler.REALM).and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
-        .rememberMe().disable();
+        .rememberMe().disable()
+        // NullRequestCache prevents creation of session
+        // when user is not authenticated so that
+        // we have only authenticated users’ session ids stored in Redis.
+        .requestCache().requestCache(new NullRequestCache());
+
+    http.logout()
+        .logoutSuccessHandler(securityLogoutHandler)
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
+        .deleteCookies("SESSION")
+        .logoutUrl("/api/auth/logout");
 
     http
         .authorizeRequests()
@@ -59,11 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
         .antMatchers(HttpMethod.GET, "/configuration/**").permitAll()
         .antMatchers(HttpMethod.GET, "/documentation/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/auth/whoami").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/auth/whoiam").permitAll()
         .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
         .antMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
+        .antMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
         .antMatchers("/api/**").hasRole("USER")
         .anyRequest().authenticated();
+    // @formatter:on
   }
 
 }

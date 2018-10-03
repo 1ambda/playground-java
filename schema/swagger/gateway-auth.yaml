@@ -53,11 +53,11 @@ api:
           schema:
             $ref: "./common.yaml#/definitions/Failure"
 
-  whoami:
+  whoiam:
     get:
       tags:
       - auth-controller
-      operationId: Whoami
+      operationId: Whoiam
       responses:
         200:
           description: OK

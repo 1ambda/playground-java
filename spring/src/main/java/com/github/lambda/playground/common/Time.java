@@ -8,4 +8,8 @@ public class Time {
   public static LocalDateTime getUTCDateTime() {
     return LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
   }
+
+  public static Long getTimestamp() {
+    return Instant.now().toEpochMilli();
+  }
 }

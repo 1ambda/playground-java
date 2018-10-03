@@ -40,12 +40,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     AuthIdentity authIdentity = user.getAuthIdentity();
 
-    // get permissions
     List<RoleToUser> roleToUsers = user.getRoleToUsers();
-    List<GrantedAuthority> authorities = roleToUsers.stream().flatMap(r -> {
-      return r.getRole().getPermissionToRoles().stream().map(p -> {
-        return new SimpleGrantedAuthority(p.getPermission().getCode().value());
-      });
+
+    // get permissions
+    // List<GrantedAuthority> authorities = roleToUsers.stream().flatMap(r -> {
+    //   return r.getRole().getPermissionToRoles().stream().map(p -> {
+    //     return new SimpleGrantedAuthority(p.getPermission().getCode().value());
+    //   });
+    // }).collect(Collectors.toList());
+
+    // get roles
+    List<GrantedAuthority> authorities = roleToUsers.stream().map(r -> {
+      return new SimpleGrantedAuthority(r.getRole().getCode().value());
     }).collect(Collectors.toList());
 
     UserPrincipal principal = UserPrincipal.builder()

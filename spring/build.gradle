@@ -28,7 +28,8 @@ ext {
     springBootAdminVersion = '2.0.2'
     micrometerVersion = "1.0.6"
     guavaVersion = "26.0-jre"
-    springfoxVersion ="2.9.2"
+    springfoxVersion = "2.9.2"
+    logbookVersion = "1.9.1"
 }
 
 dependencies {
@@ -47,6 +48,8 @@ dependencies {
 
     compile('de.codecentric:spring-boot-admin-starter-server')
     runtime('org.springframework.boot:spring-boot-devtools')
+    compile("org.zalando:logbook-core:${logbookVersion}")
+    compile("org.zalando:logbook-spring-boot-starter:${logbookVersion}")
 
     compile("com.google.guava:guava:${guavaVersion}")
     compile('org.flywaydb:flyway-core')

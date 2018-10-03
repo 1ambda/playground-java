@@ -28,8 +28,7 @@ public class UserPrincipal implements UserDetails {
 
   private String password;
 
-  @Builder.Default
-  private List<GrantedAuthority> authorities = new ArrayList<>();
+  @Builder.Default private List<GrantedAuthority> authorities = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

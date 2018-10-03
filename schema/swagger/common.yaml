@@ -9,20 +9,19 @@ definitions:
     type: object
     properties:
       timestamp:
-        type: string
+        type: integer
+        format: int64
       code:
         type: integer
         format: int64
       message:
         type: string
       type:
-        type: string
-        enum:
-        - BadRequest
-        - Unauthorized
-        - Forbidden
-        - NotFound
-        - InternalServer
+        type: string # error type (e.g exception class in Java)
+      path:
+        type: string # api path
+      stacktrace:
+        type: string # stacktrace (enabled in local profile)
 
   Pagination:
     type: object

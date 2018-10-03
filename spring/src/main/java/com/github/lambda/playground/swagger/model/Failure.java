@@ -3,7 +3,6 @@ package com.github.lambda.playground.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
@@ -24,11 +23,11 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-29T18:44:26.733+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-03T19:16:43.113+09:00")
 
 public class Failure   {
   @JsonProperty(value = "timestamp")
-  private String timestamp;
+  private Long timestamp;
 
   @JsonProperty(value = "code")
   private Long code;
@@ -36,45 +35,14 @@ public class Failure   {
   @JsonProperty(value = "message")
   private String message;
 
-  /**
-   * Gets or Sets type
-   */
-  public enum TypeEnum {
-    BADREQUEST("BadRequest"),
-    
-    UNAUTHORIZED("Unauthorized"),
-    
-    FORBIDDEN("Forbidden"),
-    
-    NOTFOUND("NotFound"),
-    
-    INTERNALSERVER("InternalServer");
-
-    private String value;
-
-    TypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeEnum fromValue(String text) {
-      for (TypeEnum b : TypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty(value = "type")
-  private TypeEnum type;
+  private String type;
+
+  @JsonProperty(value = "path")
+  private String path;
+
+  @JsonProperty(value = "stacktrace")
+  private String stacktrace;
 
 
 
@@ -85,11 +53,11 @@ public class Failure   {
   @ApiModelProperty(value = "")
 
 
-  public String getTimestamp() {
+  public Long getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(String timestamp) {
+  public void setTimestamp(Long timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -136,12 +104,46 @@ public class Failure   {
   @ApiModelProperty(value = "")
 
 
-  public TypeEnum getType() {
+  public String getType() {
     return type;
   }
 
-  public void setType(TypeEnum type) {
+  public void setType(String type) {
     this.type = type;
+  }
+
+
+
+  /**
+   * Get path
+   * @return path
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+
+
+  /**
+   * Get stacktrace
+   * @return stacktrace
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getStacktrace() {
+    return stacktrace;
+  }
+
+  public void setStacktrace(String stacktrace) {
+    this.stacktrace = stacktrace;
   }
 
 
