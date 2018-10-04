@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import com.github.lambda.playground.domain.user.UserService;
 import com.github.lambda.playground.security.SecurityManager;
 import com.github.lambda.playground.security.UserPrincipal;
-import com.github.lambda.playground.swagger.api.AuthControllerApi;
+import com.github.lambda.playground.swagger.server.api.AuthControllerApi;
 import com.github.lambda.playground.swagger.model.UserDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;

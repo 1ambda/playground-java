@@ -84,7 +84,7 @@ public class Role extends SoftDeleteEntity {
   @ToString.Exclude
   @Builder.Default
   @OneToMany(
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
       mappedBy = "role"
   )

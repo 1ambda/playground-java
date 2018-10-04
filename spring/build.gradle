@@ -25,12 +25,18 @@ repositories {
 
 
 ext {
+    guavaVersion = "26.0-jre"
     springBootAdminVersion = '2.0.2'
     micrometerVersion = "1.0.6"
-    guavaVersion = "26.0-jre"
     springfoxVersion = "2.9.2"
     logbookVersion = "1.9.1"
+
+    // test
     testcontainersVersion = "1.9.1"
+    feignVersion = "9.4.0"
+    feignFormVersion = "2.1.0"
+    oltuVersion = "1.0.1"
+    migbase64Version = "2.2"
 }
 
 dependencies {
@@ -64,6 +70,13 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.testcontainers:testcontainers:${testcontainersVersion}")
+
+    compile "io.github.openfeign:feign-core:${feignVersion}"
+    compile "io.github.openfeign:feign-jackson:${feignVersion}"
+    compile "io.github.openfeign:feign-slf4j:${feignVersion}"
+    compile "io.github.openfeign.form:feign-form:${feignFormVersion}"
+    compile "com.brsanthu:migbase64:${migbase64Version}"
+    compile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${oltuVersion}"
 }
 
 dependencyManagement {

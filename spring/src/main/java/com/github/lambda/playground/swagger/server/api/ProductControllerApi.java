@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package com.github.lambda.playground.swagger.api;
+package com.github.lambda.playground.swagger.server.api;
 
 import com.github.lambda.playground.swagger.model.Failure;
 import com.github.lambda.playground.swagger.model.Product;
@@ -29,7 +29,7 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-03T19:16:43.113+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-04T19:55:12.531+09:00")
 
 @Api(value = "ProductController", description = "the ProductController API")
 public interface ProductControllerApi {

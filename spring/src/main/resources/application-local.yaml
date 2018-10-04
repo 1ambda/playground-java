@@ -8,6 +8,7 @@ logging:
     # JPA
     org.hibernate.SQL: DEBUG                                    # hibernate
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE        # hibernate
+    org.hibernate.type.EnumType: TRACE                          # hibernate
 
     org.springframework.transaction: DEBUG                      # transaction
     org.springframework.orm.jpa: DEBUG                          # transaction
@@ -21,6 +22,7 @@ logging:
 spring.jpa.show-sql: false # Use logger output instead
 spring.jpa.properties.hibernate.format_sql: true
 spring.jpa.properties.hibernate.generate_statistics: false
+spring.jpa.properties.hibernate.type: TRACE
 
 # http logging
 logbook:
@@ -92,7 +94,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     database: MYSQL
-    open-in-view: false
     hibernate:
       ddl-auto: validate
 

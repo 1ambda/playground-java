@@ -1,0 +1,13 @@
+{
+  "apiPackage"   : "com.github.lambda.playground.swagger.client.api",
+  "modelPackage" : "com.github.lambda.playground.swagger.model",
+  "invokerPackage" : "com.github.lambda.playground.swagger.client.invoker",
+  "configPackage" : "com.github.lambda.playground.swagger.client.config",
+  "basePackage" : "com.github.lambda.playground.swagger.client",
+  "groupId" : "com.github.lambda",
+  "artifactId"  : "playground-client",
+  "useTags"  : true,
+  "useBeanValidation": true,
+  "dateLibrary" : "java8",
+  "library" : "feign"
+}
