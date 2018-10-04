@@ -1,8 +1,11 @@
 logging:
   level:
     ROOT: INFO
-    com.github.lambda.playground: INFO                          # application
 
+    # application
+    com.github.lambda.playground: DEBUG # application
+
+    # JPA
     org.hibernate.SQL: DEBUG                                    # hibernate
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE        # hibernate
     org.hibernate.type.EnumType: TRACE                          # hibernate
@@ -13,11 +16,25 @@ logging:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG           # JDBC
     org.springframework.jdbc.core.StatementCreatorUtils: TRACE  # JDBC
 
+    # security
+    org.springframework.security: DEBUG
+
 spring.jpa.show-sql: false # Use logger output instead
 spring.jpa.properties.hibernate.format_sql: true
 spring.jpa.properties.hibernate.generate_statistics: false
 spring.jpa.properties.hibernate.type: TRACE
 
+# http logging
+logbook:
+  filter.enabled: true
+  format.style: http
+  obfuscate:
+    headers:
+    - NONE
+  write:
+    category: http.wire-log
+    level: INFO
+    chunk-size: 1000
 
 spring:
 

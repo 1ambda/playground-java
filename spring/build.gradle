@@ -30,6 +30,7 @@ ext {
     guavaVersion = "26.0-jre"
     springfoxVersion = "2.9.2"
     logbookVersion = "1.9.1"
+    testcontainersVersion = "1.9.1"
 }
 
 dependencies {
@@ -62,6 +63,7 @@ dependencies {
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
+    testCompile("org.testcontainers:testcontainers:${testcontainersVersion}")
 }
 
 dependencyManagement {
