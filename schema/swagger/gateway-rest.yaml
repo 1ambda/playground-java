@@ -4,6 +4,7 @@ info:
   version: 0.0.1
 schemes:
 - http
+
 consumes:
 - application/json
 produces:

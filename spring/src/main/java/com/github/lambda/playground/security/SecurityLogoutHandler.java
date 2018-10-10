@@ -46,13 +46,13 @@ public class SecurityLogoutHandler implements LogoutSuccessHandler {
       Failure failure = failureFactory.build(e, null, status.value(), path);
 
       HttpOutputMessage output = new ServletServerHttpResponse(response);
-      converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
       return;
     }
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
-    converter.write("{}", MediaType.APPLICATION_JSON_UTF8, output);
     response.setStatus(HttpStatus.OK.value());
+    converter.write("{}", MediaType.APPLICATION_JSON_UTF8, output);
   }
 }

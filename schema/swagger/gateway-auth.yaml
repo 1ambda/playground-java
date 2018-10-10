@@ -1,9 +1,12 @@
 api:
-
   register:
     post:
       tags:
       - auth-controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
       operationId: Register
       parameters:
       - name: body
@@ -24,8 +27,7 @@ api:
       tags:
       - auth-controller
       operationId: Login
-      consumes:
-      - application/json
+      consumes: []
       produces:
       - application/json
       security:
@@ -41,9 +43,11 @@ api:
             $ref: "./common.yaml#/definitions/Failure"
 
   logout:
-    post:
+    get:
       tags:
       - auth-controller
+      produces:
+      - application/json
       operationId: Logout
       responses:
         200:
@@ -57,6 +61,9 @@ api:
     get:
       tags:
       - auth-controller
+      consumes: []
+      produces:
+      - application/json
       operationId: Whoiam
       responses:
         200:
@@ -100,3 +107,4 @@ definitions:
 securityDefinitions:
   basicAuth:
     type: basic
+    description: HTTP Basic Authentication.

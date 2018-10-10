@@ -1,16 +1,19 @@
 package com.github.lambda.playground.domain.user.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.github.lambda.playground.domain.user.UserService;
 import com.github.lambda.playground.security.SecurityManager;
 import com.github.lambda.playground.security.UserPrincipal;
-import com.github.lambda.playground.swagger.server.api.AuthControllerApi;
 import com.github.lambda.playground.swagger.model.UserDTO;
+import com.github.lambda.playground.swagger.server.api.AuthControllerApi;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,14 @@ public class AuthController implements AuthControllerApi {
   public ResponseEntity<UserDTO> login() {
     UserPrincipal principal = SecurityManager.getPrincipal();
 
-    UserDTO dto = UserDTO.builder().username(principal.getUsername()).build();
+    List<String> roles = principal.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toList());
+
+    UserDTO dto = UserDTO.builder()
+        .username(principal.getUsername())
+        .roles(roles)
+        .build();
     return ResponseEntity.ok(dto);
   }
 

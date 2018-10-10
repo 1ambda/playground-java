@@ -20,7 +20,7 @@ import feign.slf4j.Slf4jLogger;
 import com.github.lambda.playground.swagger.client.invoker.auth.*;
 import com.github.lambda.playground.swagger.client.invoker.auth.OAuth.AccessTokenListener;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-04T19:55:13.446+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-10T19:09:34.632+09:00")
 public class ApiClient {
   public interface Api {}
 

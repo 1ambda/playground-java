@@ -2,6 +2,7 @@ package com.github.lambda.playground.security;
 
 import com.github.lambda.playground.exception.type.custom.InvalidUserPrincipalException;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -25,10 +26,18 @@ public class SecurityManager {
     return principal;
   }
 
+  public static boolean isAnonymousUser(Authentication auth) {
+    return auth instanceof AnonymousAuthenticationToken;
+  }
+
   public static UserPrincipal getPrincipalOrNull() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth == null) {
+      return null;
+    }
+
+    if (isAnonymousUser(auth)) {
       return null;
     }
 

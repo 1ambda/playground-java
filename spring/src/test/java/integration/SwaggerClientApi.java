@@ -2,9 +2,12 @@ package integration;
 
 import com.github.lambda.playground.swagger.client.api.AuthControllerApi;
 import feign.Feign;
+import feign.auth.BasicAuthRequestInterceptor;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.Charset;
 
 @Component
 public class SwaggerClientApi {
@@ -17,13 +20,27 @@ public class SwaggerClientApi {
         .toString();
   }
 
-  public AuthControllerApi getAuthClientApi(int port) {
-    AuthControllerApi client =
+  public <T> T buildClient (Class<? extends T> type, int port, String username, String password) {
+    Feign.Builder builder =
         Feign.builder()
             .decoder(new JacksonDecoder())
             .encoder(new JacksonEncoder())
-            .target(AuthControllerApi.class, getBaseUrl(port));
+            .errorDecoder(new SwaggerClientErrorDecoder());
 
+    if (username != null && password != null) {
+      builder
+          .requestInterceptor(new BasicAuthRequestInterceptor(username, password, Charset.forName("UTF-8")));
+    }
+
+    T client = builder.target(type, getBaseUrl(port));
     return client;
+  }
+
+  public AuthControllerApi getAuthClientApi(int port) {
+    return buildClient(AuthControllerApi.class, port, null, null);
+  }
+
+  public AuthControllerApi getAuthClientApiWithCredential(int port, String username, String password) {
+    return buildClient(AuthControllerApi.class, port, username, password);
   }
 }

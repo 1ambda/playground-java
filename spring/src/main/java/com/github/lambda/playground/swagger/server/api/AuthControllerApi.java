@@ -29,7 +29,7 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-04T19:55:12.531+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-10T19:09:33.757+09:00")
 
 @Api(value = "AuthController", description = "the AuthController API")
 public interface AuthControllerApi {
@@ -54,7 +54,6 @@ public interface AuthControllerApi {
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/login",
         produces = { "application/json" }, 
-        consumes = { "application/json" },
         method = RequestMethod.GET)
     default ResponseEntity<UserDTO> login() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -80,7 +79,7 @@ public interface AuthControllerApi {
     @RequestMapping(value = "/auth/logout",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.POST)
+        method = RequestMethod.GET)
     default ResponseEntity<Void> logout() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
         } else {
@@ -121,7 +120,6 @@ public interface AuthControllerApi {
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/auth/whoiam",
         produces = { "application/json" }, 
-        consumes = { "application/json" },
         method = RequestMethod.GET)
     default ResponseEntity<UserDTO> whoiam() {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {

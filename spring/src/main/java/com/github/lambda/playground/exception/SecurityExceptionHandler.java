@@ -42,7 +42,7 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     this.failureFactory = securityFailureFactory;
   }
 
-  public static String getUnatuhroizedExceptionMessage(Throwable e) {
+  public static String getUnauthorizedExceptionMessage(Throwable e) {
     HttpStatus status = HttpStatus.UNAUTHORIZED;
     String message = status.getReasonPhrase();
 
@@ -68,14 +68,14 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
       AuthenticationException authException)
       throws IOException, ServletException {
     // 401
-    String message = getUnatuhroizedExceptionMessage(authException);
+    String message = getUnauthorizedExceptionMessage(authException);
     HttpStatus status = HttpStatus.UNAUTHORIZED;
     String path = SecurityManager.getOriginalRequestUri(request);
     Failure failure = failureFactory.build(authException, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
-    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
     response.setStatus(failure.getCode().intValue());
+    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
   }
 
   @ExceptionHandler(value = {AccessDeniedException.class})
@@ -91,8 +91,8 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     Failure failure = failureFactory.build(accessDeniedException, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
-    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
     response.setStatus(failure.getCode().intValue());
+    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
   }
 
   @ExceptionHandler(value = {Exception.class})
@@ -106,8 +106,8 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     Failure failure = failureFactory.build(exception, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
-    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
     response.setStatus(failure.getCode().intValue());
+    converter.write(failure, MediaType.APPLICATION_JSON_UTF8, output);
   }
 
   @Override

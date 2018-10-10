@@ -42,6 +42,7 @@ import lombok.ToString;
 public class Role extends SoftDeleteEntity {
   public enum Code {
     ROLE_INVALID("ROLE_INVALID"),
+    ROLE_ANONYMOUS("ROLE_ANONYMOUS"),
     ROLE_USER("ROLE_USER"),
     ROLE_CUSTOMER("ROLE_CUSTOMER"),
     ROLE_SELLER("ROLE_SELLER"),

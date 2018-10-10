@@ -102,10 +102,12 @@ public class UserService {
     Set<String> roles = currentRoles.stream()
         .map(Role.Code::value)
         .collect(Collectors.toSet());
-    userDTO.setRoles(new ArrayList<>(roles));
-    userDTO.setPassword(null);
-    userDTO.setEmail(null);
+    UserDTO response = userDTO.toBuilder()
+        .roles(new ArrayList<>(roles))
+        .password(null)
+        .email(null)
+        .build();
 
-    return userDTO;
+    return response;
   }
 }

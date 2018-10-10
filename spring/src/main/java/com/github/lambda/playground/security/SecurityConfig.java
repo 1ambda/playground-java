@@ -2,21 +2,23 @@ package com.github.lambda.playground.security;
 
 import com.github.lambda.playground.config.ProfileManager;
 import com.github.lambda.playground.exception.SecurityExceptionHandler;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
-@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
@@ -49,9 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
+  public void configure(WebSecurity web) throws Exception {
+    if (profileManager.hasTestProfile()) {
+      web.debug(true);
+    }
+  }
+
+  @Override
   protected void configure(HttpSecurity http) throws Exception {
     // @formatter:off
-
     http
         .cors().and().csrf().disable()
         .exceptionHandling().authenticationEntryPoint(securityEntryPoint).and()
@@ -80,10 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET, "/api/auth/whoiam").permitAll()
         .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
         .antMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
-        .antMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
         .antMatchers("/api/**").hasRole("USER")
         .anyRequest().authenticated();
     // @formatter:on
   }
-
 }
