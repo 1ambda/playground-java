@@ -2,27 +2,13 @@ package com.github.lambda.playground.domain.user.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.github.lambda.playground.domain.base.SoftDeleteEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.github.lambda.playground.domain.base.BaseEntity;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -33,13 +19,14 @@ import lombok.ToString;
 @Entity
 @Table(name = "`Role`",
     indexes = {
+        @Index(name = "idx_Role_createdAt", columnList = "created_at", unique = false),
         @Index(name = "idx_Role_deletedAt", columnList = "deleted_at", unique = false),
     },
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"code"}),
     }
 )
-public class Role extends SoftDeleteEntity {
+public class Role extends BaseEntity {
   public enum Code {
     ROLE_INVALID("ROLE_INVALID"),
     ROLE_ANONYMOUS("ROLE_ANONYMOUS"),

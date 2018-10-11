@@ -1,20 +1,10 @@
 package com.github.lambda.playground.domain.user.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.lambda.playground.domain.base.BaseIdEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.github.lambda.playground.domain.base.BaseEntity;
+import lombok.*;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -25,11 +15,18 @@ import lombok.ToString;
 @Entity
 @Table(
     name = "`RoleToUser`",
+    indexes = {
+        @Index(name = "idx_RoleToUser_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_RoleToUser_deletedAt", columnList = "deleted_at", unique = false),
+    },
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"`role_id`", "`user_id`"}),
+        @UniqueConstraint(
+                name = "`uniq_RoleToUser_roleAndUserId`",
+                columnNames = {"`role_id`", "`user_id`"}
+        ),
     }
 )
-public class RoleToUser extends BaseIdEntity {
+public class RoleToUser extends BaseEntity {
   @ToString.Exclude
   @ManyToOne(
       fetch = FetchType.EAGER

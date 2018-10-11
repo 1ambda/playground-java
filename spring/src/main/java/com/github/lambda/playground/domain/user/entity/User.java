@@ -1,26 +1,13 @@
 package com.github.lambda.playground.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.lambda.playground.domain.base.BaseEntity;
+import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.lambda.playground.domain.base.SoftDeleteEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -29,15 +16,17 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "`User`",
+@Table(
+    name = "`User`",
     indexes = {
-        @Index(name = "idx_User_deletedAt", columnList = "deleted_at", unique = false),
+      @Index(name = "idx_User_createdAt", columnList = "created_at", unique = false),
+      @Index(name = "idx_User_deletedAt", columnList = "deleted_at", unique = false),
+      @Index(name = "idx_User_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email"}),
-    }
-)
-public class User extends SoftDeleteEntity {
+      @UniqueConstraint(columnNames = {"email"}),
+    })
+public class User extends BaseEntity {
 
   @ToString.Exclude
   @Size(min = 0, max = 255)
@@ -54,30 +43,20 @@ public class User extends SoftDeleteEntity {
   @Column(name = "`address`", nullable = false)
   private String address;
 
-  /**
-   * relations
-   */
-
+  /** relations */
   @OneToOne(
       fetch = FetchType.EAGER,
       mappedBy = "user",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-      optional = false
-  )
+      optional = false)
   private AuthIdentity authIdentity;
 
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(
-      fetch = FetchType.EAGER,
-      mappedBy = "user"
-  )
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
   private List<RoleToUser> roleToUsers = new ArrayList<>();
 
-  /**
-   * functions
-   */
-
+  /** functions */
   public void addRoleToUser(RoleToUser roleToUser) {
     roleToUser.setUser(this);
     roleToUsers.add(roleToUser);

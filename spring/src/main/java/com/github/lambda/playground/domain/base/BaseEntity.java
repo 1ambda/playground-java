@@ -1,22 +1,27 @@
 package com.github.lambda.playground.domain.base;
 
-import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.lambda.playground.common.Time;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @MappedSuperclass
-public class BaseEntity implements Serializable {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class BaseEntity {
   private static final long serialVersionUID = 1L;
+
+  @Id
+  @JsonProperty("_id")
+  @Column(name = "`id`")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  protected long id;
 
   @Version
   @Column(name = "`version`")
@@ -30,12 +35,42 @@ public class BaseEntity implements Serializable {
 
   @PrePersist
   protected void onCreate() {
-    this.createdAt = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
-    this.updatedAt = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
+    this.createdAt = Time.getUTCDateTime();
+    this.updatedAt = Time.getUTCDateTime();
   }
 
   @PreUpdate
   protected void onUpdate() {
-    this.updatedAt = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
+    this.updatedAt = Time.getUTCDateTime();
+  }
+
+  protected static final String NOT_DELETED =
+      "deleted_at > CURRENT_TIMESTAMP OR deleted_at IS NULL";
+
+  @Column(name = "`deleted_at`")
+  protected LocalDateTime deletedAt;
+
+  public boolean isDeleted() {
+    return Time.getUTCDateTime().isAfter(this.deletedAt);
+  }
+
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  @Column(name = "`locked`")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  protected YesNo locked = YesNo.N;
+
+  /**
+   * @return true if temporarily disabled.
+   */
+  public boolean isLocked() {
+    return YesNo.N.equals(this.locked);
+  }
+
+  /**
+   * @return true if not disabled (locked) and not deleted.
+   */
+  public boolean isAvailable() {
+    return !isLocked() && !isDeleted();
   }
 }

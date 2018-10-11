@@ -1,27 +1,13 @@
 package com.github.lambda.playground.domain.user.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.github.lambda.playground.domain.base.SoftDeleteEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.github.lambda.playground.domain.base.BaseEntity;
+import lombok.*;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -32,13 +18,15 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "`AuthIdentity`",
     indexes = {
+        @Index(name = "idx_AuthIdentity_createdAt", columnList = "created_at", unique = false),
         @Index(name = "idx_AuthIdentity_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_AuthIdentity_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"username"}),
     }
 )
-public class AuthIdentity extends SoftDeleteEntity {
+public class AuthIdentity extends BaseEntity {
   public enum Provider {
     PASSWORD("PASSWORD"),
     OAUTH_GOOGLE("OAUTH_GOOGLE"),
@@ -74,7 +62,7 @@ public class AuthIdentity extends SoftDeleteEntity {
    */
 
   @ToString.Exclude
-  @Where(clause = SoftDeleteEntity.NOT_DELETED)
+  @Where(clause = BaseEntity.NOT_DELETED)
   @OneToOne(
       fetch = FetchType.EAGER,
       optional = false
