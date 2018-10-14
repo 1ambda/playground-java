@@ -16,4 +16,8 @@ public enum YesNo {
   public String value() {
     return value;
   }
+
+  public YesNo reverse() {
+    return YesNo.Y.equals(this) ? YesNo.N : YesNo.Y;
+  }
 }

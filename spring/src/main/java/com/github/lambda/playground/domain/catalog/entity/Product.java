@@ -1,4 +1,4 @@
-package com.github.lambda.playground.domain.product.entity;
+package com.github.lambda.playground.domain.catalog.entity;
 
 import java.util.ArrayList;
 import java.util.List;

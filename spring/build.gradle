@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.0.5.RELEASE'
+        gradleAptVersion = '0.18'
     }
     repositories {
         mavenCentral()
@@ -25,18 +26,21 @@ repositories {
 
 
 ext {
-    guavaVersion = "26.0-jre"
+    guavaVersion = '26.0-jre'
     springBootAdminVersion = '2.0.2'
-    micrometerVersion = "1.0.6"
-    springfoxVersion = "2.9.2"
-    logbookVersion = "1.9.1"
+    micrometerVersion = '1.0.6'
+    springfoxVersion = '2.9.2'
+    logbookVersion = '1.9.1'
+    
+    mapstructVersion = '1.2.0.Final'
+    lombokVersion = '1.18.2'
 
     // test
-    testcontainersVersion = "1.9.1"
-    feignVersion = "9.4.0"
-    feignFormVersion = "2.1.0"
-    oltuVersion = "1.0.1"
-    migbase64Version = "2.2"
+    testcontainersVersion = '1.9.1'
+    feignVersion = '9.4.0'
+    feignFormVersion = '2.1.0'
+    oltuVersion = '1.0.1'
+    migbase64Version = '2.2'
 }
 
 dependencies {
@@ -66,7 +70,7 @@ dependencies {
 
     runtime('com.h2database:h2')
     runtime('mysql:mysql-connector-java')
-    compileOnly('org.projectlombok:lombok')
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.testcontainers:testcontainers:${testcontainersVersion}")

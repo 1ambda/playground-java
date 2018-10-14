@@ -1,4 +1,4 @@
-package com.github.lambda.playground.domain.product.entity;
+package com.github.lambda.playground.domain.catalog.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,9 @@ public class Category extends BaseEntity {
   @Builder.Default
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
   private List<Product> products = new ArrayList<>();
+
+  @Column(name = "`parent_category_id`", nullable = false)
+  private Long parentCategoryId; // self-referencing relation
 
   /** functions */
   public void addProduct(Product product) {

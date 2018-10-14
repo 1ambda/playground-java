@@ -1,17 +1,19 @@
-package com.github.lambda.playground.domain.order;
+package com.github.lambda.playground.domain.order.controller;
 
 import java.util.List;
 
+import com.github.lambda.playground.domain.order.entity.Order;
+import com.github.lambda.playground.domain.order.repository.OrderRepository;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/v1/order")
+@Controller
+@RequestMapping("api")
 public class OrderController {
 
   OrderRepository orderRepository;

@@ -3,11 +3,8 @@ package com.github.lambda.playground.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.github.lambda.playground.swagger.model.ProductOption;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -18,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Product
+ * ProductItemDTO
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,23 +23,23 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-10T19:09:33.757+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-14T13:31:41.358+09:00")
 
-public class Product   {
+public class ProductItemDTO   {
   @JsonProperty(value = "id")
-  private String id;
+  private Long id;
 
   @JsonProperty(value = "createdAt")
-  private String createdAt;
+  private Long createdAt;
 
   @JsonProperty(value = "updatedAt")
-  private String updatedAt;
+  private Long updatedAt;
 
   @JsonProperty(value = "name")
   private String name;
 
   @JsonProperty(value = "price")
-  private String price;
+  private Long price;
 
   @JsonProperty(value = "description")
   private String description;
@@ -50,8 +47,8 @@ public class Product   {
   @JsonProperty(value = "onSale")
   private String onSale;
 
-  @JsonProperty(value = "categoryID")
-  private String categoryID;
+  @JsonProperty(value = "categoryId")
+  private Long categoryId;
 
   @JsonProperty(value = "categoryDisplayName")
   private String categoryDisplayName;
@@ -59,19 +56,14 @@ public class Product   {
   @JsonProperty(value = "categoryPath")
   private String categoryPath;
 
-  @JsonProperty(value = "imageID")
-  private String imageID;
+  @JsonProperty(value = "imageId")
+  private Long imageId;
 
   @JsonProperty(value = "imageType")
   private String imageType;
 
   @JsonProperty(value = "imagePath")
   private String imagePath;
-
-  @JsonProperty(value = "options")
-  @Valid
-  @Builder.Default
-  private List<ProductOption> options = new ArrayList<>();
 
 
 
@@ -82,11 +74,11 @@ public class Product   {
   @ApiModelProperty(value = "")
 
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -99,11 +91,11 @@ public class Product   {
   @ApiModelProperty(value = "")
 
 
-  public String getCreatedAt() {
+  public Long getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(String createdAt) {
+  public void setCreatedAt(Long createdAt) {
     this.createdAt = createdAt;
   }
 
@@ -116,11 +108,11 @@ public class Product   {
   @ApiModelProperty(value = "")
 
 
-  public String getUpdatedAt() {
+  public Long getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(String updatedAt) {
+  public void setUpdatedAt(Long updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -150,11 +142,11 @@ public class Product   {
   @ApiModelProperty(value = "")
 
 
-  public String getPrice() {
+  public Long getPrice() {
     return price;
   }
 
-  public void setPrice(String price) {
+  public void setPrice(Long price) {
     this.price = price;
   }
 
@@ -195,18 +187,18 @@ public class Product   {
 
 
   /**
-   * Get categoryID
-   * @return categoryID
+   * Get categoryId
+   * @return categoryId
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getCategoryID() {
-    return categoryID;
+  public Long getCategoryId() {
+    return categoryId;
   }
 
-  public void setCategoryID(String categoryID) {
-    this.categoryID = categoryID;
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
   }
 
 
@@ -246,18 +238,18 @@ public class Product   {
 
 
   /**
-   * Get imageID
-   * @return imageID
+   * Get imageId
+   * @return imageId
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getImageID() {
-    return imageID;
+  public Long getImageId() {
+    return imageId;
   }
 
-  public void setImageID(String imageID) {
-    this.imageID = imageID;
+  public void setImageId(Long imageId) {
+    this.imageId = imageId;
   }
 
 
@@ -292,32 +284,6 @@ public class Product   {
 
   public void setImagePath(String imagePath) {
     this.imagePath = imagePath;
-  }
-
-
-
-  public Product addOptionsItem(ProductOption optionsItem) {
-    if (this.options == null) {
-      this.options = new ArrayList<>();
-    }
-    this.options.add(optionsItem);
-    return this;
-  }
-
-  /**
-   * Get options
-   * @return options
-  **/
-  @ApiModelProperty(value = "")
-
-  @Valid
-
-  public List<ProductOption> getOptions() {
-    return options;
-  }
-
-  public void setOptions(List<ProductOption> options) {
-    this.options = options;
   }
 
 

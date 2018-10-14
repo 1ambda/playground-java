@@ -3,7 +3,6 @@ package com.github.lambda.playground.exception.factory;
 import com.google.common.base.Throwables;
 
 import com.github.lambda.playground.common.Time;
-import com.github.lambda.playground.exception.factory.FailureFactory;
 import com.github.lambda.playground.swagger.model.Failure;
 
 import org.springframework.context.annotation.Profile;
@@ -16,7 +15,7 @@ public class StacktraceFailureFactory implements FailureFactory {
   @Override
   public Failure build(Throwable e, String message, long status, String path) {
     Failure.FailureBuilder failureBuilder = Failure.builder();
-    failureBuilder.timestamp(Time.getTimestamp());
+    failureBuilder.timestamp(Time.getCurrentTimestamp());
     failureBuilder.code(status);
     failureBuilder.type(e.getClass().getCanonicalName());
 

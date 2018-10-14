@@ -15,16 +15,17 @@ basePath: /api
 paths:
   /auth/whoiam:
     $ref: "./gateway-auth.yaml#/api/whoiam"
-
   /auth/register:
     $ref: "./gateway-auth.yaml#/api/register"
-
   /auth/login:
     $ref: "./gateway-auth.yaml#/api/login"
-
   /auth/logout:
     $ref: "./gateway-auth.yaml#/api/logout"
 
   /product/{productID}:
-    $ref: "./gateway-product.yaml#/api/findOneProductWithOptions"
+    $ref: "./gateway-catalog.yaml#/api/findOneProduct"
+  /products:
+    $ref: "./gateway-catalog.yaml#/api/findPaginatedProducts"
+  /categories:
+    $ref: "./gateway-catalog.yaml#/api/findAllCategories"
 

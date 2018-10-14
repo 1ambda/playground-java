@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * ProductOption
+ * CategoryDTO
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,23 +23,26 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-10T19:09:33.757+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-14T13:31:41.358+09:00")
 
-public class ProductOption   {
+public class CategoryDTO   {
   @JsonProperty(value = "id")
-  private String id;
+  private Long id;
+
+  @JsonProperty(value = "parentCategoryId")
+  private Long parentCategoryId;
 
   @JsonProperty(value = "name")
   private String name;
 
-  @JsonProperty(value = "price")
-  private String price;
+  @JsonProperty(value = "path")
+  private String path;
+
+  @JsonProperty(value = "displayName")
+  private String displayName;
 
   @JsonProperty(value = "description")
   private String description;
-
-  @JsonProperty(value = "onSale")
-  private String onSale;
 
 
 
@@ -50,12 +53,29 @@ public class ProductOption   {
   @ApiModelProperty(value = "")
 
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
+  }
+
+
+
+  /**
+   * Get parentCategoryId
+   * @return parentCategoryId
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Long getParentCategoryId() {
+    return parentCategoryId;
+  }
+
+  public void setParentCategoryId(Long parentCategoryId) {
+    this.parentCategoryId = parentCategoryId;
   }
 
 
@@ -78,18 +98,35 @@ public class ProductOption   {
 
 
   /**
-   * Get price
-   * @return price
+   * Get path
+   * @return path
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getPrice() {
-    return price;
+  public String getPath() {
+    return path;
   }
 
-  public void setPrice(String price) {
-    this.price = price;
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+
+
+  /**
+   * Get displayName
+   * @return displayName
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
 
@@ -107,23 +144,6 @@ public class ProductOption   {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-
-
-  /**
-   * Get onSale
-   * @return onSale
-  **/
-  @ApiModelProperty(value = "")
-
-
-  public String getOnSale() {
-    return onSale;
-  }
-
-  public void setOnSale(String onSale) {
-    this.onSale = onSale;
   }
 
 

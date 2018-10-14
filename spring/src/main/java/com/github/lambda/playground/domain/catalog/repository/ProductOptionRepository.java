@@ -1,9 +1,8 @@
-package com.github.lambda.playground.domain.product.repository;
+package com.github.lambda.playground.domain.catalog.repository;
 
 import javax.transaction.Transactional;
 
-import com.github.lambda.playground.domain.product.entity.Product;
-import com.github.lambda.playground.domain.product.entity.ProductOption;
+import com.github.lambda.playground.domain.catalog.entity.ProductOption;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

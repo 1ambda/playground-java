@@ -51,7 +51,7 @@ public class UserService {
 
   @Transactional
   public User getUserByUsername(@NotNull String username) {
-    User user = userRepository.findActiveOneByUsername(username, Time.getUTCDateTime());
+    User user = userRepository.findActiveOneByUsername(username, Time.getCurrentUTCDateTime());
 
     return user;
   }

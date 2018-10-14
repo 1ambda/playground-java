@@ -1,9 +1,9 @@
-package com.github.lambda.playground.domain.product.repository;
+package com.github.lambda.playground.domain.catalog.repository;
 
+import java.util.List;
 import javax.transaction.Transactional;
 
-import com.github.lambda.playground.domain.product.entity.Category;
-import com.github.lambda.playground.domain.product.entity.Product;
+import com.github.lambda.playground.domain.catalog.entity.Category;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
+  @Override
+  List<Category> findAll();
 }

@@ -1,11 +1,14 @@
-package com.github.lambda.playground.domain.product.entity;
+package com.github.lambda.playground.domain.catalog.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.playground.domain.base.BaseEntity;
 import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor

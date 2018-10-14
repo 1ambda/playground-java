@@ -1,4 +1,4 @@
-package com.github.lambda.playground.domain.order;
+package com.github.lambda.playground.domain.order.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.lambda.playground.domain.base.BaseEntity;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -22,10 +21,10 @@ import lombok.*;
 @Table(
     name = "`Order`",
     indexes = {
-      @Index(name = "idx_Order_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_Order_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_Order_locked", columnList = "locked", unique = false),
-      @Index(name = "idx_Order_state", columnList = "state", unique = false),
+      @Index(name = "`idx_Order_createdAt`", columnList = "`created_at`", unique = false),
+      @Index(name = "`idx_Order_deletedAt`", columnList = "`deleted_at`", unique = false),
+      @Index(name = "`idx_Order_locked`", columnList = "`locked`", unique = false),
+      @Index(name = "`idx_Order_state`", columnList = "`state`", unique = false),
     })
 public class Order extends BaseEntity {
   // ref: https://schema.org/OrderStatus
@@ -33,8 +32,6 @@ public class Order extends BaseEntity {
     CANCELLED("CANCELLED"),
     DELIVERED("DELIVERED"),
     IN_TRANSIT("IN_TRANSIT"),
-    PAYMENT_DUE("PAYMENT_DUE"),
-    PICKUP_AVAILABLE("PICKUP_AVAILABLE"),
     PROBLEM("PROBLEM"),
     PROCESSING("PROCESSING"),
     RETURNED("RETURNED");

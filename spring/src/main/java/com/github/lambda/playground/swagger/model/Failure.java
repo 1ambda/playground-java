@@ -23,7 +23,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-10T19:09:33.757+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-14T13:31:41.358+09:00")
 
 public class Failure   {
   @JsonProperty(value = "timestamp")

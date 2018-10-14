@@ -13,7 +13,7 @@ public class GeneralFailureFactory implements FailureFactory {
   @Override
   public Failure build(Throwable e, String message, long status, String path) {
     Failure.FailureBuilder failureBuilder = Failure.builder();
-    failureBuilder.timestamp(Time.getTimestamp());
+    failureBuilder.timestamp(Time.getCurrentTimestamp());
     failureBuilder.code(status);
     failureBuilder.type(e.getClass().getCanonicalName());
 

@@ -6,7 +6,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.lambda.playground.common.Time;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -35,13 +34,13 @@ public class BaseEntity {
 
   @PrePersist
   protected void onCreate() {
-    this.createdAt = Time.getUTCDateTime();
-    this.updatedAt = Time.getUTCDateTime();
+    this.createdAt = Time.getCurrentUTCDateTime();
+    this.updatedAt = Time.getCurrentUTCDateTime();
   }
 
   @PreUpdate
   protected void onUpdate() {
-    this.updatedAt = Time.getUTCDateTime();
+    this.updatedAt = Time.getCurrentUTCDateTime();
   }
 
   protected static final String NOT_DELETED =
@@ -51,14 +50,13 @@ public class BaseEntity {
   protected LocalDateTime deletedAt;
 
   public boolean isDeleted() {
-    return Time.getUTCDateTime().isAfter(this.deletedAt);
+    return Time.getCurrentUTCDateTime().isAfter(this.deletedAt);
   }
 
   @Enumerated(EnumType.STRING)
-  @Builder.Default
   @Column(name = "`locked`")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  protected YesNo locked = YesNo.N;
+  protected YesNo locked;
 
   /**
    * @return true if temporarily disabled.
@@ -72,5 +70,26 @@ public class BaseEntity {
    */
   public boolean isAvailable() {
     return !isLocked() && !isDeleted();
+  }
+
+  /**
+   * @return timestamp for `createdAt`
+   */
+  public Long getCreateTimestamp() {
+    return Time.getTimestamp(createdAt);
+  }
+
+  /**
+   * @return timestamp for `updatedAt`
+   */
+  public Long getUpdateTimestamp() {
+    return Time.getTimestamp(updatedAt);
+  }
+
+  /**
+   * @return timestamp for `deletedAt`
+   */
+  public Long getDeleteTimestamp() {
+    return Time.getTimestamp(deletedAt);
   }
 }

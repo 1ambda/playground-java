@@ -1,0 +1,174 @@
+api:
+
+  findPaginatedProducts:
+    get:
+      tags:
+      - catalog-controller
+      operationId: findPaginatedProducts
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: productId
+        type: integer
+        format: int64
+      - in: path
+        name: page
+        type: integer
+        format: int64
+      - in: path
+        name: count
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-catalog.yaml#/definitions/ProductListDTO"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+  findOneProduct:
+    get:
+      tags:
+      - catalog-controller
+      operationId: findOneProduct
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: productId
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-catalog.yaml#/definitions/ProductDTO"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+  findAllCategories:
+    get:
+      tags:
+      - catalog-controller
+      operationId: findAllCategories
+      consumes: []
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-catalog.yaml#/definitions/CategoryListDTO"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+definitions:
+  CategoryListDTO:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "./gateway-catalog.yaml#/definitions/CategoryDTO"
+
+  CategoryDTO:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      parentCategoryId:
+        type: integer
+        format: int64
+      name:
+        type: string
+      path:
+        type: string
+      displayName:
+        type: string
+      description:
+        type: string
+
+
+  ProductListDTO:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "./gateway-catalog.yaml#/definitions/ProductDTO"
+      pagination:
+        $ref: "./common.yaml#/definitions/Pagination"
+
+  ProductDTO:
+    type: object
+    properties:
+      item:
+        $ref: "./gateway-catalog.yaml#/definitions/ProductItemDTO"
+      options:
+        type: array
+        items:
+          $ref: "./gateway-catalog.yaml#/definitions/ProductOptionDTO"
+
+  ProductItemDTO:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      createdAt:
+        type: integer
+        format: int64
+      updatedAt:
+        type: integer
+        format: int64
+      name:
+        type: string
+      price:
+        type: integer
+        format: int64
+      description:
+        type: string
+      onSale:
+        type: string
+      categoryId:
+        type: integer
+        format: int64
+      categoryDisplayName:
+        type: string
+      categoryPath:
+        type: string
+      imageId:
+        type: integer
+        format: int64
+      imageType:
+        type: string
+      imagePath:
+        type: string
+
+  ProductOptionDTO:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      price:
+        type: integer
+        format: int64
+      description:
+        type: string
+      onSale:
+        type: string

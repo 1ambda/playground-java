@@ -1,13 +1,13 @@
 package com.github.lambda.playground.domain.user.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.playground.domain.base.BaseEntity;
 import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
