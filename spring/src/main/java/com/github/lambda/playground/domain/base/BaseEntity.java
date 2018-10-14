@@ -6,6 +6,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.lambda.playground.common.Time;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,7 @@ public class BaseEntity {
   protected void onCreate() {
     this.createdAt = Time.getCurrentUTCDateTime();
     this.updatedAt = Time.getCurrentUTCDateTime();
+    this.locked = YesNo.N;
   }
 
   @PreUpdate
