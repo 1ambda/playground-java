@@ -82,6 +82,9 @@ CREATE TABLE OrderDetail (
   INDEX `idx_OrderDetail_locked` (`locked`),
 
   -- columns
+  `state`             VARCHAR(30)          NOT NULL,
+  INDEX `idx_OrderDetail_state` (`state`),
+
   `index`             BIGINT UNSIGNED NOT NULL,
   `price`             BIGINT UNSIGNED NOT NULL,
   `quantity`          BIGINT UNSIGNED NOT NULL

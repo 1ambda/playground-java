@@ -6,12 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.parameters.P;
 
 /**
  * Make flyway migration happens after hibernate ddl manipulation.
  */
+@Profile("!unit")
 @Configuration
-@Profile( {"test"})
 public class FlywayConfig {
   /**
    * Override default flyway initializer to do nothing

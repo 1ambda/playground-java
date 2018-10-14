@@ -1,4 +1,4 @@
-package integration;
+package base;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,19 +6,16 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.lambda.playground.PlaygroundApplication;
+import integration.SwaggerClientApi;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.GenericContainer;
 
+/** Abstract class for testing the application via end-to-end. */
 @ActiveProfiles({"integration"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -26,13 +23,10 @@ import org.testcontainers.containers.GenericContainer;
     classes = {
       PlaygroundApplication.class,
       SwaggerClientApi.class,
-      AbstractIntegrationTest.Config.class,
+      TestRedisConfig.class,
     })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public abstract class AbstractIntegrationTest {
-
-  private static int REDIS_CONTAINER_PORT = 6379;
-  private static final String REDIS_IMAGE_VERSION = "redis:4";
 
   @LocalServerPort protected int randomServerPort;
 
@@ -57,25 +51,5 @@ public abstract class AbstractIntegrationTest {
     }
 
     return keys;
-  }
-
-  @TestConfiguration
-  static class Config {
-
-    @Bean
-    public GenericContainer redisContainer() {
-      GenericContainer redisContainer = new GenericContainer(REDIS_IMAGE_VERSION)
-          .withExposedPorts(REDIS_CONTAINER_PORT);
-      redisContainer.start();
-      return redisContainer;
-    }
-
-    @Primary
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-      return new LettuceConnectionFactory(redisContainer().getContainerIpAddress(),
-          redisContainer().getFirstMappedPort());
-    }
-
   }
 }

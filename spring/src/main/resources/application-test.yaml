@@ -39,13 +39,6 @@ logbook:
 spring:
 
 #
-# spring.flyway
-#
-  flyway:
-    enabled: true
-    check-location: true
-    locations: classpath:/db/migration/data-h2
-#
 # spring.datasource
 #
   datasource:
@@ -87,8 +80,8 @@ spring:
 #
 # spring session and redis
 #
-  data.redis.repositories.enabled: false
-  session.store-type: none
+  session.store-type: redis
+  data.redis.repositories.enabled: true
 
 server:
   port: ${APPLICATION_PORT:8090}

@@ -1,0 +1,16 @@
+spring.profiles:
+  include:
+  - test
+  active: test, unit
+
+spring:
+
+#
+# spring session and redis
+#
+  data.redis.repositories.enabled: false
+  session.store-type: none
+
+  flyway:
+    enabled: false
+

@@ -9,7 +9,7 @@ import com.github.lambda.playground.exception.type.UnauthorizedException;
 import com.github.lambda.playground.swagger.client.api.AuthControllerApi;
 import com.github.lambda.playground.swagger.model.Failure;
 import com.github.lambda.playground.swagger.model.UserDTO;
-import integration.AbstractIntegrationTest;
+import base.AbstractIntegrationTest;
 import integration.SwaggerClientApi;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
