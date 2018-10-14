@@ -58,7 +58,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(failure, headers, status);
   }
 
-  @ExceptionHandler(value = {BadRequestException.class})
+  @ExceptionHandler(value = {
+      BadRequestException.class,
+      IllegalArgumentException.class,
+  })
   protected ResponseEntity<Object> handleBadRequestException(Exception ex, WebRequest request) {
     HttpStatus status = HttpStatus.BAD_REQUEST;
     HttpHeaders httpHeaders = new HttpHeaders();

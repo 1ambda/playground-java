@@ -13,7 +13,7 @@
 
 package com.github.lambda.playground.swagger.client.invoker;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-14T13:31:42.323+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-14T21:41:39.221+09:00")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

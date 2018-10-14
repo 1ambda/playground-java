@@ -31,7 +31,7 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-14T13:31:41.358+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-14T21:41:38.285+09:00")
 
 @Api(value = "CatalogController", description = "the CatalogController API")
 public interface CatalogControllerApi {
@@ -54,7 +54,7 @@ public interface CatalogControllerApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = CategoryListDTO.class),
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
-    @RequestMapping(value = "/categories",
+    @RequestMapping(value = "/catalog/categories",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     default ResponseEntity<CategoryListDTO> findAllCategories() {
@@ -78,7 +78,7 @@ public interface CatalogControllerApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = ProductDTO.class),
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
-    @RequestMapping(value = "/product/{productID}",
+    @RequestMapping(value = "/catalog/product/{productID}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     default ResponseEntity<ProductDTO> findOneProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId) {
@@ -102,7 +102,7 @@ public interface CatalogControllerApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = ProductListDTO.class),
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
-    @RequestMapping(value = "/products",
+    @RequestMapping(value = "/catalog/products",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     default ResponseEntity<ProductListDTO> findPaginatedProducts(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "",required=true) @PathVariable("page") Long page,@ApiParam(value = "",required=true) @PathVariable("count") Long count) {

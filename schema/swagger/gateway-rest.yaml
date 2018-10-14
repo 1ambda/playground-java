@@ -22,10 +22,10 @@ paths:
   /auth/logout:
     $ref: "./gateway-auth.yaml#/api/logout"
 
-  /product/{productID}:
+  /catalog/product/{productID}:
     $ref: "./gateway-catalog.yaml#/api/findOneProduct"
-  /products:
+  /catalog/products:
     $ref: "./gateway-catalog.yaml#/api/findPaginatedProducts"
-  /categories:
+  /catalog/categories:
     $ref: "./gateway-catalog.yaml#/api/findAllCategories"
 
