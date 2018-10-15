@@ -11,13 +11,13 @@ TAG = "Makefile"
 
 VCS = github.com
 REPOSITORY = 1ambda/domain-driven-design-spring
-MODULE = spring
+MODULE = service-gateway
 
 SWAGGER_DIR = ../schema/swagger
 SWAGGER_SCHEMA = "$(SWAGGER_DIR)/gateway-rest.yaml"
-SWAGGER_SERVER_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.spring-server.json"
+SWAGGER_SERVER_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.gateway-server.json"
 SWAGGER_OUTPUT_DIR = "src/main/java/com/github/lambda/gateway/swagger"
-SWAGGER_CLIENT_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.spring-client.json"
+SWAGGER_CLIENT_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.gateway-client.json"
 SWAGGER_CLIENT_OUTPUT_TEMP_DIR = ".swagger-client"
 SWAGGER_CLIENT_OUTPUT_DIR = "src/main/java/com/github/lambda/gateway/swagger/client"
 SWAGGER_CLIENT_OUTPUT_GEN_DIR = "$(SWAGGER_CLIENT_OUTPUT_TEMP_DIR)/$(SWAGGER_CLIENT_OUTPUT_DIR)"
