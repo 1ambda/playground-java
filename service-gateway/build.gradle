@@ -24,7 +24,6 @@ repositories {
     mavenCentral()
 }
 
-
 ext {
     guavaVersion = '26.0-jre'
     springBootAdminVersion = '2.0.2'
@@ -41,7 +40,7 @@ ext {
     feignFormVersion = '2.1.0'
     oltuVersion = '1.0.1'
     migbase64Version = '2.2'
-    
+
 }
 
 dependencies {

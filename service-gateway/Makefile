@@ -61,6 +61,33 @@ swagger.client:
 	@ echo ""
 	@ echo ""
 
+.PHONY: test.unit
+test.unit:
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Started: running unit tests"
+	@ echo "-----------------------------------------\n"
+
+	@ ./gradlew test --tests com.github.lambda*
+
+	@ echo "\n-----------------------------------------"
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Finished: running unit tests"
+	@ echo ""
+	@ echo ""
+
+.PHONY: test.integration
+test.integration:
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Started: running integration tests"
+	@ echo "-----------------------------------------\n"
+
+	@ ./gradlew test --tests integration*
+
+	@ echo "\n-----------------------------------------"
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Finished: running integration tests"
+	@ echo ""
+	@ echo ""
+
+.PHONY: test
+test: test.unit test.integration
+
 .PHONY: swagger
 swagger: swagger.clean swagger.server swagger.client
 
