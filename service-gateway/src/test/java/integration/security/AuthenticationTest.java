@@ -2,14 +2,14 @@ package integration.security;
 
 import java.util.List;
 
+import base.AbstractIntegrationTest;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.exception.type.InternalServerException;
 import com.github.lambda.gateway.exception.type.UnauthorizedException;
-import integration.swagger.client.api.AuthControllerApi;
+import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.UserDTO;
-import base.AbstractIntegrationTest;
 import integration.SwaggerClientApi;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

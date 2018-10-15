@@ -19,7 +19,7 @@ SWAGGER_SERVER_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.gateway-server.json"
 SWAGGER_SERVER_OUTPUT_DIR = "src/main/java/com/github/lambda/gateway/swagger"
 SWAGGER_CLIENT_CONFIG = "$(SWAGGER_DIR)/swagger-codegen.gateway-client.json"
 SWAGGER_CLIENT_OUTPUT_TEMP_DIR = ".swagger-client"
-SWAGGER_CLIENT_OUTPUT_DIR = "src/test/java/integration/swagger/client"
+SWAGGER_CLIENT_OUTPUT_DIR = "src/test/java/com/github/lambda/gateway/swagger/client"
 SWAGGER_CLIENT_OUTPUT_GEN_DIR = "$(SWAGGER_CLIENT_OUTPUT_TEMP_DIR)/src/main/java/com/github/lambda/gateway/swagger/client"
 
 .PHONY: swagger.clean
