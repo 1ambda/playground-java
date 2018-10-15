@@ -111,17 +111,16 @@ public class Order extends BaseEntity {
   /** relations */
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
-  private List<OrderDetail> orderDetails = new ArrayList<>();
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "`order_id`")
+  private List<OrderLine> orderDetails = new ArrayList<>();
 
   /** functions */
-  public void addOrderDetail(OrderDetail orderDetail) {
-    orderDetail.setOrder(this);
+  public void addOrderDetail(OrderLine orderDetail) {
     orderDetails.add(orderDetail);
   }
 
-  public void removeOrderDetail(OrderDetail orderDetail) {
-    orderDetail.setOrder(null);
+  public void removeOrderDetail(OrderLine orderDetail) {
     orderDetails.remove(orderDetail);
   }
 }

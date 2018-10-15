@@ -1,5 +1,7 @@
 package com.github.lambda.gateway.domain.order.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -16,17 +18,16 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(
-    name = "`OrderDetail`",
+    name = "`OrderLine`",
     indexes = {
-      @Index(name = "`idx_OrderDetail_createdAt`", columnList = "`created_at`", unique = false),
-      @Index(name = "`idx_OrderDetail_deletedAt`", columnList = "`deleted_at`", unique = false),
-      @Index(name = "`idx_OrderDetail_locked`", columnList = "`locked`", unique = false),
-      @Index(name = "`idx_OrderDetail_state`", columnList = "`state`", unique = false),
-      @Index(name = "`idx_OrderDetail_orderId`", columnList = "`order_id`", unique = false),
-      @Index(name = "`idx_OrderDetail_productId`", columnList = "`product_id`", unique = false),
-      @Index(name = "`idx_OrderDetail_productOptionId`", columnList = "`product_option_id`", unique = false),
+        @Index(name = "`idx_OrderLine_createdAt`", columnList = "`created_at`", unique = false),
+        @Index(name = "`idx_OrderLine_deletedAt`", columnList = "`deleted_at`", unique = false),
+        @Index(name = "`idx_OrderLine_locked`", columnList = "`locked`", unique = false),
+        @Index(name = "`idx_OrderLine_orderId`", columnList = "`order_id`", unique = false),
+        @Index(name = "`idx_OrderLine_productId`", columnList = "`product_id`", unique = false),
+        @Index(name = "`idx_OrderLine_state`", columnList = "`state`", unique = false),
     })
-public class OrderDetail extends BaseEntity {
+public class OrderLine extends BaseEntity {
   public enum State {
     CANCELLED("CANCELLED"),
     DELIVERED("DELIVERED"),
@@ -64,18 +65,29 @@ public class OrderDetail extends BaseEntity {
   @Column(name = "`quantity`", nullable = false)
   private Long quantity;
 
-  /** other domains */
+  /**
+   * other domains
+   */
   @Column(name = "`product_id`", nullable = false)
   private Long productId;
 
-  @Column(name = "`product_option_id`", nullable = false)
-  private Long productOptionId;
-
-  /** relations */
+  /**
+   * relations
+   */
   @ToString.Exclude
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "`order_id`", nullable = false)
-  private Order order;
+  @Builder.Default
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "`order_line_id`")
+  private List<OrderLineOption> orderLineOptions = new ArrayList<>();
 
-  /** functions */
+  /**
+   * functions
+   */
+  public void AddOrderLineOption(OrderLineOption orderLineOption) {
+    orderLineOptions.add(orderLineOption);
+  }
+
+  public void RemoveOrderLineOption(OrderLineOption orderLineOption) {
+    orderLineOptions.remove(orderLineOption);
+  }
 }

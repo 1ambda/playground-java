@@ -1,6 +1,6 @@
 package integration;
 
-import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
+import integration.swagger.client.api.AuthControllerApi;
 import feign.Feign;
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.jackson.JacksonDecoder;

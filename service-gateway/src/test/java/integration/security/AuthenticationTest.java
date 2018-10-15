@@ -6,7 +6,7 @@ import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.exception.type.InternalServerException;
 import com.github.lambda.gateway.exception.type.UnauthorizedException;
-import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
+import integration.swagger.client.api.AuthControllerApi;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import base.AbstractIntegrationTest;

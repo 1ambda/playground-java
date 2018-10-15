@@ -76,12 +76,12 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.testcontainers:testcontainers:${testcontainersVersion}")
 
-    compile "io.github.openfeign:feign-core:${feignVersion}"
-    compile "io.github.openfeign:feign-jackson:${feignVersion}"
-    compile "io.github.openfeign:feign-slf4j:${feignVersion}"
-    compile "io.github.openfeign.form:feign-form:${feignFormVersion}"
-    compile "com.brsanthu:migbase64:${migbase64Version}"
-    compile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${oltuVersion}"
+    testCompile "io.github.openfeign:feign-core:${feignVersion}"
+    testCompile "io.github.openfeign:feign-jackson:${feignVersion}"
+    testCompile "io.github.openfeign:feign-slf4j:${feignVersion}"
+    testCompile "io.github.openfeign.form:feign-form:${feignFormVersion}"
+    testCompile "com.brsanthu:migbase64:${migbase64Version}"
+    testCompile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${oltuVersion}"
 }
 
 dependencyManagement {
