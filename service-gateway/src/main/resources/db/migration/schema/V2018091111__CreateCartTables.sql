@@ -2,7 +2,6 @@ CREATE TABLE `Cart` (
   -- primary key
   `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
-
   -- FK columns
   `user_id`     BIGINT UNSIGNED NOT NULL,
 
@@ -21,10 +20,9 @@ CREATE TABLE `Cart` (
   `locked`     VARCHAR(4)                         NOT NULL,
   INDEX `idx_Cart_createdAt` (`created_at`),
   INDEX `idx_Cart_deletedAt` (`deleted_at`),
-  INDEX `idx_Cart_locked` (`locked`),
+  INDEX `idx_Cart_locked` (`locked`)
 
   -- columns
-  `total_price` BIGINT UNSIGNED NOT NULL
 );
 
 CREATE TABLE `CartLine` (

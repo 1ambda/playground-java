@@ -113,14 +113,14 @@ public class Order extends BaseEntity {
   @Builder.Default
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "`order_id`")
-  private List<OrderLine> orderDetails = new ArrayList<>();
+  private List<OrderLine> orderLines = new ArrayList<>();
 
   /** functions */
   public void addOrderDetail(OrderLine orderDetail) {
-    orderDetails.add(orderDetail);
+    orderLines.add(orderDetail);
   }
 
   public void removeOrderDetail(OrderLine orderDetail) {
-    orderDetails.remove(orderDetail);
+    orderLines.remove(orderDetail);
   }
 }
