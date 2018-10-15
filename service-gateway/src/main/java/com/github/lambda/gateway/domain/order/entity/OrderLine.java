@@ -1,14 +1,14 @@
 package com.github.lambda.gateway.domain.order.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor

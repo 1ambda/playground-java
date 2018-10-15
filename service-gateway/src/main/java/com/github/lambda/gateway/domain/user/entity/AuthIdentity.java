@@ -1,13 +1,13 @@
 package com.github.lambda.gateway.domain.user.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor

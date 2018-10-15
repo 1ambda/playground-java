@@ -21,8 +21,8 @@ import lombok.*;
     },
     uniqueConstraints = {
         @UniqueConstraint(
-                name = "`uniq_RoleToUser_roleAndUserId`",
-                columnNames = {"`role_id`", "`user_id`"}
+            name = "`uniq_RoleToUser_roleAndUserId`",
+            columnNames = {"`role_id`", "`user_id`"}
         ),
     }
 )

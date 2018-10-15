@@ -1,14 +1,14 @@
 package com.github.lambda.gateway.domain.catalog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.lambda.gateway.domain.base.BaseEntity;
+import lombok.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.lambda.gateway.domain.base.BaseEntity;
-import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -20,9 +20,9 @@ import lombok.*;
 @Table(
     name = "`Image`",
     indexes = {
-      @Index(name = "idx_Image_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_Image_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_Image_locked", columnList = "locked", unique = false),
+        @Index(name = "idx_Image_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_Image_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_Image_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {})
 public class Image extends BaseEntity {

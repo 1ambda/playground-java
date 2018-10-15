@@ -13,5 +13,6 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
   @Query("SELECT u FROM User u JOIN u.authIdentity a WHERE a.username = :username AND (u.deletedAt > :timestamp OR u.deletedAt = NULL)")
-  User findActiveOneByUsername(@Param("username") String username, @Param("timestamp") LocalDateTime timestamp);
+  User findActiveOneByUsername(@Param("username") String username,
+                               @Param("timestamp") LocalDateTime timestamp);
 }

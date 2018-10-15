@@ -1,7 +1,6 @@
 package com.github.lambda.gateway.security;
 
 import com.github.lambda.gateway.exception.type.custom.InvalidUserPrincipalException;
-
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,7 +8,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-/** SecurityManager returns user principal (UserDetails). */
+/**
+ * SecurityManager returns user principal (UserDetails).
+ */
 public class SecurityManager {
 
   /**

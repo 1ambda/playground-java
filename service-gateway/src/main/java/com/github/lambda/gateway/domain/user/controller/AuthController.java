@@ -35,7 +35,7 @@ public class AuthController implements AuthControllerApi {
       notes = "",
       response = UserDTO.class,
       tags = {
-        "auth-controller",
+          "auth-controller",
       },
       authorizations = {@Authorization(value = "basicAuth")})
   @Override

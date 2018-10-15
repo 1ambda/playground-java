@@ -3,7 +3,6 @@ package com.github.lambda.gateway.security;
 import com.github.lambda.gateway.exception.factory.FailureFactory;
 import com.github.lambda.gateway.exception.type.custom.AlreadyLoggedOutException;
 import com.github.lambda.gateway.swagger.model.Failure;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 public class SecurityLogoutHandler implements LogoutSuccessHandler {

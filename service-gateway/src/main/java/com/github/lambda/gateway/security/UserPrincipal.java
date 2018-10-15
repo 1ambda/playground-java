@@ -1,17 +1,13 @@
 package com.github.lambda.gateway.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +20,8 @@ public class UserPrincipal implements UserDetails {
 
   private String password;
 
-  @Builder.Default private List<GrantedAuthority> authorities = new ArrayList<>();
+  @Builder.Default
+  private List<GrantedAuthority> authorities = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

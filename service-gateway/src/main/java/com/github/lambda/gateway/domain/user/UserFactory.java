@@ -1,13 +1,13 @@
 package com.github.lambda.gateway.domain.user;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.lambda.gateway.domain.user.entity.Role;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class UserFactory {

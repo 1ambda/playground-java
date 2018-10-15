@@ -19,12 +19,12 @@ import lombok.*;
 @Table(
     name = "`Category`",
     indexes = {
-      @Index(name = "idx_Category_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_Category_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_Category_locked", columnList = "locked", unique = false),
+        @Index(name = "idx_Category_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_Category_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_Category_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {
-      @UniqueConstraint(columnNames = {"path"}),
+        @UniqueConstraint(columnNames = {"path"}),
     })
 public class Category extends BaseEntity {
   @Size(min = 0, max = 255)
@@ -43,7 +43,9 @@ public class Category extends BaseEntity {
   @Column(name = "`description`", nullable = false, columnDefinition = "TEXT")
   private String description;
 
-  /** relations */
+  /**
+   * relations
+   */
   @ToString.Exclude
   @Builder.Default
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
@@ -52,7 +54,9 @@ public class Category extends BaseEntity {
   @Column(name = "`parent_category_id`", nullable = false)
   private Long parentCategoryId; // self-referencing relation
 
-  /** functions */
+  /**
+   * functions
+   */
   public void addProduct(Product product) {
     product.setCategory(this);
     products.add(product);

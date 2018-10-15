@@ -1,15 +1,15 @@
 package com.github.lambda.gateway.domain.order.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +21,10 @@ import lombok.*;
 @Table(
     name = "`Order`",
     indexes = {
-      @Index(name = "`idx_Order_createdAt`", columnList = "`created_at`", unique = false),
-      @Index(name = "`idx_Order_deletedAt`", columnList = "`deleted_at`", unique = false),
-      @Index(name = "`idx_Order_locked`", columnList = "`locked`", unique = false),
-      @Index(name = "`idx_Order_state`", columnList = "`state`", unique = false),
+        @Index(name = "`idx_Order_createdAt`", columnList = "`created_at`", unique = false),
+        @Index(name = "`idx_Order_deletedAt`", columnList = "`deleted_at`", unique = false),
+        @Index(name = "`idx_Order_locked`", columnList = "`locked`", unique = false),
+        @Index(name = "`idx_Order_state`", columnList = "`state`", unique = false),
     })
 public class Order extends BaseEntity {
   // ref: https://schema.org/OrderStatus
@@ -104,18 +104,24 @@ public class Order extends BaseEntity {
   @Column(name = "`recipient_email`", nullable = false)
   private String recipientEmail;
 
-  /** other domains */
+  /**
+   * other domains
+   */
   @Column(name = "`user_id`", nullable = false)
   private Long userId;
 
-  /** relations */
+  /**
+   * relations
+   */
   @ToString.Exclude
   @Builder.Default
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "`order_id`")
   private List<OrderLine> orderLines = new ArrayList<>();
 
-  /** functions */
+  /**
+   * functions
+   */
   public void addOrderDetail(OrderLine orderDetail) {
     orderLines.add(orderDetail);
   }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-public interface PermissionRepository extends PagingAndSortingRepository<Permission, Long> {}
+public interface PermissionRepository extends PagingAndSortingRepository<Permission, Long> {
+}

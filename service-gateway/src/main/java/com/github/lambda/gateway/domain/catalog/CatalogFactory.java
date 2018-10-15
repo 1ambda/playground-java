@@ -1,14 +1,14 @@
 package com.github.lambda.gateway.domain.catalog;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
 import com.github.lambda.gateway.domain.catalog.entity.ProductOption;
 import com.github.lambda.gateway.swagger.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CatalogFactory {

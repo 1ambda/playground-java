@@ -1,14 +1,14 @@
 package com.github.lambda.gateway.domain.catalog.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,9 +20,9 @@ import lombok.*;
 @Table(
     name = "`Product`",
     indexes = {
-      @Index(name = "idx_Product_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_Product_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_Product_locked", columnList = "locked", unique = false),
+        @Index(name = "idx_Product_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_Product_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_Product_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {})
 public class Product extends BaseEntity {
@@ -38,7 +38,9 @@ public class Product extends BaseEntity {
   @Column(name = "`description`", nullable = false, columnDefinition = "TEXT")
   private String description;
 
-  /** relations */
+  /**
+   * relations
+   */
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "`category_id`", nullable = false)
@@ -53,7 +55,9 @@ public class Product extends BaseEntity {
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
   private List<ProductOption> productOptions = new ArrayList<>();
 
-  /** functions */
+  /**
+   * functions
+   */
   public void addProductOption(ProductOption productOption) {
     productOption.setProduct(this);
     productOptions.add(productOption);

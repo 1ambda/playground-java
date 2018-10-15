@@ -20,8 +20,8 @@ import javax.persistence.*;
     },
     uniqueConstraints = {
         @UniqueConstraint(
-                name = "`uniq_PermissionToRole_permissionAndRoleId`",
-                columnNames = {"`permission_id`", "`role_id`", }
+            name = "`uniq_PermissionToRole_permissionAndRoleId`",
+            columnNames = {"`permission_id`", "`role_id`",}
         ),
     }
 )

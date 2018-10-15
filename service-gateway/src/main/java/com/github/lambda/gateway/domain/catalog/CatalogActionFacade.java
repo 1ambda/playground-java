@@ -1,17 +1,17 @@
 package com.github.lambda.gateway.domain.catalog;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** CatalogActionFacade handles all actions for catalog-bounded context operations. */
+import javax.transaction.Transactional;
+
+/**
+ * CatalogActionFacade handles all actions for catalog-bounded context operations.
+ */
 @Service
 @Transactional
 public class CatalogActionFacade {
   @Autowired
   public CatalogActionFacade() {
   }
-
-
 }

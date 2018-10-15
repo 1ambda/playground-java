@@ -1,8 +1,5 @@
 package com.github.lambda.gateway.security;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.domain.user.entity.RoleToUser;
@@ -15,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

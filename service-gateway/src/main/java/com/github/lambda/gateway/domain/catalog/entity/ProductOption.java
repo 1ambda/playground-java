@@ -1,12 +1,12 @@
 package com.github.lambda.gateway.domain.catalog.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -18,9 +18,9 @@ import lombok.*;
 @Table(
     name = "`ProductOption`",
     indexes = {
-      @Index(name = "idx_ProductOption_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_ProductOption_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_ProductOption_locked", columnList = "locked", unique = false),
+        @Index(name = "idx_ProductOption_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_ProductOption_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_ProductOption_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {})
 public class ProductOption extends BaseEntity {
@@ -36,7 +36,9 @@ public class ProductOption extends BaseEntity {
   @Column(name = "`description`", nullable = false, columnDefinition = "TEXT")
   private String description;
 
-  /** relations */
+  /**
+   * relations
+   */
   @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "`product_id`", nullable = false)

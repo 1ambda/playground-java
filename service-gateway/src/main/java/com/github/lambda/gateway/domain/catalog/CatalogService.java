@@ -1,8 +1,5 @@
 package com.github.lambda.gateway.domain.catalog;
 
-import java.util.List;
-import javax.transaction.Transactional;
-
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
@@ -13,7 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-/** CatalogService handled all operations for the catalog domain. */
+import javax.transaction.Transactional;
+import java.util.List;
+
+/**
+ * CatalogService handled all operations for the catalog domain.
+ */
 @Service
 public class CatalogService {
 
@@ -22,10 +24,9 @@ public class CatalogService {
   private CatalogFactory catalogFactory;
 
   @Autowired
-  public CatalogService(
-      CatalogActionFacade productActionFacade,
-      CatalogQueryFacade productQueryFacade,
-      CatalogFactory catalogFactory) {
+  public CatalogService(CatalogActionFacade productActionFacade,
+                        CatalogQueryFacade productQueryFacade,
+                        CatalogFactory catalogFactory) {
 
     this.productActionFacade = productActionFacade;
     this.productQueryFacade = productQueryFacade;

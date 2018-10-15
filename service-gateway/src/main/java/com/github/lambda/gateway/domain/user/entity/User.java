@@ -19,12 +19,12 @@ import lombok.*;
 @Table(
     name = "`User`",
     indexes = {
-      @Index(name = "idx_User_createdAt", columnList = "created_at", unique = false),
-      @Index(name = "idx_User_deletedAt", columnList = "deleted_at", unique = false),
-      @Index(name = "idx_User_locked", columnList = "locked", unique = false),
+        @Index(name = "idx_User_createdAt", columnList = "created_at", unique = false),
+        @Index(name = "idx_User_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "idx_User_locked", columnList = "locked", unique = false),
     },
     uniqueConstraints = {
-      @UniqueConstraint(columnNames = {"email"}),
+        @UniqueConstraint(columnNames = {"email"}),
     })
 public class User extends BaseEntity {
 
@@ -43,7 +43,9 @@ public class User extends BaseEntity {
   @Column(name = "`address`", nullable = false)
   private String address;
 
-  /** relations */
+  /**
+   * relations
+   */
   @OneToOne(
       fetch = FetchType.EAGER,
       mappedBy = "user",
@@ -56,7 +58,9 @@ public class User extends BaseEntity {
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
   private List<RoleToUser> roleToUsers = new ArrayList<>();
 
-  /** functions */
+  /**
+   * functions
+   */
   public void addRoleToUser(RoleToUser roleToUser) {
     roleToUser.setUser(this);
     roleToUsers.add(roleToUser);

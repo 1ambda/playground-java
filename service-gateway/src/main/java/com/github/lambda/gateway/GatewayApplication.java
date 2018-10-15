@@ -1,11 +1,11 @@
 package com.github.lambda.gateway;
 
-import java.util.TimeZone;
-import javax.annotation.PostConstruct;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)

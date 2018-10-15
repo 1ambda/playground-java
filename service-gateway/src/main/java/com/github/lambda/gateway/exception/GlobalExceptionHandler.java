@@ -5,9 +5,7 @@ import com.github.lambda.gateway.exception.type.BadRequestException;
 import com.github.lambda.gateway.exception.type.ForbiddenException;
 import com.github.lambda.gateway.exception.type.UnauthorizedException;
 import com.github.lambda.gateway.swagger.model.Failure;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

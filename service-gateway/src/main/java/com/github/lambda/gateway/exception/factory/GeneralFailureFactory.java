@@ -2,7 +2,6 @@ package com.github.lambda.gateway.exception.factory;
 
 import com.github.lambda.gateway.common.Time;
 import com.github.lambda.gateway.swagger.model.Failure;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

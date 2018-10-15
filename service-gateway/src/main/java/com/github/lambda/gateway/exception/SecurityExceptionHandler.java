@@ -1,11 +1,5 @@
 package com.github.lambda.gateway.exception;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.github.lambda.gateway.exception.factory.FailureFactory;
 import com.github.lambda.gateway.security.SecurityManager;
 import com.github.lambda.gateway.swagger.model.Failure;
@@ -26,6 +20,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 @ControllerAdvice
