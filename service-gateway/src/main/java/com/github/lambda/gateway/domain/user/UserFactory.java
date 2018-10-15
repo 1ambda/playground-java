@@ -25,6 +25,7 @@ public class UserFactory {
         .collect(Collectors.toSet());
 
     builder.roles(new ArrayList<>(roles))
+        .username(user.getAuthIdentity().getUsername())
         .password(null)
         .email(null)
         .build();

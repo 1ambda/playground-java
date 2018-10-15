@@ -1,4 +1,4 @@
-package integration;
+package base;
 
 import com.github.lambda.gateway.exception.type.*;
 import feign.Response;

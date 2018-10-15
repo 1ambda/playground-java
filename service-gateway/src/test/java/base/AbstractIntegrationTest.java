@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.lambda.gateway.GatewayApplication;
-import integration.SwaggerClientApi;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;

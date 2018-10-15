@@ -10,15 +10,11 @@ import com.github.lambda.gateway.domain.user.repository.RoleRepository;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static reactor.core.publisher.Mono.when;
 
-@AutoConfigureTestEntityManager
 public class UserServiceTest extends AbstractServiceTest {
 
   @Autowired
@@ -26,9 +22,6 @@ public class UserServiceTest extends AbstractServiceTest {
 
   @MockBean
   RoleRepository roleRepository;
-
-  @Autowired
-  private TestEntityManager entityManager;
 
   @Test
   public void addNewCustomer_shouldCreateUserAndSetRoles() {

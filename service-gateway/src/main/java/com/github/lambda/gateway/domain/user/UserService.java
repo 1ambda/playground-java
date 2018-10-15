@@ -56,8 +56,8 @@ public class UserService {
                                 "Invalid password encoding");
 
     User user = userActionFacade.addNewCustomer(userDTO, provider, encodedPassword);
-    UserDTO response = userFactory.convertToUserDTO(user);
+    UserDTO dto = userFactory.convertToUserDTO(user);
 
-    return response;
+    return dto;
   }
 }

@@ -10,7 +10,7 @@ import com.github.lambda.gateway.exception.type.UnauthorizedException;
 import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.UserDTO;
-import integration.SwaggerClientApi;
+import base.SwaggerClientApi;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
