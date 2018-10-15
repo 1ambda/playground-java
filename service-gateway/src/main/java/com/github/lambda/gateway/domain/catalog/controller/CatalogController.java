@@ -1,18 +1,18 @@
 package com.github.lambda.gateway.domain.catalog.controller;
 
-import javax.validation.constraints.PositiveOrZero;
-
 import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.ProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import com.github.lambda.gateway.swagger.server.api.CatalogControllerApi;
+import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -37,8 +37,8 @@ public class CatalogController implements CatalogControllerApi {
   }
 
   @Override
-  public ResponseEntity<ProductDTO> findOneProduct(@PositiveOrZero Long productId) {
-    //     Preconditions.checkArgument(p);
+  public ResponseEntity<ProductDTO> findOneProduct(@PathVariable("productId") Long productId) {
+    Preconditions.checkArgument(productId > 0L, "Invalid productId");
 
     catalogService.getProductById(productId);
 

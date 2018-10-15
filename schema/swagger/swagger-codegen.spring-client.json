@@ -8,6 +8,7 @@
   "artifactId"  : "gateway-client",
   "useTags"  : true,
   "useBeanValidation": true,
+  "hideGenerationTimestamp": true,
   "dateLibrary" : "java8",
   "library" : "feign"
 }

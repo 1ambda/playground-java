@@ -31,7 +31,6 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-15T14:42:52.804+09:00")
 
 @Api(value = "CatalogController", description = "the CatalogController API")
 public interface CatalogControllerApi {
@@ -78,7 +77,7 @@ public interface CatalogControllerApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = ProductDTO.class),
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
-    @RequestMapping(value = "/catalog/product/{productID}",
+    @RequestMapping(value = "/catalog/product/{productId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     default ResponseEntity<ProductDTO> findOneProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId) {

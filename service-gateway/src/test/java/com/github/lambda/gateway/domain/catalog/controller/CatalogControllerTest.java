@@ -8,18 +8,19 @@ import com.github.lambda.gateway.swagger.model.CategoryDTO;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CatalogControllerTest extends AbstractControllerTest {
 
-  @Autowired private MockMvc mvc;
+  @Autowired
+  private MockMvc mvc;
 
   private ObjectMapper mapper = new ObjectMapper();
 
@@ -44,15 +45,19 @@ public class CatalogControllerTest extends AbstractControllerTest {
   @Test
   public void findOneProduct_shouldReturn400_withInvalidProductId() throws Exception {
     // given
-    Long invalidProductId = Long.MAX_VALUE;
+    Long invalidProductId1 = 0L;
+    Long invalidProductId2 = Long.MAX_VALUE;
 
-    // then
-    MvcResult result = this.mvc
-        .perform(get("/api/catalog/product/" + invalidProductId))
-        .andExpect(status().isBadRequest())
+    // when
+    MvcResult result1 = this.mvc
+        .perform(get("/api/catalog/product/" + invalidProductId1))
+        .andReturn();
+    MvcResult result2 = this.mvc
+        .perform(get("/api/catalog/product/" + invalidProductId2))
         .andReturn();
 
     // then
-    fail("should have returned 401");
+    assertThat(result1.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    assertThat(result2.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
   }
 }

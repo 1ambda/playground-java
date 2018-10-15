@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import feign.*;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-15T14:42:53.778+09:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-10-15T16:09:20.579+09:00")
 public interface CatalogControllerApi extends ApiClient.Api {
 
 
@@ -35,7 +35,7 @@ public interface CatalogControllerApi extends ApiClient.Api {
     * @param productId  (required)
    * @return ProductDTO
    */
-  @RequestLine("GET /catalog/product/{productID}")
+  @RequestLine("GET /catalog/product/{productId}")
   @Headers({
     "Accept: application/json",
   })

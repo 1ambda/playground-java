@@ -1,6 +1,10 @@
 spring.profiles.include:
 - test
 
+# http logging
+logbook:
+  filter.enabled: false
+
 spring:
 
 #
