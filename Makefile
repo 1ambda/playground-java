@@ -6,7 +6,7 @@ PIP = pip
 GOCMD = go
 
 VCS = github.com
-REPOSITORY = 1ambda/playground-java
+REPOSITORY = "1ambda/domain-driven-design-spring"
 
 .PHONY: install.tool
 prepare:

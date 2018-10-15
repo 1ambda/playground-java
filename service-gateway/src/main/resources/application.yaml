@@ -1,0 +1,134 @@
+logging:
+  level:
+    ROOT: INFO
+
+    # application
+    com.github.lambda.gateway: DEBUG                         # application
+
+    # JPA
+    org.hibernate.SQL: DEBUG                                    # hibernate
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE        # hibernate
+
+    org.springframework.transaction: DEBUG                      # transaction
+    org.springframework.orm.jpa: DEBUG                          # transaction
+
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG           # JDBC
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE  # JDBC
+
+    # security
+    org.springframework.security: INFO
+
+spring.jpa.show-sql: false # Use logger output instead
+spring.jpa.properties.hibernate.format_sql: true
+
+# http logging
+logbook:
+  filter.enabled: false
+
+#
+# spring actuactor
+#
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  # https://dzone.com/articles/monitoring-using-spring-boot-2-prometheus-and-graf
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  info:
+    git:
+      mode: full
+  health:
+    defaults:
+      enabled: true
+    mail:
+      enabled: false
+
+spring:
+  application:
+    name: Gateway
+  profiles:
+    # The commented value for `active` can be replaced with valid Spring profiles to load.
+    # Otherwise, it will be filled in by maven when building the WAR file
+    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+    active: local
+
+#
+# spring.flyway
+#
+  flyway:
+    enabled: true
+    check-location: true
+    locations: classpath:/db/migration
+    baseline-on-migrate: true
+    table: FlywaySchema_Gateway
+
+#
+# spring.datasource
+#
+  datasource:
+    hikari:
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+#
+# spring.jpa
+#
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+
+#
+# spring.security
+#
+  security:
+    user:
+      name: ${ACTUACTOR_USERNAME}
+      password: ${ACTUACTOR_PASSWORD}
+      roles: ACTUACTOR
+
+#
+# spring session and redis
+#
+  session.redis.namespace: spring:session:gateway
+  session.store-type: redis
+  data.redis.repositories.enabled: true
+  redis.host: localhost
+  redis.port: 6379
+  redis.password:
+  redis.ssl: false
+#
+# server
+#
+server:
+  port: ${APPLICATION_PORT:8090}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+
+
