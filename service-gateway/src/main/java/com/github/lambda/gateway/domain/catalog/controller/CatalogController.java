@@ -3,9 +3,8 @@ package com.github.lambda.gateway.domain.catalog.controller;
 import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
-import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
+import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductDTO;
-import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import com.github.lambda.gateway.swagger.server.api.CatalogControllerApi;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("api")
@@ -47,11 +47,14 @@ public class CatalogController implements CatalogControllerApi {
   }
 
   @Override
-  public ResponseEntity<ProductListDTO> findPaginatedProducts(
-      Long productId, Long page, Long count) {
+  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(@RequestParam(value = "page", required = false) Long page,
+                                                                   @RequestParam(value = "count", required = false) Long count) {
+
+    Preconditions.checkArgument(page >= 0L, "invalid page value");
+    Preconditions.checkArgument(count > 0L, "invalid count value");
 
     Pageable pageable = PageRequest.of(page.intValue(), count.intValue());
-    ProductListDTO dto = catalogService.getPaginatedProducts(pageable);
+    PaginatedProductDTO dto = catalogService.getPaginatedProducts(pageable);
 
     return ResponseEntity.ok(dto);
   }

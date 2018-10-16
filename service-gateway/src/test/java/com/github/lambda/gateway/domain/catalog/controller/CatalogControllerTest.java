@@ -1,17 +1,20 @@
 package com.github.lambda.gateway.domain.catalog.controller;
 
-import java.util.List;
-
 import base.AbstractControllerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
 import com.github.lambda.gateway.swagger.model.CategoryDTO;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
+import com.github.lambda.gateway.swagger.model.Failure;
+import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,6 +24,9 @@ public class CatalogControllerTest extends AbstractControllerTest {
 
   @Autowired
   private MockMvc mvc;
+
+  @Autowired
+  private ProductRepository productRepository;
 
   private ObjectMapper mapper = new ObjectMapper();
 
@@ -59,5 +65,56 @@ public class CatalogControllerTest extends AbstractControllerTest {
     // then
     assertThat(result1.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     assertThat(result2.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+  }
+
+  @WithMockUser(username = "user")
+  @Test
+  public void findPaginatedProducts_shouldReturnPaginatedDTO() throws Exception {
+    // given
+    Long page = 0L;
+    Long count = 10L;
+    String endpoint = new StringBuilder()
+        .append("/api/catalog/products")
+        .append("?page=" + page)
+        .append("&count=" + count)
+        .toString();
+    assertThat(productRepository.count()).isGreaterThanOrEqualTo(10);
+
+    // when
+    MvcResult result = this.mvc
+        .perform(get(endpoint))
+        .andReturn();
+
+    // then
+    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+
+    String content = result.getResponse().getContentAsString();
+    PaginatedProductDTO dto = mapper.readValue(content, PaginatedProductDTO.class);
+    assertThat(dto.getProducts().size()).isEqualTo(count.intValue());
+  }
+
+  @WithMockUser(username = "user")
+  @Test
+  public void findPaginatedProducts_shouldReturnFailure_WhenGotInvalidPagination() throws Exception {
+    // given
+    Long page = Long.MAX_VALUE;
+    Long count = 10L;
+    String endpoint = new StringBuilder()
+        .append("/api/catalog/products")
+        .append("?page=" + page)
+        .append("&count=" + count)
+        .toString();
+
+    // when
+    MvcResult result = this.mvc
+        .perform(get(endpoint))
+        .andReturn();
+
+    // then
+    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+    String content = result.getResponse().getContentAsString();
+    Failure dto = mapper.readValue(content, Failure.class);
+    assertThat(dto.getType()).isEqualTo("java.lang.IllegalArgumentException");
   }
 }

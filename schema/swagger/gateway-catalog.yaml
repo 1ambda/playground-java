@@ -9,10 +9,6 @@ api:
       produces:
       - application/json
       parameters:
-      - in: path
-        name: productId
-        type: integer
-        format: int64
       - in: query
         name: page
         type: integer
@@ -25,7 +21,7 @@ api:
         200:
           description: OK
           schema:
-            $ref: "./gateway-catalog.yaml#/definitions/ProductListDTO"
+            $ref: "./gateway-catalog.yaml#/definitions/PaginatedProductDTO"
         default:
           description: error
           schema:
@@ -100,10 +96,10 @@ definitions:
       description:
         type: string
 
-  ProductListDTO:
+  PaginatedProductDTO:
     type: object
     properties:
-      items:
+      products:
         type: array
         items:
           $ref: "./gateway-catalog.yaml#/definitions/ProductContainerDTO"
