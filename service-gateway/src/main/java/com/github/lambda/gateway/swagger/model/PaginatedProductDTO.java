@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * ProductListDTO
+ * PaginatedProductDTO
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,39 +28,39 @@ import lombok.ToString;
 @ToString
 @Validated
 
-public class ProductListDTO   {
-  @JsonProperty(value = "items")
+public class PaginatedProductDTO   {
+  @JsonProperty(value = "products")
   @Valid
   @Builder.Default
-  private List<ProductContainerDTO> items = new ArrayList<>();
+  private List<ProductContainerDTO> products = new ArrayList<>();
 
   @JsonProperty(value = "pagination")
   private Pagination pagination;
 
 
 
-  public ProductListDTO addItemsItem(ProductContainerDTO itemsItem) {
-    if (this.items == null) {
-      this.items = new ArrayList<>();
+  public PaginatedProductDTO addProductsItem(ProductContainerDTO productsItem) {
+    if (this.products == null) {
+      this.products = new ArrayList<>();
     }
-    this.items.add(itemsItem);
+    this.products.add(productsItem);
     return this;
   }
 
   /**
-   * Get items
-   * @return items
+   * Get products
+   * @return products
   **/
   @ApiModelProperty(value = "")
 
   @Valid
 
-  public List<ProductContainerDTO> getItems() {
-    return items;
+  public List<ProductContainerDTO> getProducts() {
+    return products;
   }
 
-  public void setItems(List<ProductContainerDTO> items) {
-    this.items = items;
+  public void setProducts(List<ProductContainerDTO> products) {
+    this.products = products;
   }
 
 

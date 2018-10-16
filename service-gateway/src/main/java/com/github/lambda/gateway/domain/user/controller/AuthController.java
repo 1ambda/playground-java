@@ -1,9 +1,5 @@
 package com.github.lambda.gateway.domain.user.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
-
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.security.SecurityManager;
 import com.github.lambda.gateway.security.UserPrincipal;
@@ -17,6 +13,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("api")
@@ -29,6 +30,7 @@ public class AuthController implements AuthControllerApi {
     this.userService = userService;
   }
 
+  @Override
   @ApiOperation(
       value = "",
       nickname = "login",
@@ -38,7 +40,9 @@ public class AuthController implements AuthControllerApi {
           "auth-controller",
       },
       authorizations = {@Authorization(value = "basicAuth")})
-  @Override
+  @RequestMapping(value = "/auth/login",
+                  produces = {"application/json"},
+                  method = RequestMethod.GET)
   public ResponseEntity<UserDTO> login() {
     UserPrincipal principal = SecurityManager.getPrincipal();
 
@@ -54,11 +58,19 @@ public class AuthController implements AuthControllerApi {
   }
 
   @Override
+  @RequestMapping(value = "/auth/logout",
+                  produces = {"application/json"},
+                  consumes = {"application/json"},
+                  method = RequestMethod.GET)
   public ResponseEntity<Void> logout() {
     return null;
   }
 
   @Override
+  @RequestMapping(value = "/auth/register",
+                  produces = {"application/json"},
+                  consumes = {"application/json"},
+                  method = RequestMethod.POST)
   public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO request) {
 
     UserDTO userDTO = userService.addNewCustomer(request);
@@ -67,6 +79,9 @@ public class AuthController implements AuthControllerApi {
   }
 
   @Override
+  @RequestMapping(value = "/auth/whoiam",
+                  produces = {"application/json"},
+                  method = RequestMethod.GET)
   public ResponseEntity<UserDTO> whoiam() {
     UserPrincipal principal = SecurityManager.getPrincipalOrNull();
     String username = null;

@@ -65,7 +65,7 @@ public class CatalogFactory {
     return builder.build();
   }
 
-  public ProductListDTO convertToProductListDTO(Page<Product> paginated) {
+  public PaginatedProductDTO convertToPaginatedProductDTO(Page<Product> paginated) {
     List<ProductContainerDTO> productDTOList =
         paginated
             .getContent()
@@ -80,8 +80,8 @@ public class CatalogFactory {
             .totalItemCount(paginated.getTotalElements())
             .build();
 
-    ProductListDTO.ProductListDTOBuilder builder =
-        ProductListDTO.builder().items(productDTOList).pagination(pagination);
+    PaginatedProductDTO.PaginatedProductDTOBuilder builder =
+        PaginatedProductDTO.builder().products(productDTOList).pagination(pagination);
 
     return builder.build();
   }

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -31,6 +32,9 @@ public class CatalogController implements CatalogControllerApi {
   }
 
   @Override
+  @RequestMapping(value = "/catalog/categories",
+                  produces = {"application/json"},
+                  method = RequestMethod.GET)
   public ResponseEntity<CategoryListDTO> findAllCategories() {
     CategoryListDTO dto = catalogService.getAllCategories();
 
@@ -38,6 +42,9 @@ public class CatalogController implements CatalogControllerApi {
   }
 
   @Override
+  @RequestMapping(value = "/catalog/product/{productId}",
+                  produces = {"application/json"},
+                  method = RequestMethod.GET)
   public ResponseEntity<ProductDTO> findOneProduct(@PathVariable("productId") Long productId) {
     Preconditions.checkArgument(productId > 0L, "Invalid productId");
 
@@ -47,8 +54,13 @@ public class CatalogController implements CatalogControllerApi {
   }
 
   @Override
-  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(@RequestParam(value = "page", required = false) Long page,
-                                                                   @RequestParam(value = "count", required = false) Long count) {
+  @RequestMapping(value = "/catalog/products",
+                  produces = {"application/json"},
+                  method = RequestMethod.GET)
+  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(@RequestParam(value = "page",
+                                                                                 required = false) Long page,
+                                                                   @RequestParam(value = "count",
+                                                                                 required = false) Long count) {
 
     Preconditions.checkArgument(page >= 0L, "invalid page value");
     Preconditions.checkArgument(count > 0L, "invalid count value");

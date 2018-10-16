@@ -57,30 +57,30 @@ public interface CartControllerApi extends ApiClient.Api {
   /**
    * 
    * 
-    * @param cartLineId  (required)
+    * @param lineId  (required)
    */
   @RequestLine("DELETE /cart/user/line/{lineId}")
   @Headers({
     "Accept: application/json",
   })
-  void removeUserCartLine(@Param("cartLineId") Long cartLineId);
+  void removeUserCartLine(@Param("lineId") Long lineId);
 
   /**
    * 
    * 
-    * @param cartLineId  (required)
-    * @param cartLineOptionId  (required)
+    * @param lineId  (required)
+    * @param optionId  (required)
    */
   @RequestLine("DELETE /cart/user/line/{lineId}/option/{optionId}")
   @Headers({
     "Accept: application/json",
   })
-  void removeUserCartLineOption(@Param("cartLineId") Long cartLineId, @Param("cartLineOptionId") Long cartLineOptionId);
+  void removeUserCartLineOption(@Param("lineId") Long lineId, @Param("optionId") Long optionId);
 
   /**
    * 
    * 
-    * @param cartLineId  (required)
+    * @param lineId  (required)
     * @param body  (optional)
    * @return CartLineDTO
    */
@@ -89,13 +89,13 @@ public interface CartControllerApi extends ApiClient.Api {
     "Content-Type: application/json",
     "Accept: application/json",
   })
-  CartLineDTO updateUserCartLine(@Param("cartLineId") Long cartLineId, CartLineRequestDTO body);
+  CartLineDTO updateUserCartLine(@Param("lineId") Long lineId, CartLineRequestDTO body);
 
   /**
    * 
    * 
-    * @param cartLineId  (required)
-    * @param cartLineOptionId  (required)
+    * @param lineId  (required)
+    * @param optionId  (required)
     * @param body  (optional)
    * @return CartLineOptionDTO
    */
@@ -104,5 +104,5 @@ public interface CartControllerApi extends ApiClient.Api {
     "Content-Type: application/json",
     "Accept: application/json",
   })
-  CartLineOptionDTO updateUserCartLineOption(@Param("cartLineId") Long cartLineId, @Param("cartLineOptionId") Long cartLineOptionId, CartLineOptionRequestDTO body);
+  CartLineOptionDTO updateUserCartLineOption(@Param("lineId") Long lineId, @Param("optionId") Long optionId, CartLineOptionRequestDTO body);
 }

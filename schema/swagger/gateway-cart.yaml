@@ -69,7 +69,7 @@ api:
       - application/json
       parameters:
       - in: path
-        name: CartLineId
+        name: lineId
         type: integer
         format: int64
       responses:
@@ -91,7 +91,7 @@ api:
       - application/json
       parameters:
       - in: path
-        name: CartLineId
+        name: lineId
         type: integer
         format: int64
       - name: body
@@ -144,11 +144,11 @@ api:
       - application/json
       parameters:
       - in: path
-        name: CartLineId
+        name: lineId
         type: integer
         format: int64
       - in: path
-        name: CartLineOptionId
+        name: optionId
         type: integer
         format: int64
       responses:
@@ -170,11 +170,11 @@ api:
       - application/json
       parameters:
       - in: path
-        name: CartLineId
+        name: lineId
         type: integer
         format: int64
       - in: path
-        name: CartLineOptionId
+        name: optionId
         type: integer
         format: int64
       - name: body

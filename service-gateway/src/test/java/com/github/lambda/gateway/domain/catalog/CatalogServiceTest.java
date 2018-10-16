@@ -1,7 +1,5 @@
 package com.github.lambda.gateway.domain.catalog;
 
-import java.util.UUID;
-
 import base.AbstractServiceTest;
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Image;
@@ -13,26 +11,33 @@ import com.github.lambda.gateway.domain.catalog.repository.ProductOptionReposito
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
 import com.github.lambda.gateway.exception.type.BadRequestException;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
+import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
-import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 public class CatalogServiceTest extends AbstractServiceTest {
 
-  @Autowired private CatalogService catalogService;
+  @Autowired
+  private CatalogService catalogService;
 
-  @Autowired private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-  @Autowired private CategoryRepository categoryRepository;
+  @Autowired
+  private CategoryRepository categoryRepository;
 
-  @Autowired private ImageRepository imageRepository;
+  @Autowired
+  private ImageRepository imageRepository;
 
-  @Autowired private ProductOptionRepository productOptionRepository;
+  @Autowired
+  private ProductOptionRepository productOptionRepository;
 
   @Test
   public void getProductById_shouldReturnDTO_whenProductExists() {
@@ -73,12 +78,12 @@ public class CatalogServiceTest extends AbstractServiceTest {
     PageRequest pagination2 = PageRequest.of(2, 10);
 
     // when
-    ProductListDTO dto1 = catalogService.getPaginatedProducts(pagination1);
-    ProductListDTO dto2 = catalogService.getPaginatedProducts(pagination2);
+    PaginatedProductDTO dto1 = catalogService.getPaginatedProducts(pagination1);
+    PaginatedProductDTO dto2 = catalogService.getPaginatedProducts(pagination2);
 
     // then
-    assertThat(dto1.getItems().size()).isEqualTo(10);
-    assertThat(dto2.getItems().size()).isEqualTo(5);
+    assertThat(dto1.getProducts().size()).isEqualTo(10);
+    assertThat(dto2.getProducts().size()).isEqualTo(5);
   }
 
   @Test

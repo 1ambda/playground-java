@@ -5,8 +5,8 @@ import com.github.lambda.gateway.swagger.client.invoker.EncodingUtils;
 
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
+import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductDTO;
-import com.github.lambda.gateway.swagger.model.ProductListDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,16 +44,15 @@ public interface CatalogControllerApi extends ApiClient.Api {
   /**
    * 
    * 
-    * @param productId  (required)
     * @param page  (optional)
     * @param count  (optional)
-   * @return ProductListDTO
+   * @return PaginatedProductDTO
    */
   @RequestLine("GET /catalog/products?page={page}&count={count}")
   @Headers({
     "Accept: application/json",
   })
-  ProductListDTO findPaginatedProducts(@Param("productId") Long productId, @Param("page") Long page, @Param("count") Long count);
+  PaginatedProductDTO findPaginatedProducts(@Param("page") Long page, @Param("count") Long count);
 
   /**
    * 
@@ -63,20 +62,19 @@ public interface CatalogControllerApi extends ApiClient.Api {
    * is convenient for services with optional query parameters, especially when
    * used with the {@link FindPaginatedProductsQueryParams} class that allows for
    * building up this map in a fluent style.
-   * @param productId  (required)
    * @param queryParams Map of query parameters as name-value pairs
    *   <p>The following elements may be specified in the query map:</p>
    *   <ul>
    *   <li>page -  (optional)</li>
    *   <li>count -  (optional)</li>
    *   </ul>
-   * @return ProductListDTO
+   * @return PaginatedProductDTO
    */
   @RequestLine("GET /catalog/products?page={page}&count={count}")
   @Headers({
   "Accept: application/json",
   })
-  ProductListDTO findPaginatedProducts(@Param("productId") Long productId, @QueryMap(encoded=true) Map<String, Object> queryParams);
+  PaginatedProductDTO findPaginatedProducts(@QueryMap(encoded=true) Map<String, Object> queryParams);
 
   /**
    * A convenience class for generating query parameters for the

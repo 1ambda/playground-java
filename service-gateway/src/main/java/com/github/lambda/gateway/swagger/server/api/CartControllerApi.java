@@ -123,7 +123,7 @@ public interface CartControllerApi {
     @RequestMapping(value = "/cart/user/line/{lineId}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    default ResponseEntity<Void> removeUserCartLine(@ApiParam(value = "",required=true) @PathVariable("CartLineId") Long cartLineId) {
+    default ResponseEntity<Void> removeUserCartLine(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
         } else {
             log.warn("ObjectMapper or HttpServletRequest not configured in default CartControllerApi interface so no example is generated");
@@ -139,7 +139,7 @@ public interface CartControllerApi {
     @RequestMapping(value = "/cart/user/line/{lineId}/option/{optionId}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    default ResponseEntity<Void> removeUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("CartLineId") Long cartLineId,@ApiParam(value = "",required=true) @PathVariable("CartLineOptionId") Long cartLineOptionId) {
+    default ResponseEntity<Void> removeUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = "",required=true) @PathVariable("optionId") Long optionId) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
         } else {
             log.warn("ObjectMapper or HttpServletRequest not configured in default CartControllerApi interface so no example is generated");
@@ -156,7 +156,7 @@ public interface CartControllerApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    default ResponseEntity<CartLineDTO> updateUserCartLine(@ApiParam(value = "",required=true) @PathVariable("CartLineId") Long cartLineId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineRequestDTO body) {
+    default ResponseEntity<CartLineDTO> updateUserCartLine(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineRequestDTO body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
@@ -181,7 +181,7 @@ public interface CartControllerApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    default ResponseEntity<CartLineOptionDTO> updateUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("CartLineId") Long cartLineId,@ApiParam(value = "",required=true) @PathVariable("CartLineOptionId") Long cartLineOptionId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineOptionRequestDTO body) {
+    default ResponseEntity<CartLineOptionDTO> updateUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = "",required=true) @PathVariable("optionId") Long optionId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineOptionRequestDTO body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {

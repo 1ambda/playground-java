@@ -3,8 +3,8 @@ package com.github.lambda.gateway.domain.catalog;
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
+import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
-import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,9 +42,9 @@ public class CatalogService {
   }
 
   @Transactional
-  public ProductListDTO getPaginatedProducts(Pageable pageable) {
+  public PaginatedProductDTO getPaginatedProducts(Pageable pageable) {
     Page<Product> paginated = productQueryFacade.getPaginatedProducts(pageable);
-    ProductListDTO dto = catalogFactory.convertToProductListDTO(paginated);
+    PaginatedProductDTO dto = catalogFactory.convertToPaginatedProductDTO(paginated);
 
     return dto;
   }
