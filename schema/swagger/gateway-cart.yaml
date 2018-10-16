@@ -226,15 +226,17 @@ definitions:
         type: integer
         format: int64
       totalPrice:
-        type: string
+        type: integer
+        format: int64
       index:
         type: integer
-        format: int32
+        format: int64
       quantity:
         type: integer
         format: int64
       productPrice:
-        type: string
+        type: integer
+        format: int64
       productId:
         type: integer
         format: int64
@@ -281,11 +283,3 @@ definitions:
       quantity:
         type: integer
         format: int64
-
-  RemoveCartItemDTO:
-    required:
-    - cartItemID
-    type: object
-    properties:
-      productID:
-        type: string

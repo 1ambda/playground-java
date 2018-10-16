@@ -1,13 +1,13 @@
 package com.github.lambda.gateway.domain.catalog.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,16 +16,15 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(
-    name = "`Category`",
-    indexes = {
-        @Index(name = "idx_Category_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_Category_deletedAt", columnList = "deleted_at", unique = false),
-        @Index(name = "idx_Category_locked", columnList = "locked", unique = false),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"path"}),
-    })
+@Table(name = "`Category`",
+       indexes = {
+           @Index(name = "idx_Category_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_Category_deletedAt", columnList = "deleted_at", unique = false),
+           @Index(name = "idx_Category_locked", columnList = "locked", unique = false),
+       },
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = {"path"}),
+       })
 public class Category extends BaseEntity {
   @Size(min = 0, max = 255)
   @Column(name = "`name`", nullable = false)

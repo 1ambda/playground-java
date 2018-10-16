@@ -15,14 +15,13 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(
-    name = "`ProductOption`",
-    indexes = {
-        @Index(name = "idx_ProductOption_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_ProductOption_deletedAt", columnList = "deleted_at", unique = false),
-        @Index(name = "idx_ProductOption_locked", columnList = "locked", unique = false),
-    },
-    uniqueConstraints = {})
+@Table(name = "`ProductOption`",
+       indexes = {
+           @Index(name = "idx_ProductOption_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_ProductOption_deletedAt", columnList = "deleted_at", unique = false),
+           @Index(name = "idx_ProductOption_locked", columnList = "locked", unique = false),
+       },
+       uniqueConstraints = {})
 public class ProductOption extends BaseEntity {
   @Size(min = 0, max = 255)
   @Column(name = "`name`", nullable = false)

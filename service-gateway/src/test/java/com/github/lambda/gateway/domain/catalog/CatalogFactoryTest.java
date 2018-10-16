@@ -12,10 +12,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {CatalogFactory.class})
+@ContextConfiguration(classes = {CatalogConverter.class})
 public class CatalogFactoryTest {
 
-  @Autowired CatalogFactory catalogFactory;
+  @Autowired
+  CatalogConverter catalogConverter;
 
   @Test
   public void convertToProductOptionDTO_shouldReturnDTO() {
@@ -28,7 +29,7 @@ public class CatalogFactoryTest {
     entity.setLocked(YesNo.N);
 
     // when
-    ProductOptionDTO dto = catalogFactory.convertToProductOptionDTO(entity);
+    ProductOptionDTO dto = catalogConverter.convertToProductOptionDTO(entity);
 
     // then
     assertThat(dto.getId()).isEqualTo(entity.getId());

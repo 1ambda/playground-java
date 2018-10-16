@@ -14,16 +14,20 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "`PermissionToRole`",
-    indexes = {
-        @Index(name = "idx_PermissionToRole_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_PermissionToRole_deletedAt", columnList = "deleted_at", unique = false),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "`uniq_PermissionToRole_permissionAndRoleId`",
-            columnNames = {"`permission_id`", "`role_id`",}
-        ),
-    }
+       indexes = {
+           @Index(name = "idx_PermissionToRole_createdAt",
+                  columnList = "created_at",
+                  unique = false),
+           @Index(name = "idx_PermissionToRole_deletedAt",
+                  columnList = "deleted_at",
+                  unique = false),
+       },
+       uniqueConstraints = {
+           @UniqueConstraint(
+               name = "`uniq_PermissionToRole_permissionAndRoleId`",
+               columnNames = {"`permission_id`", "`role_id`",}
+           ),
+       }
 )
 public class PermissionToRole extends BaseEntity {
   @Column(name = "`permission_id`", nullable = true)

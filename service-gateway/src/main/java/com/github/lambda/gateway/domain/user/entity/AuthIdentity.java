@@ -17,14 +17,14 @@ import javax.validation.constraints.Size;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "`AuthIdentity`",
-    indexes = {
-        @Index(name = "idx_AuthIdentity_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_AuthIdentity_deletedAt", columnList = "deleted_at", unique = false),
-        @Index(name = "idx_AuthIdentity_locked", columnList = "locked", unique = false),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"username"}),
-    }
+       indexes = {
+           @Index(name = "idx_AuthIdentity_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_AuthIdentity_deletedAt", columnList = "deleted_at", unique = false),
+           @Index(name = "idx_AuthIdentity_locked", columnList = "locked", unique = false),
+       },
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = {"username"}),
+       }
 )
 public class AuthIdentity extends BaseEntity {
   public enum Provider {

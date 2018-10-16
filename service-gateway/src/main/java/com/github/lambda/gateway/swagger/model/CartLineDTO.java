@@ -38,16 +38,16 @@ public class CartLineDTO   {
   private Long updatedAt;
 
   @JsonProperty(value = "totalPrice")
-  private String totalPrice;
+  private Long totalPrice;
 
   @JsonProperty(value = "index")
-  private Integer index;
+  private Long index;
 
   @JsonProperty(value = "quantity")
   private Long quantity;
 
   @JsonProperty(value = "productPrice")
-  private String productPrice;
+  private Long productPrice;
 
   @JsonProperty(value = "productId")
   private Long productId;
@@ -117,11 +117,11 @@ public class CartLineDTO   {
   @ApiModelProperty(value = "")
 
 
-  public String getTotalPrice() {
+  public Long getTotalPrice() {
     return totalPrice;
   }
 
-  public void setTotalPrice(String totalPrice) {
+  public void setTotalPrice(Long totalPrice) {
     this.totalPrice = totalPrice;
   }
 
@@ -134,11 +134,11 @@ public class CartLineDTO   {
   @ApiModelProperty(value = "")
 
 
-  public Integer getIndex() {
+  public Long getIndex() {
     return index;
   }
 
-  public void setIndex(Integer index) {
+  public void setIndex(Long index) {
     this.index = index;
   }
 
@@ -168,11 +168,11 @@ public class CartLineDTO   {
   @ApiModelProperty(value = "")
 
 
-  public String getProductPrice() {
+  public Long getProductPrice() {
     return productPrice;
   }
 
-  public void setProductPrice(String productPrice) {
+  public void setProductPrice(Long productPrice) {
     this.productPrice = productPrice;
   }
 

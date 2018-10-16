@@ -1,14 +1,14 @@
 package com.github.lambda.gateway.domain.user.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,13 +18,13 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "`Role`",
-    indexes = {
-        @Index(name = "idx_Role_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_Role_deletedAt", columnList = "deleted_at", unique = false),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"code"}),
-    }
+       indexes = {
+           @Index(name = "idx_Role_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_Role_deletedAt", columnList = "deleted_at", unique = false),
+       },
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = {"code"}),
+       }
 )
 public class Role extends BaseEntity {
   public enum Code {

@@ -21,22 +21,22 @@ public class CatalogService {
 
   private CatalogActionFacade productActionFacade;
   private CatalogQueryFacade productQueryFacade;
-  private CatalogFactory catalogFactory;
+  private CatalogConverter catalogConverter;
 
   @Autowired
   public CatalogService(CatalogActionFacade productActionFacade,
                         CatalogQueryFacade productQueryFacade,
-                        CatalogFactory catalogFactory) {
+                        CatalogConverter catalogConverter) {
 
     this.productActionFacade = productActionFacade;
     this.productQueryFacade = productQueryFacade;
-    this.catalogFactory = catalogFactory;
+    this.catalogConverter = catalogConverter;
   }
 
   @Transactional
   public ProductContainerDTO getProductById(Long productId) {
     Product product = productQueryFacade.getProductById(productId);
-    ProductContainerDTO dto = catalogFactory.convertToProductDTO(product);
+    ProductContainerDTO dto = catalogConverter.convertToProductDTO(product);
 
     return dto;
   }
@@ -44,7 +44,7 @@ public class CatalogService {
   @Transactional
   public PaginatedProductDTO getPaginatedProducts(Pageable pageable) {
     Page<Product> paginated = productQueryFacade.getPaginatedProducts(pageable);
-    PaginatedProductDTO dto = catalogFactory.convertToPaginatedProductDTO(paginated);
+    PaginatedProductDTO dto = catalogConverter.convertToPaginatedProductDTO(paginated);
 
     return dto;
   }
@@ -52,7 +52,7 @@ public class CatalogService {
   @Transactional
   public CategoryListDTO getAllCategories() {
     List<Category> categories = productQueryFacade.getAllCategories();
-    CategoryListDTO dto = catalogFactory.convertToCategoryListDTO(categories);
+    CategoryListDTO dto = catalogConverter.convertToCategoryListDTO(categories);
 
     return dto;
   }

@@ -1,7 +1,7 @@
 package com.github.lambda.gateway.domain.user.controller;
 
 import com.github.lambda.gateway.domain.user.UserService;
-import com.github.lambda.gateway.security.SecurityManager;
+import com.github.lambda.gateway.security.SecurityService;
 import com.github.lambda.gateway.security.UserPrincipal;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import com.github.lambda.gateway.swagger.server.api.AuthControllerApi;
@@ -44,7 +44,7 @@ public class AuthController implements AuthControllerApi {
                   produces = {"application/json"},
                   method = RequestMethod.GET)
   public ResponseEntity<UserDTO> login() {
-    UserPrincipal principal = SecurityManager.getPrincipal();
+    UserPrincipal principal = SecurityService.getPrincipal();
 
     List<String> roles = principal.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
@@ -83,7 +83,7 @@ public class AuthController implements AuthControllerApi {
                   produces = {"application/json"},
                   method = RequestMethod.GET)
   public ResponseEntity<UserDTO> whoiam() {
-    UserPrincipal principal = SecurityManager.getPrincipalOrNull();
+    UserPrincipal principal = SecurityService.getPrincipalOrNull();
     String username = null;
 
     if (principal != null) {

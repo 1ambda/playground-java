@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class UserFactory {
+public class UserConverter {
 
   public UserDTO convertToUserDTO(User user) {
     UserDTO.UserDTOBuilder builder = UserDTO.builder();

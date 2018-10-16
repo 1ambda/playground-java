@@ -9,9 +9,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * SecurityManager returns user principal (UserDetails).
+ * SecurityService returns user principal (UserDetails).
  */
-public class SecurityManager {
+public class SecurityService {
 
   /**
    * @return null if principal is invalid.

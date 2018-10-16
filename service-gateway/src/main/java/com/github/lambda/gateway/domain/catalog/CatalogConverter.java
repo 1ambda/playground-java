@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CatalogFactory {
+public class CatalogConverter {
 
   public ProductOptionDTO convertToProductOptionDTO(ProductOption productOption) {
     return ProductOptionDTO.builder()

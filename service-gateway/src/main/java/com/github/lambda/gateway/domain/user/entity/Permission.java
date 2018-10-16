@@ -18,13 +18,13 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "`Permission`",
-    indexes = {
-        @Index(name = "idx_Permission_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_Permission_deletedAt", columnList = "deleted_at", unique = false),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"code"}),
-    }
+       indexes = {
+           @Index(name = "idx_Permission_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_Permission_deletedAt", columnList = "deleted_at", unique = false),
+       },
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = {"code"}),
+       }
 )
 public class Permission extends BaseEntity {
   public enum Code {

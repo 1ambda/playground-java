@@ -1,12 +1,12 @@
 package com.github.lambda.gateway.domain.user.repository;
 
-import javax.transaction.Transactional;
-
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 @Repository
 @Transactional

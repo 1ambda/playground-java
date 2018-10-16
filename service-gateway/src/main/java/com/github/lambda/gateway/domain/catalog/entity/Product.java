@@ -67,4 +67,14 @@ public class Product extends BaseEntity {
     productOption.setProduct(null);
     productOptions.remove(productOption);
   }
+
+  public Long getTotalPrice() {
+    Long totalPrice = price;
+
+    for(ProductOption productOption : productOptions) {
+      totalPrice += productOption.getPrice();
+    }
+
+    return totalPrice;
+  }
 }

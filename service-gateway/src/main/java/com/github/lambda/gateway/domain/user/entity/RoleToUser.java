@@ -1,10 +1,10 @@
 package com.github.lambda.gateway.domain.user.entity;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.gateway.domain.base.BaseEntity;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor

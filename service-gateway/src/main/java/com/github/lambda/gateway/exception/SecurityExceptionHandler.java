@@ -1,7 +1,7 @@
 package com.github.lambda.gateway.exception;
 
 import com.github.lambda.gateway.exception.factory.FailureFactory;
-import com.github.lambda.gateway.security.SecurityManager;
+import com.github.lambda.gateway.security.SecurityService;
 import com.github.lambda.gateway.swagger.model.Failure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpOutputMessage;
@@ -69,7 +69,7 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     // 401
     String message = getUnauthorizedExceptionMessage(authException);
     HttpStatus status = HttpStatus.UNAUTHORIZED;
-    String path = SecurityManager.getOriginalRequestUri(request);
+    String path = SecurityService.getOriginalRequestUri(request);
     Failure failure = failureFactory.build(authException, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
@@ -86,7 +86,7 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     // 403
     String message = "Don't have enough permission.";
     HttpStatus status = HttpStatus.FORBIDDEN;
-    String path = SecurityManager.getOriginalRequestUri(request);
+    String path = SecurityService.getOriginalRequestUri(request);
     Failure failure = failureFactory.build(accessDeniedException, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);
@@ -101,7 +101,7 @@ public class SecurityExceptionHandler extends BasicAuthenticationEntryPoint {
     // 500
     HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     String message = "Unknown error occurred while handling authentication";
-    String path = SecurityManager.getOriginalRequestUri(request);
+    String path = SecurityService.getOriginalRequestUri(request);
     Failure failure = failureFactory.build(exception, message, status.value(), path);
 
     HttpOutputMessage output = new ServletServerHttpResponse(response);

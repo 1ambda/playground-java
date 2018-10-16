@@ -17,14 +17,13 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(
-    name = "`Image`",
-    indexes = {
-        @Index(name = "idx_Image_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_Image_deletedAt", columnList = "deleted_at", unique = false),
-        @Index(name = "idx_Image_locked", columnList = "locked", unique = false),
-    },
-    uniqueConstraints = {})
+@Table(name = "`Image`",
+       indexes = {
+           @Index(name = "idx_Image_createdAt", columnList = "created_at", unique = false),
+           @Index(name = "idx_Image_deletedAt", columnList = "deleted_at", unique = false),
+           @Index(name = "idx_Image_locked", columnList = "locked", unique = false),
+       },
+       uniqueConstraints = {})
 public class Image extends BaseEntity {
   @Size(min = 0, max = 255)
   @Column(name = "`name`", nullable = false)

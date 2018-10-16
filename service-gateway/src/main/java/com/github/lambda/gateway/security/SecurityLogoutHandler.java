@@ -40,7 +40,7 @@ public class SecurityLogoutHandler implements LogoutSuccessHandler {
     if (authentication == null) {
       AlreadyLoggedOutException e = new AlreadyLoggedOutException("Already logged out.");
       HttpStatus status = HttpStatus.UNAUTHORIZED;
-      String path = SecurityManager.getOriginalRequestUri(request);
+      String path = SecurityService.getOriginalRequestUri(request);
       Failure failure = failureFactory.build(e, null, status.value(), path);
 
       HttpOutputMessage output = new ServletServerHttpResponse(response);
