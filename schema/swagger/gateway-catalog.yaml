@@ -1,6 +1,6 @@
 api:
 
-  findPaginatedProducts:
+  ProductsOperation:
     get:
       tags:
       - catalog-controller
@@ -13,11 +13,11 @@ api:
         name: productId
         type: integer
         format: int64
-      - in: path
+      - in: query
         name: page
         type: integer
         format: int64
-      - in: path
+      - in: query
         name: count
         type: integer
         format: int64
@@ -31,7 +31,7 @@ api:
           schema:
             $ref: "./common.yaml#/definitions/Failure"
 
-  findOneProduct:
+  ProductOperation:
     get:
       tags:
       - catalog-controller
@@ -54,7 +54,7 @@ api:
           schema:
             $ref: "./common.yaml#/definitions/Failure"
 
-  findAllCategories:
+  CategoriesOperation:
     get:
       tags:
       - catalog-controller

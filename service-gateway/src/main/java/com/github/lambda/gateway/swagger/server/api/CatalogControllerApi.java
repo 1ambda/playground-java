@@ -104,7 +104,7 @@ public interface CatalogControllerApi {
     @RequestMapping(value = "/catalog/products",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<ProductListDTO> findPaginatedProducts(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "",required=true) @PathVariable("page") Long page,@ApiParam(value = "",required=true) @PathVariable("count") Long count) {
+    default ResponseEntity<ProductListDTO> findPaginatedProducts(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) Long page,@ApiParam(value = "") @Valid @RequestParam(value = "count", required = false) Long count) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {

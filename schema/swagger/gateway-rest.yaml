@@ -23,13 +23,17 @@ paths:
     $ref: "./gateway-auth.yaml#/api/logout"
 
   /catalog/product/{productId}:
-    $ref: "./gateway-catalog.yaml#/api/findOneProduct"
+    $ref: "./gateway-catalog.yaml#/api/ProductOperation"
   /catalog/products:
-    $ref: "./gateway-catalog.yaml#/api/findPaginatedProducts"
+    $ref: "./gateway-catalog.yaml#/api/ProductsOperation"
   /catalog/categories:
-    $ref: "./gateway-catalog.yaml#/api/findAllCategories"
+    $ref: "./gateway-catalog.yaml#/api/CategoriesOperation"
 
-  /cart/my:
-    $ref: "./gateway-cart.yaml#/api/findUserCart"
+  /cart/user/lines:
+    $ref: "./gateway-cart.yaml#/api/CartLinesOperation"
+  /cart/user/line/{lineId}:
+    $ref: "./gateway-cart.yaml#/api/CartLineOperation"
+  /cart/user/line/{lineId}/option/{optionId}:
+    $ref: "./gateway-cart.yaml#/api/CartLineOptionOperation"
 
 

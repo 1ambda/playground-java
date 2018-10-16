@@ -45,13 +45,51 @@ public interface CatalogControllerApi extends ApiClient.Api {
    * 
    * 
     * @param productId  (required)
-    * @param page  (required)
-    * @param count  (required)
+    * @param page  (optional)
+    * @param count  (optional)
    * @return ProductListDTO
    */
-  @RequestLine("GET /catalog/products")
+  @RequestLine("GET /catalog/products?page={page}&count={count}")
   @Headers({
     "Accept: application/json",
   })
   ProductListDTO findPaginatedProducts(@Param("productId") Long productId, @Param("page") Long page, @Param("count") Long count);
+
+  /**
+   * 
+   * 
+   * Note, this is equivalent to the other <code>findPaginatedProducts</code> method,
+   * but with the query parameters collected into a single Map parameter. This
+   * is convenient for services with optional query parameters, especially when
+   * used with the {@link FindPaginatedProductsQueryParams} class that allows for
+   * building up this map in a fluent style.
+   * @param productId  (required)
+   * @param queryParams Map of query parameters as name-value pairs
+   *   <p>The following elements may be specified in the query map:</p>
+   *   <ul>
+   *   <li>page -  (optional)</li>
+   *   <li>count -  (optional)</li>
+   *   </ul>
+   * @return ProductListDTO
+   */
+  @RequestLine("GET /catalog/products?page={page}&count={count}")
+  @Headers({
+  "Accept: application/json",
+  })
+  ProductListDTO findPaginatedProducts(@Param("productId") Long productId, @QueryMap(encoded=true) Map<String, Object> queryParams);
+
+  /**
+   * A convenience class for generating query parameters for the
+   * <code>findPaginatedProducts</code> method in a fluent style.
+   */
+  public static class FindPaginatedProductsQueryParams extends HashMap<String, Object> {
+    public FindPaginatedProductsQueryParams page(final Long value) {
+      put("page", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams count(final Long value) {
+      put("count", EncodingUtils.encode(value));
+      return this;
+    }
+  }
 }

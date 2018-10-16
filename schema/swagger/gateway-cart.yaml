@@ -1,10 +1,10 @@
 api:
 
-  findUserCart:
+  CartLinesOperation:
     get:
       tags:
       - cart-controller
-      operationId: findUserCart
+      operationId: getUserCartLines
       consumes: []
       produces:
       - application/json
@@ -19,44 +19,178 @@ api:
           schema:
             $ref: "./common.yaml#/definitions/Failure"
 
-#    post:
-#      tags:
-#      - cart
-#      operationId: addCartItem
-#      parameters:
-#      - name: body
-#        in: body
-#        schema:
-#          $ref: "./gateway-cart.yaml#/definitions/AddCartItemDTO"
-#      responses:
-#        200:
-#          description: OK
-#          schema:
-#            $ref: "./gateway-cart.yaml#/definitions/AddCartItemDTO"
-#        default:
-#          description: error
-#          schema:
-#            $ref: "./common.yaml#/definitions/Failure"
-#
-#    delete:
-#      tags:
-#      - cart
-#      operationId: removeCartItem
-#      parameters:
-#      - name: body
-#        in: body
-#        schema:
-#          $ref: "./gateway-cart.yaml#/definitions/RemoveCartItemDTO"
-#      responses:
-#        200:
-#          description: OK
-#          schema:
-#            $ref: "./gateway-cart.yaml#/definitions/RemoveCartItemDTO"
-#        default:
-#          description: error
-#          schema:
-#            $ref: "./common.yaml#/definitions/Failure"
+    delete:
+      tags:
+      - cart-controller
+      operationId: clearUserCartLines
+      consumes: []
+      produces:
+      - application/json
+      responses:
+        204:
+          description: No Content
 
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+    post:
+      tags:
+      - cart-controller
+      operationId: addUserCartLine
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        schema:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineDTO"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-cart.yaml#/definitions/CartLineDTO"
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+  CartLineOperation:
+    delete:
+      tags:
+      - cart-controller
+      operationId: removeUserCartLine
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: CartLineId
+        type: integer
+        format: int64
+      responses:
+        204:
+          description: No Content
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+    patch:
+      tags:
+      - cart-controller
+      operationId: updateUserCartLine
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: CartLineId
+        type: integer
+        format: int64
+      - name: body
+        in: body
+        schema:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineRequestDTO"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-cart.yaml#/definitions/CartLineDTO"
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+  CartLineOptionsOperation:
+    post:
+      tags:
+      - cart-controller
+      operationId: addUserCartLineOption
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        schema:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionDTO"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-cart.yaml#/definitions/CartLineOptionDTO"
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+  CartLineOptionOperation:
+    delete:
+      tags:
+      - cart-controller
+      operationId: removeUserCartLineOption
+      consumes: []
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: CartLineId
+        type: integer
+        format: int64
+      - in: path
+        name: CartLineOptionId
+        type: integer
+        format: int64
+      responses:
+        204:
+          description: No Content
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
+    patch:
+      tags:
+      - cart-controller
+      operationId: updateUserCartLineOption
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: CartLineId
+        type: integer
+        format: int64
+      - in: path
+        name: CartLineOptionId
+        type: integer
+        format: int64
+      - name: body
+        in: body
+        schema:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionRequestDTO"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-cart.yaml#/definitions/CartLineOptionDTO"
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
 
 definitions:
   CartDTO:
@@ -131,26 +265,22 @@ definitions:
         type: integer
         format: int64
 
-  AddCartItemDTO:
-    required:
-    - productID
-    - productOptionIDList
-    - quantity
+  CartLineRequestDTO:
     type: object
     properties:
-      productID:
-        type: integer
-        format: int64
-        minimum: 1
-      productOptionIDList:
-        type: array
-        items:
-          type: integer
-          format: int64
       quantity:
         type: integer
         format: int64
-        minimum: 1
+
+  CartLineOptionRequestDTO:
+    type: object
+    properties:
+      productOptionId:
+        type: integer
+        format: int64
+      quantity:
+        type: integer
+        format: int64
 
   RemoveCartItemDTO:
     required:
