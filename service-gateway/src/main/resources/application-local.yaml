@@ -29,6 +29,10 @@ logbook:
   exclude:
   - /health
   - /admin/**
+  - /documentation/**
+  - /swagger-resources/**
+  - /error/**
+  - /v2/**
   filter.enabled: true
   format.style: http
   obfuscate:
