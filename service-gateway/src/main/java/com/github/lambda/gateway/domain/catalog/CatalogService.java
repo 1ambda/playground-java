@@ -3,7 +3,7 @@ package com.github.lambda.gateway.domain.catalog;
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
-import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,9 +34,9 @@ public class CatalogService {
   }
 
   @Transactional
-  public ProductDTO getProductById(Long productId) {
+  public ProductContainerDTO getProductById(Long productId) {
     Product product = productQueryFacade.getProductById(productId);
-    ProductDTO dto = catalogFactory.convertToProductDTO(product);
+    ProductContainerDTO dto = catalogFactory.convertToProductDTO(product);
 
     return dto;
   }

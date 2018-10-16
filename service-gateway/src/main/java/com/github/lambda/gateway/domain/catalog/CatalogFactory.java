@@ -23,9 +23,9 @@ public class CatalogFactory {
         .build();
   }
 
-  public ProductItemDTO convertToProductItemDTO(Product product) {
-    ProductItemDTO.ProductItemDTOBuilder builder =
-        ProductItemDTO.builder()
+  public ProductDTO convertToProductItemDTO(Product product) {
+    ProductDTO.ProductDTOBuilder builder =
+        ProductDTO.builder()
             .id(product.getId())
             .createdAt(product.getCreateTimestamp())
             .updatedAt(product.getUpdateTimestamp())
@@ -51,7 +51,7 @@ public class CatalogFactory {
     return builder.build();
   }
 
-  public ProductDTO convertToProductDTO(Product product) {
+  public ProductContainerDTO convertToProductDTO(Product product) {
     List<ProductOptionDTO> optionDTOList =
         product
             .getProductOptions()
@@ -59,14 +59,14 @@ public class CatalogFactory {
             .map(this::convertToProductOptionDTO)
             .collect(Collectors.toList());
 
-    ProductDTO.ProductDTOBuilder builder =
-        ProductDTO.builder().item(convertToProductItemDTO(product)).options(optionDTOList);
+    ProductContainerDTO.ProductContainerDTOBuilder builder =
+        ProductContainerDTO.builder().item(convertToProductItemDTO(product)).options(optionDTOList);
 
     return builder.build();
   }
 
   public ProductListDTO convertToProductListDTO(Page<Product> paginated) {
-    List<ProductDTO> productDTOList =
+    List<ProductContainerDTO> productDTOList =
         paginated
             .getContent()
             .stream()

@@ -100,28 +100,27 @@ definitions:
       description:
         type: string
 
-
   ProductListDTO:
     type: object
     properties:
       items:
         type: array
         items:
-          $ref: "./gateway-catalog.yaml#/definitions/ProductDTO"
+          $ref: "./gateway-catalog.yaml#/definitions/ProductContainerDTO"
       pagination:
         $ref: "./common.yaml#/definitions/Pagination"
 
-  ProductDTO:
+  ProductContainerDTO:
     type: object
     properties:
       item:
-        $ref: "./gateway-catalog.yaml#/definitions/ProductItemDTO"
+        $ref: "./gateway-catalog.yaml#/definitions/ProductDTO"
       options:
         type: array
         items:
           $ref: "./gateway-catalog.yaml#/definitions/ProductOptionDTO"
 
-  ProductItemDTO:
+  ProductDTO:
     type: object
     properties:
       id:

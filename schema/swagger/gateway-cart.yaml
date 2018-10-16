@@ -1,36 +1,24 @@
-#api:
-#
-#  cart:
-#    get:
-#      tags:
-#      - cart
-#      operationId: getCartItems
-#      parameters:
-#      responses:
-#        200:
-#          description: OK
-#          schema:
-#            type: object
-#            properties:
-#              cart:
-#                $ref: "./gateway-cart.yaml#/definitions/Cart"
-#              cartItemList:
-#                type: array
-#                items:
-#                  type: object
-#                  properties:
-#                    cartItem:
-#                      $ref: "./gateway-cart.yaml#/definitions/CartItem"
-#                    cartItemOptionList:
-#                      type: array
-#                      items:
-#                        $ref: "./gateway-cart.yaml#/definitions/CartItemOption"
-#
-#        default:
-#          description: error
-#          schema:
-#            $ref: "./common.yaml#/definitions/Exception"
-#
+api:
+
+  findUserCart:
+    get:
+      tags:
+      - cart-controller
+      operationId: findUserCart
+      consumes: []
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-cart.yaml#/definitions/CartDTO"
+
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Failure"
+
 #    post:
 #      tags:
 #      - cart
@@ -48,7 +36,7 @@
 #        default:
 #          description: error
 #          schema:
-#            $ref: "./common.yaml#/definitions/Exception"
+#            $ref: "./common.yaml#/definitions/Failure"
 #
 #    delete:
 #      tags:
@@ -67,114 +55,107 @@
 #        default:
 #          description: error
 #          schema:
-#            $ref: "./common.yaml#/definitions/Exception"
-#
-#
-#definitions:
-#  Cart:
-#    type: object
-#    required:
-#    - cartID
-#    - updatedAt
-#    - totalPrice
-#    - itemCount
-#    properties:
-#      cartID:
-#        type: integer
-#        format: int64
-#      updatedAt:
-#        type: string
-#      totalPrice:
-#        type: string
-#      itemCount:
-#        type: string
-#
-#  CartItem:
-#    type: object
-#    required:
-#    - cartItemID
-#    - updatedAt
-#    - index
-#    - quantity
-#    - productPrice
-#    - totalPrice
-#    - productID
-#    properties:
-#      cartItemID:
-#        type: integer
-#        format: int64
-#      updatedAt:
-#        type: string
-#      index:
-#        type: integer
-#        format: int64
-#      quantity:
-#        type: integer
-#        format: int64
-#      productPrice:
-#        type: string
-#      totalPrice:
-#        type: string
-#      productID:
-#        type: integer
-#        format: int64
-#
-#  CartItemOption:
-#    required:
-#    - cartItemOptionID
-#    - updatedAt
-#    - cartItemID
-#    - productOptionID
-#    - quantity
-#    - required
-#    type: object
-#    properties:
-#      cartItemOptionID:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#      updatedAt:
-#        type: string
-#      cartItemID:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#      quantity:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#      productOptionID:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#      productOptionPrice:
-#        type: string
-#
-#  AddCartItemDTO:
-#    required:
-#    - productID
-#    - productOptionIDList
-#    - quantity
-#    type: object
-#    properties:
-#      productID:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#      productOptionIDList:
-#        type: array
-#        items:
-#          type: integer
-#          format: int64
-#      quantity:
-#        type: integer
-#        format: int64
-#        minimum: 1
-#
-#  RemoveCartItemDTO:
-#    required:
-#    - cartItemID
-#    type: object
-#    properties:
-#      productID:
-#        type: string
+#            $ref: "./common.yaml#/definitions/Failure"
+
+
+definitions:
+  CartDTO:
+    type: object
+    properties:
+      cartId:
+        type: integer
+        format: int64
+      updatedAt:
+        type: integer
+        format: int64
+      totalPrice:
+        type: integer
+        format: int64
+      itemCount:
+        type: integer
+        format: int64
+      cartLines:
+        type: array
+        items:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineDTO"
+
+  CartLineDTO:
+    type: object
+    properties:
+      cartLineID:
+        type: integer
+        format: int64
+      createdAt:
+        type: integer
+        format: int64
+      updatedAt:
+        type: integer
+        format: int64
+      totalPrice:
+        type: string
+      index:
+        type: integer
+        format: int32
+      quantity:
+        type: integer
+        format: int64
+      productPrice:
+        type: string
+      productId:
+        type: integer
+        format: int64
+      cartLineOptions:
+        type: array
+        items:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionDTO"
+
+  CartLineOptionDTO:
+    type: object
+    properties:
+      cartLineOptionId:
+        type: integer
+        format: int64
+      updatedAt:
+        type: integer
+        format: int64
+      createdAt:
+        type: integer
+        format: int64
+      quantity:
+        type: integer
+        format: int64
+      productOptionId:
+        type: integer
+        format: int64
+      productOptionPrice:
+        type: integer
+        format: int64
+
+  AddCartItemDTO:
+    required:
+    - productID
+    - productOptionIDList
+    - quantity
+    type: object
+    properties:
+      productID:
+        type: integer
+        format: int64
+        minimum: 1
+      productOptionIDList:
+        type: array
+        items:
+          type: integer
+          format: int64
+      quantity:
+        type: integer
+        format: int64
+        minimum: 1
+
+  RemoveCartItemDTO:
+    required:
+    - cartItemID
+    type: object
+    properties:
+      productID:
+        type: string

@@ -13,7 +13,7 @@ import com.github.lambda.gateway.domain.catalog.repository.ProductOptionReposito
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
 import com.github.lambda.gateway.exception.type.BadRequestException;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
-import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class CatalogServiceTest extends AbstractServiceTest {
     Product product = prepareProduct();
 
     // when
-    ProductDTO productDTO = catalogService.getProductById(product.getId());
+    ProductContainerDTO productDTO = catalogService.getProductById(product.getId());
 
     // then
     assertThat(productDTO).isNotNull();

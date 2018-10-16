@@ -29,3 +29,7 @@ paths:
   /catalog/categories:
     $ref: "./gateway-catalog.yaml#/api/findAllCategories"
 
+  /cart/my:
+    $ref: "./gateway-cart.yaml#/api/findUserCart"
+
+

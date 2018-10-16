@@ -3,8 +3,8 @@ package com.github.lambda.gateway.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.github.lambda.gateway.swagger.model.Pagination;
-import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
+import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductOptionDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * ProductListDTO
+ * ProductContainerDTO
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,57 +28,57 @@ import lombok.ToString;
 @ToString
 @Validated
 
-public class ProductListDTO   {
-  @JsonProperty(value = "items")
+public class ProductContainerDTO   {
+  @JsonProperty(value = "item")
+  private ProductDTO item;
+
+  @JsonProperty(value = "options")
   @Valid
   @Builder.Default
-  private List<ProductContainerDTO> items = new ArrayList<>();
-
-  @JsonProperty(value = "pagination")
-  private Pagination pagination;
+  private List<ProductOptionDTO> options = new ArrayList<>();
 
 
 
-  public ProductListDTO addItemsItem(ProductContainerDTO itemsItem) {
-    if (this.items == null) {
-      this.items = new ArrayList<>();
+  /**
+   * Get item
+   * @return item
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public ProductDTO getItem() {
+    return item;
+  }
+
+  public void setItem(ProductDTO item) {
+    this.item = item;
+  }
+
+
+
+  public ProductContainerDTO addOptionsItem(ProductOptionDTO optionsItem) {
+    if (this.options == null) {
+      this.options = new ArrayList<>();
     }
-    this.items.add(itemsItem);
+    this.options.add(optionsItem);
     return this;
   }
 
   /**
-   * Get items
-   * @return items
+   * Get options
+   * @return options
   **/
   @ApiModelProperty(value = "")
 
   @Valid
 
-  public List<ProductContainerDTO> getItems() {
-    return items;
+  public List<ProductOptionDTO> getOptions() {
+    return options;
   }
 
-  public void setItems(List<ProductContainerDTO> items) {
-    this.items = items;
-  }
-
-
-
-  /**
-   * Get pagination
-   * @return pagination
-  **/
-  @ApiModelProperty(value = "")
-
-  @Valid
-
-  public Pagination getPagination() {
-    return pagination;
-  }
-
-  public void setPagination(Pagination pagination) {
-    this.pagination = pagination;
+  public void setOptions(List<ProductOptionDTO> options) {
+    this.options = options;
   }
 
 

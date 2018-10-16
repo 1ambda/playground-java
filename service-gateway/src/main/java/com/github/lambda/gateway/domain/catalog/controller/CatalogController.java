@@ -3,6 +3,7 @@ package com.github.lambda.gateway.domain.catalog.controller;
 import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.github.lambda.gateway.swagger.model.ProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductListDTO;
 import com.github.lambda.gateway.swagger.server.api.CatalogControllerApi;
