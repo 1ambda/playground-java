@@ -1,20 +1,28 @@
 package com.github.lambda.gateway.domain.user.repository;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-import base.AbstractRepositoryTest;
+import base.RepositoryTest;
 import com.github.lambda.gateway.common.Time;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.domain.user.entity.User;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserRepositoryTest extends AbstractRepositoryTest {
+@RunWith(SpringRunner.class)
+@RepositoryTest
+public class UserRepositoryTest {
+
+  @Autowired
+  protected TestEntityManager entityManager;
 
   @Autowired
   UserRepository userRepository;

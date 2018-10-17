@@ -1,4 +1,4 @@
-package base;
+package base.swagger;
 
 import com.github.lambda.gateway.exception.type.*;
 import feign.Response;

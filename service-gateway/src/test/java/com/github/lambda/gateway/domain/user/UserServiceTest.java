@@ -1,21 +1,31 @@
 package com.github.lambda.gateway.domain.user;
 
-import javax.transaction.Transactional;
-
-import base.AbstractServiceTest;
+import base.ServiceTest;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.domain.user.entity.Role;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.domain.user.repository.RoleRepository;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
-public class UserServiceTest extends AbstractServiceTest {
+@RunWith(SpringRunner.class)
+@ServiceTest
+@AutoConfigureTestEntityManager
+public class UserServiceTest {
+
+  @Autowired
+  protected TestEntityManager entityManager;
 
   @Autowired
   UserService userService;

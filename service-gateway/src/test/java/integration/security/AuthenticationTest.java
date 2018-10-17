@@ -1,8 +1,7 @@
 package integration.security;
 
-import java.util.List;
-
 import base.AbstractIntegrationTest;
+import base.swagger.SwaggerClientApi;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.exception.type.InternalServerException;
@@ -10,17 +9,25 @@ import com.github.lambda.gateway.exception.type.UnauthorizedException;
 import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.UserDTO;
-import base.SwaggerClientApi;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
+@RunWith(SpringRunner.class)
 public class AuthenticationTest extends AbstractIntegrationTest {
+
+  @LocalServerPort
+  protected int randomServerPort;
 
   @Autowired private SwaggerClientApi swaggerClientApi;
   @Autowired private UserService userService;

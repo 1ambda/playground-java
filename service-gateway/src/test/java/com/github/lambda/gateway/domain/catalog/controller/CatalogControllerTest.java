@@ -1,6 +1,6 @@
 package com.github.lambda.gateway.domain.catalog.controller;
 
-import base.AbstractControllerTest;
+import base.ControllerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
 import com.github.lambda.gateway.swagger.model.CategoryDTO;
@@ -8,9 +8,11 @@ import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -20,7 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CatalogControllerTest extends AbstractControllerTest {
+@RunWith(SpringRunner.class)
+@ControllerTest
+public class CatalogControllerTest {
 
   @Autowired
   private MockMvc mvc;

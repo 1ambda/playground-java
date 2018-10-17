@@ -1,4 +1,4 @@
-package base;
+package base.storage;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.testcontainers.containers.GenericContainer;
 
 @TestConfiguration
-public class TestRedisConfig {
+public class TestStorageConfig {
   private static int REDIS_CONTAINER_PORT = 6379;
   private static final String REDIS_IMAGE_VERSION = "redis:4";
 

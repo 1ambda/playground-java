@@ -1,10 +1,7 @@
 package base;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import base.storage.TestStorageConfig;
+import base.swagger.SwaggerClientApi;
 import com.github.lambda.gateway.GatewayApplication;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,20 +11,29 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-/** Abstract class for testing the application via end-to-end. */
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Abstract class for testing the application via end-to-end.
+ */
 @ActiveProfiles({"integration"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {
-      GatewayApplication.class,
-      SwaggerClientApi.class,
-      TestRedisConfig.class,
-    })
+        GatewayApplication.class,
+        SwaggerClientApi.class,
+        TestStorageConfig.class,
+    }
+)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public abstract class AbstractIntegrationTest {
 
-  @LocalServerPort protected int randomServerPort;
+  @LocalServerPort
+  protected int randomServerPort;
 
   public String getBaseUrl() {
     return new StringBuilder()

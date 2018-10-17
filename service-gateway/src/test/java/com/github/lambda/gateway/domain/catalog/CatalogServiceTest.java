@@ -1,6 +1,6 @@
 package com.github.lambda.gateway.domain.catalog;
 
-import base.AbstractServiceTest;
+import base.ServiceTest;
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Image;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
@@ -14,15 +14,19 @@ import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class CatalogServiceTest extends AbstractServiceTest {
+@RunWith(SpringRunner.class)
+@ServiceTest
+public class CatalogServiceTest {
 
   @Autowired
   private CatalogService catalogService;
@@ -45,7 +49,7 @@ public class CatalogServiceTest extends AbstractServiceTest {
     Product product = prepareProduct();
 
     // when
-    ProductContainerDTO productDTO = catalogService.getProductById(product.getId());
+    ProductContainerDTO productDTO = catalogService.getProductDTOById(product.getId());
 
     // then
     assertThat(productDTO).isNotNull();
@@ -59,7 +63,7 @@ public class CatalogServiceTest extends AbstractServiceTest {
     assertThat(productRepository.findById(productId)).isEmpty();
 
     // when
-    catalogService.getProductById(productId);
+    catalogService.getProductDTOById(productId);
 
     // then
     fail("should throw an exception");
@@ -78,8 +82,8 @@ public class CatalogServiceTest extends AbstractServiceTest {
     PageRequest pagination2 = PageRequest.of(2, 10);
 
     // when
-    PaginatedProductDTO dto1 = catalogService.getPaginatedProducts(pagination1);
-    PaginatedProductDTO dto2 = catalogService.getPaginatedProducts(pagination2);
+    PaginatedProductDTO dto1 = catalogService.getPaginatedProductDTO(pagination1);
+    PaginatedProductDTO dto2 = catalogService.getPaginatedProductDTO(pagination2);
 
     // then
     assertThat(dto1.getProducts().size()).isEqualTo(10);
@@ -96,7 +100,7 @@ public class CatalogServiceTest extends AbstractServiceTest {
     assertThat(categoryRepository.count()).isEqualTo(totalCategoryCount);
 
     // when
-    CategoryListDTO categoryListDTO = catalogService.getAllCategories();
+    CategoryListDTO categoryListDTO = catalogService.getCategoryListDTO();
 
     // then
     assertThat(categoryListDTO.getItems().size()).isEqualTo(totalCategoryCount);

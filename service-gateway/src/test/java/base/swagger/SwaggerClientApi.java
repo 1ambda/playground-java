@@ -1,4 +1,4 @@
-package base;
+package base.swagger;
 
 import com.github.lambda.gateway.swagger.client.api.AuthControllerApi;
 import feign.Feign;
