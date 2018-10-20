@@ -270,13 +270,28 @@ definitions:
   CartLineRequestDTO:
     type: object
     properties:
+      cartLineId:
+        type: integer
+        format: int64
+        description: might be null depending on the request type
+      productId:
+        type: integer
+        format: int64
       quantity:
         type: integer
         format: int64
+      options:
+        type: array
+        items:
+          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionRequestDTO"
 
   CartLineOptionRequestDTO:
     type: object
     properties:
+      cartLineOptionId:
+        type: integer
+        format: int64
+        description: might be null depending on the request type
       productOptionId:
         type: integer
         format: int64

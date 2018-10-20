@@ -15,11 +15,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "`PermissionToRole`",
        indexes = {
-           @Index(name = "idx_PermissionToRole_createdAt",
-                  columnList = "created_at",
+           @Index(name = "`idx_PermissionToRole_createdAt`",
+                  columnList = "`created_at`",
                   unique = false),
-           @Index(name = "idx_PermissionToRole_deletedAt",
-                  columnList = "deleted_at",
+           @Index(name = "`idx_PermissionToRole_deletedAt`",
+                  columnList = "`deleted_at`",
                   unique = false),
        },
        uniqueConstraints = {

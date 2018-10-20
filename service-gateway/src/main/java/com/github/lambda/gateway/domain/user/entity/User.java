@@ -19,12 +19,12 @@ import java.util.List;
 @Table(
     name = "`User`",
     indexes = {
-        @Index(name = "idx_User_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_User_deletedAt", columnList = "deleted_at", unique = false),
-        @Index(name = "idx_User_locked", columnList = "locked", unique = false),
+        @Index(name = "`idx_User_createdAt`", columnList = "`created_at`", unique = false),
+        @Index(name = "`idx_User_deletedAt`", columnList = "`deleted_at`", unique = false),
+        @Index(name = "`idx_User_locked`", columnList = "`locked`", unique = false),
     },
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email"}),
+        @UniqueConstraint(name="`uniq_User_email`", columnNames = {"email"}),
     })
 public class User extends BaseEntity {
 

@@ -1,23 +1,36 @@
 package com.github.lambda.gateway.security;
 
+import com.github.lambda.gateway.domain.user.UserService;
+import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.exception.type.custom.InvalidUserPrincipalException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 /**
  * SecurityService returns user principal (UserDetails).
  */
+@Service
 public class SecurityService {
+
+  private UserService userService;
+
+  @Autowired
+  public SecurityService(UserService userService) {
+    this.userService = userService;
+  }
 
   /**
    * @return null if principal is invalid.
    * @throws InvalidUserPrincipalException when username is null.
    */
-  public static UserPrincipal getPrincipal() {
+  public UserPrincipal getPrincipalThrow() {
     UserPrincipal principal = getPrincipalOrNull();
 
     if (principal == null) {
@@ -27,11 +40,24 @@ public class SecurityService {
     return principal;
   }
 
-  public static boolean isAnonymousUser(Authentication auth) {
+  public boolean isAnonymousUser(Authentication auth) {
     return auth instanceof AnonymousAuthenticationToken;
   }
 
-  public static UserPrincipal getPrincipalOrNull() {
+  @Transactional
+  public long getUserIdOrThrow() {
+    UserPrincipal principal = getPrincipalThrow();
+
+    User user = userService.getUserByUsername(principal.getUsername());
+    if (user == null) {
+      throw new InvalidUserPrincipalException("Invalid username");
+    }
+
+    long userId = user.getId();
+    return userId;
+  }
+
+  public UserPrincipal getPrincipalOrNull() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth == null) {

@@ -6,6 +6,7 @@ import com.github.lambda.gateway.domain.user.entity.RoleToUser;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.domain.user.repository.*;
 import com.github.lambda.gateway.swagger.model.UserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ public class UserActionFacade {
   private RoleToUserRepository roleToUserRepository;
   private UserRepository userRepository;
 
+  @Autowired
   public UserActionFacade(AuthIdentityRepository authIdentityRepository,
                           PermissionRepository permissionRepository,
                           PermissionToRoleRepository permissionToRoleRepository,

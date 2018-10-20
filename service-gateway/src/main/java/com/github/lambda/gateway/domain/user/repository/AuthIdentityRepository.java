@@ -6,10 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-
 @Repository
-@Transactional
 public interface AuthIdentityRepository extends PagingAndSortingRepository<AuthIdentity, Long> {
   @Query("SELECT a FROM AuthIdentity a WHERE a.username = :username")
   AuthIdentity findByUsername(@Param("username") String username);

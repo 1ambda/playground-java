@@ -1,5 +1,6 @@
 package com.github.lambda.gateway.domain.cart;
 
+import com.github.lambda.gateway.domain.cart.entity.Cart;
 import com.github.lambda.gateway.domain.cart.repository.CartLineOptionRepository;
 import com.github.lambda.gateway.domain.cart.repository.CartLineRepository;
 import com.github.lambda.gateway.domain.cart.repository.CartRepository;
@@ -24,5 +25,9 @@ public class CartQueryFacade {
     this.cartRepository = cartRepository;
     this.cartLineRepository = cartLineRepository;
     this.cartLineOptionRepository = cartLineOptionRepository;
+  }
+
+  public Cart getCart(long userId) {
+    return cartRepository.findByUserId(userId);
   }
 }

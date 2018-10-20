@@ -19,11 +19,11 @@ import java.util.List;
 @Entity
 @Table(name = "`Role`",
        indexes = {
-           @Index(name = "idx_Role_createdAt", columnList = "created_at", unique = false),
-           @Index(name = "idx_Role_deletedAt", columnList = "deleted_at", unique = false),
+           @Index(name = "`idx_Role_createdAt`", columnList = "`created_at`", unique = false),
+           @Index(name = "`idx_Role_deletedAt`", columnList = "`deleted_at`", unique = false),
        },
        uniqueConstraints = {
-           @UniqueConstraint(columnNames = {"code"}),
+           @UniqueConstraint(name = "`uniq_Role_code`", columnNames = {"code"}),
        }
 )
 public class Role extends BaseEntity {

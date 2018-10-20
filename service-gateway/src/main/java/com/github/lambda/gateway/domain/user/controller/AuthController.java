@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class AuthController implements AuthControllerApi {
 
   private UserService userService;
+  private SecurityService securityService;
 
   @Autowired
   public AuthController(UserService userService) {
@@ -44,7 +45,7 @@ public class AuthController implements AuthControllerApi {
                   produces = {"application/json"},
                   method = RequestMethod.GET)
   public ResponseEntity<UserDTO> login() {
-    UserPrincipal principal = SecurityService.getPrincipal();
+    UserPrincipal principal = securityService.getPrincipalThrow();
 
     List<String> roles = principal.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
@@ -83,7 +84,7 @@ public class AuthController implements AuthControllerApi {
                   produces = {"application/json"},
                   method = RequestMethod.GET)
   public ResponseEntity<UserDTO> whoiam() {
-    UserPrincipal principal = SecurityService.getPrincipalOrNull();
+    UserPrincipal principal = securityService.getPrincipalOrNull();
     String username = null;
 
     if (principal != null) {

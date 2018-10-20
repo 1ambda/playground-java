@@ -21,8 +21,11 @@ import java.util.List;
         @Index(name = "`idx_Cart_createdAt`", columnList = "`created_at`", unique = false),
         @Index(name = "`idx_Cart_deletedAt`", columnList = "`deleted_at`", unique = false),
         @Index(name = "`idx_Cart_locked`", columnList = "`locked`", unique = false),
-        @Index(name = "`idx_Cart_userId`", columnList = "`user_id`", unique = false),
-    })
+    },
+    uniqueConstraints = {
+        @UniqueConstraint(name="`uniq_Cart_userId`", columnNames = {"`user_id`"}),
+    }
+)
 public class Cart extends BaseEntity {
   /**
    * other domains
@@ -35,18 +38,21 @@ public class Cart extends BaseEntity {
    */
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(fetch = FetchType.EAGER)
-  @JoinColumn(name = "`cart_id`")
+  @OneToMany(
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}
+  )
+  @JoinColumn(name = "`cart_id`", referencedColumnName = "`id`")
   private List<CartLine> cartLines = new ArrayList<>();
 
   /**
    * functions
    */
-  public void addCartLine(CartLine orderDetail) {
-    cartLines.add(orderDetail);
+  public void addCartLine(CartLine cartLine) {
+    cartLines.add(cartLine);
   }
 
-  public void removeCartLine(CartLine orderDetail) {
-    cartLines.remove(orderDetail);
+  public void removeCartLine(CartLine cartLine) {
+    cartLines.remove(cartLine);
   }
 }

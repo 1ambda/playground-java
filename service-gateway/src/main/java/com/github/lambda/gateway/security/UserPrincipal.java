@@ -12,12 +12,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@ToString(exclude = {"username", "password"})
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserPrincipal implements UserDetails {
   private String username;
 
+  @ToString.Exclude
   private String password;
 
   @Builder.Default

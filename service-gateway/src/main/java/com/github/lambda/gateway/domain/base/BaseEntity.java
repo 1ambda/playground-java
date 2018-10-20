@@ -50,6 +50,10 @@ public class BaseEntity {
     @Column(name = "`deleted_at`")
     protected LocalDateTime deletedAt;
 
+    public void markDeleted() {
+      this.deletedAt = Time.getCurrentUTCDateTime();
+    }
+
     public boolean isDeleted() {
         return Time.getCurrentUTCDateTime().isAfter(this.deletedAt);
     }

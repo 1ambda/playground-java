@@ -2,6 +2,7 @@ package com.github.lambda.gateway.domain.catalog;
 
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
+import com.github.lambda.gateway.domain.catalog.entity.ProductOption;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
@@ -34,15 +35,21 @@ public class CatalogService {
   }
 
   @Transactional
-  public ProductContainerDTO getProductById(Long productId) {
-    Product product = productQueryFacade.getProductById(productId);
+  public ProductContainerDTO getProductDTOById(Long productId) {
+    Product product = getProductById(productId);
     ProductContainerDTO dto = catalogConverter.convertToProductDTO(product);
 
     return dto;
   }
 
   @Transactional
-  public PaginatedProductDTO getPaginatedProducts(Pageable pageable) {
+  public Product getProductById(Long productId) {
+    Product product = productQueryFacade.getProductById(productId);
+    return product;
+  }
+
+  @Transactional
+  public PaginatedProductDTO getPaginatedProductDTO(Pageable pageable) {
     Page<Product> paginated = productQueryFacade.getPaginatedProducts(pageable);
     PaginatedProductDTO dto = catalogConverter.convertToPaginatedProductDTO(paginated);
 
@@ -50,7 +57,7 @@ public class CatalogService {
   }
 
   @Transactional
-  public CategoryListDTO getAllCategories() {
+  public CategoryListDTO getCategoryListDTO() {
     List<Category> categories = productQueryFacade.getAllCategories();
     CategoryListDTO dto = catalogConverter.convertToCategoryListDTO(categories);
 

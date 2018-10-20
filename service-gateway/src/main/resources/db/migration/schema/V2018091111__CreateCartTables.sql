@@ -6,6 +6,7 @@ CREATE TABLE `Cart` (
   `user_id`     BIGINT UNSIGNED NOT NULL,
 
   INDEX `idx_Cart_userId` (`user_id`),
+  CONSTRAINT `uniq_Cart_userId` UNIQUE (`user_id`),
 
   CONSTRAINT `fk_Cart_userId`
   FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)

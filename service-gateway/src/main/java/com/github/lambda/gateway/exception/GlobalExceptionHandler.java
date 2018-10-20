@@ -18,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.WebUtils;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -58,6 +60,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(value = {
       BadRequestException.class,
+      NoSuchElementException.class,
       IllegalArgumentException.class,
   })
   protected ResponseEntity<Object> handleBadRequestException(Exception ex, WebRequest request) {
@@ -67,7 +70,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, null, httpHeaders, status, request);
   }
 
-  @ExceptionHandler(value = {UnauthorizedException.class})
+  @ExceptionHandler(value = {
+      UnauthorizedException.class,
+  })
   protected ResponseEntity<Object> handleUnauthorizedException(Exception ex, WebRequest request) {
     HttpStatus status = HttpStatus.UNAUTHORIZED;
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -75,7 +80,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, null, httpHeaders, status, request);
   }
 
-  @ExceptionHandler(value = {ForbiddenException.class})
+  @ExceptionHandler(value = {
+      ForbiddenException.class,
+  })
   protected ResponseEntity<Object> handleForbiddenException(Exception ex, WebRequest request) {
     HttpStatus status = HttpStatus.FORBIDDEN;
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -83,7 +90,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, null, httpHeaders, status, request);
   }
 
-  @ExceptionHandler(value = {Exception.class})
+  @ExceptionHandler(value = {
+      IllegalStateException.class,
+      Exception.class,
+  })
   protected ResponseEntity<Object> handleUnknownException(Exception ex, WebRequest request) {
     HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     HttpHeaders httpHeaders = new HttpHeaders();

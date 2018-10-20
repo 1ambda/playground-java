@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
   @Override

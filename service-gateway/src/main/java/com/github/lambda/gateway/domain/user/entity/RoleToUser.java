@@ -16,8 +16,8 @@ import javax.persistence.*;
 @Table(
     name = "`RoleToUser`",
     indexes = {
-        @Index(name = "idx_RoleToUser_createdAt", columnList = "created_at", unique = false),
-        @Index(name = "idx_RoleToUser_deletedAt", columnList = "deleted_at", unique = false),
+        @Index(name = "`idx_RoleToUser_createdAt`", columnList = "`created_at`", unique = false),
+        @Index(name = "`idx_RoleToUser_deletedAt`", columnList = "`deleted_at`", unique = false),
     },
     uniqueConstraints = {
         @UniqueConstraint(

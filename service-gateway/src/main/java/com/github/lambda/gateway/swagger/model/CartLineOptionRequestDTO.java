@@ -25,11 +25,31 @@ import lombok.ToString;
 @Validated
 
 public class CartLineOptionRequestDTO   {
+  @JsonProperty(value = "cartLineOptionId")
+  private Long cartLineOptionId;
+
   @JsonProperty(value = "productOptionId")
   private Long productOptionId;
 
   @JsonProperty(value = "quantity")
   private Long quantity;
+
+
+
+  /**
+   * might be null depending on the request type
+   * @return cartLineOptionId
+  **/
+  @ApiModelProperty(value = "might be null depending on the request type")
+
+
+  public Long getCartLineOptionId() {
+    return cartLineOptionId;
+  }
+
+  public void setCartLineOptionId(Long cartLineOptionId) {
+    this.cartLineOptionId = cartLineOptionId;
+  }
 
 
 

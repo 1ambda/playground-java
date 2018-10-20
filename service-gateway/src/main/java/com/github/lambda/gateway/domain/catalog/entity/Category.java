@@ -24,7 +24,8 @@ import java.util.List;
        },
        uniqueConstraints = {
            @UniqueConstraint(columnNames = {"path"}),
-       })
+       }
+)
 public class Category extends BaseEntity {
   @Size(min = 0, max = 255)
   @Column(name = "`name`", nullable = false)

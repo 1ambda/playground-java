@@ -19,7 +19,7 @@ CREATE TABLE `User` (
   `email`      VARCHAR(255)                       NOT NULL,
   `address`    VARCHAR(255)                       NOT NULL,
 
-  CONSTRAINT uniq_User_email UNIQUE (`email`)
+  CONSTRAINT `uniq_User_email` UNIQUE (`email`)
 );
 
 CREATE TABLE `AuthIdentity` (

@@ -44,6 +44,8 @@ public class OrderLineOption extends BaseEntity {
   /**
    * relations
    */
+  @Column(name = "`order_line_id`")
+  private Long orderLineId;
 
   /**
    * functions

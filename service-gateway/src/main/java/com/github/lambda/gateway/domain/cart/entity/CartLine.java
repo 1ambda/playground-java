@@ -24,7 +24,8 @@ import java.util.List;
         @Index(name = "`idx_CartLine_locked`", columnList = "`locked`", unique = false),
         @Index(name = "`idx_CartLine_cartId`", columnList = "`cart_id`", unique = false),
         @Index(name = "`idx_CartLine_productId`", columnList = "`product_id`", unique = false),
-    })
+    }
+)
 public class CartLine extends BaseEntity {
   @PositiveOrZero
   @Column(name = "`index`", nullable = false)
@@ -45,7 +46,10 @@ public class CartLine extends BaseEntity {
    */
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}
+  )
   @JoinColumn(name = "`cart_line_id`")
   private List<CartLineOption> cartLineOptions = new ArrayList<>();
 

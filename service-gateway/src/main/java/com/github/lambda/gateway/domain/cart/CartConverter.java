@@ -9,7 +9,6 @@ import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CartConverter {
@@ -23,7 +22,6 @@ public class CartConverter {
         .itemCount((long) cartLineDTOs.size());
 
     builder.cartLines(cartLineDTOs);
-
     builder.totalPrice(allProductsPrice);
 
     return builder.build();

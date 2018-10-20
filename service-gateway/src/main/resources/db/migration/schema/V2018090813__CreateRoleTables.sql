@@ -15,7 +15,7 @@ CREATE TABLE `Role` (
   -- columns
   `code`        VARCHAR(255)                       NOT NULL,
   `description` VARCHAR(255)                       NOT NULL,
-  CONSTRAINT uniq_Role_code UNIQUE (`code`)
+  CONSTRAINT `uniq_Role_code` UNIQUE (`code`)
 );
 
 CREATE TABLE `RoleToUser` (

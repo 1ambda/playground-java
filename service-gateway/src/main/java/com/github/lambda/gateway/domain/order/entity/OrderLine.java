@@ -76,7 +76,10 @@ public class OrderLine extends BaseEntity {
    */
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(
+      fetch = FetchType.EAGER,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}
+  )
   @JoinColumn(name = "`order_line_id`")
   private List<OrderLineOption> orderLineOptions = new ArrayList<>();
 
