@@ -27,8 +27,11 @@ public class AuthController implements AuthControllerApi {
   private SecurityService securityService;
 
   @Autowired
-  public AuthController(UserService userService) {
+  public AuthController(UserService userService,
+                        SecurityService securityService) {
+
     this.userService = userService;
+    this.securityService = securityService;
   }
 
   @Override
