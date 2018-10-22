@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
+import 'vue-awesome/icons'
+
 
 import App from '@/App.vue'
 import routes from '@/router.ts'
@@ -12,7 +14,10 @@ import '@/registerServiceWorker'
 import {AuthAPI} from '@/common/auth.service.ts'
 import {Failure} from '@/generated/swagger'
 
+import Icon from 'vue-awesome/components/Icon.vue'
 Vue.use(ElementUI, {locale})
+Vue.component('v-icon', Icon)
+
 
 const router = new Router({
   routes,
