@@ -1,4 +1,4 @@
-package com.github.lambda.gateway.exception.type.custom;
+package com.github.lambda.gateway.security.exception;
 
 import com.github.lambda.gateway.exception.type.UnauthorizedException;
 

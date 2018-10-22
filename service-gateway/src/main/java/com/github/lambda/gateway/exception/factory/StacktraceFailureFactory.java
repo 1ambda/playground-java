@@ -15,6 +15,7 @@ public class StacktraceFailureFactory implements FailureFactory {
     Failure.FailureBuilder failureBuilder = Failure.builder();
     failureBuilder.timestamp(Time.getCurrentTimestamp());
     failureBuilder.code(status);
+    failureBuilder.message(e.getMessage());
     failureBuilder.type(e.getClass().getCanonicalName());
 
     if (!StringUtils.isEmpty(path)) {

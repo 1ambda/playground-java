@@ -1,7 +1,7 @@
 package com.github.lambda.gateway.security;
 
 import com.github.lambda.gateway.exception.factory.FailureFactory;
-import com.github.lambda.gateway.exception.type.custom.AlreadyLoggedOutException;
+import com.github.lambda.gateway.security.exception.AlreadyLoggedOutException;
 import com.github.lambda.gateway.swagger.model.Failure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpOutputMessage;

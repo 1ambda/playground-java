@@ -2,7 +2,7 @@ package com.github.lambda.gateway.security;
 
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.User;
-import com.github.lambda.gateway.exception.type.custom.InvalidUserPrincipalException;
+import com.github.lambda.gateway.security.exception.InvalidUserPrincipalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

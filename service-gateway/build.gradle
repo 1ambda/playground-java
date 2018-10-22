@@ -26,7 +26,7 @@ repositories {
 
 ext {
     guavaVersion = '26.0-jre'
-    springBootAdminVersion = '2.0.2'
+    springBootAdminVersion = '2.0.3'
     micrometerVersion = '1.0.6'
     springfoxVersion = '2.9.2'
     logbookVersion = '1.9.1'
@@ -57,7 +57,7 @@ dependencies {
     compile('org.springframework.session:spring-session-core')
     compile('org.springframework.session:spring-session-data-redis')
 
-    compile('de.codecentric:spring-boot-admin-starter-server')
+    compile("de.codecentric:spring-boot-admin-starter-client:${springBootAdminVersion}")
     runtime('org.springframework.boot:spring-boot-devtools')
     compile("org.zalando:logbook-core:${logbookVersion}")
     compile("org.zalando:logbook-spring-boot-starter:${logbookVersion}")

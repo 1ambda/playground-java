@@ -85,6 +85,17 @@ test.integration:
 	@ echo ""
 	@ echo ""
 
+.PHONY: run
+run:
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Started: running '$(MODULE)' Application"
+	@ echo "-----------------------------------------\n"
+
+	@ echo "SPRING_PROFILES_ACTIVE=local ./gradlew bootRun -x test"
+	@ echo ""
+	@ echo ""
+
+	@ SPRING_PROFILES_ACTIVE=local ./gradlew bootRun -x test
+
 .PHONY: test
 test: test.unit test.integration
 

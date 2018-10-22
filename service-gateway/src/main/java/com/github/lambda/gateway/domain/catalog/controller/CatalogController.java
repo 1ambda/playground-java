@@ -4,7 +4,7 @@ import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
-import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.github.lambda.gateway.swagger.server.api.CatalogControllerApi;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +45,12 @@ public class CatalogController implements CatalogControllerApi {
   @RequestMapping(value = "/catalog/product/{productId}",
                   produces = {"application/json"},
                   method = RequestMethod.GET)
-  public ResponseEntity<ProductDTO> findOneProduct(@PathVariable("productId") Long productId) {
+  public ResponseEntity<ProductContainerDTO> findOneProduct(@PathVariable("productId") Long productId) {
     Preconditions.checkArgument(productId > 0L, "Invalid productId");
 
-    catalogService.getProductDTOById(productId);
+    ProductContainerDTO dto = catalogService.getProductDTOById(productId);
 
-    return null;
+    return ResponseEntity.ok(dto);
   }
 
   @Override

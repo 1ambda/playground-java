@@ -6,7 +6,7 @@ import com.github.lambda.gateway.swagger.client.invoker.EncodingUtils;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
-import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,13 +33,13 @@ public interface CatalogControllerApi extends ApiClient.Api {
    * 
    * 
     * @param productId  (required)
-   * @return ProductDTO
+   * @return ProductContainerDTO
    */
   @RequestLine("GET /catalog/product/{productId}")
   @Headers({
     "Accept: application/json",
   })
-  ProductDTO findOneProduct(@Param("productId") Long productId);
+  ProductContainerDTO findOneProduct(@Param("productId") Long productId);
 
   /**
    * 

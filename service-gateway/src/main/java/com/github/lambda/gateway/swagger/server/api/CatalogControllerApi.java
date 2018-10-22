@@ -8,7 +8,7 @@ package com.github.lambda.gateway.swagger.server.api;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
-import com.github.lambda.gateway.swagger.model.ProductDTO;
+import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -73,18 +73,18 @@ public interface CatalogControllerApi {
     }
 
 
-    @ApiOperation(value = "", nickname = "findOneProduct", notes = "", response = ProductDTO.class, tags={ "catalog-controller", })
+    @ApiOperation(value = "", nickname = "findOneProduct", notes = "", response = ProductContainerDTO.class, tags={ "catalog-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = ProductDTO.class),
+        @ApiResponse(code = 200, message = "OK", response = ProductContainerDTO.class),
         @ApiResponse(code = 200, message = "error", response = Failure.class) })
     @RequestMapping(value = "/catalog/product/{productId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<ProductDTO> findOneProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId) {
+    default ResponseEntity<ProductContainerDTO> findOneProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"imageId\" : 2,  \"categoryPath\" : \"categoryPath\",  \"imagePath\" : \"imagePath\",  \"categoryDisplayName\" : \"categoryDisplayName\",  \"description\" : \"description\",  \"createdAt\" : 6,  \"price\" : 5,  \"name\" : \"name\",  \"onSale\" : \"onSale\",  \"id\" : 0,  \"imageType\" : \"imageType\",  \"categoryId\" : 5,  \"updatedAt\" : 1}", ProductDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"item\" : {    \"imageId\" : 2,    \"categoryPath\" : \"categoryPath\",    \"imagePath\" : \"imagePath\",    \"categoryDisplayName\" : \"categoryDisplayName\",    \"description\" : \"description\",    \"createdAt\" : 6,    \"price\" : 5,    \"name\" : \"name\",    \"onSale\" : \"onSale\",    \"id\" : 0,    \"imageType\" : \"imageType\",    \"categoryId\" : 5,    \"updatedAt\" : 1  },  \"options\" : [ {    \"price\" : 9,    \"name\" : \"name\",    \"description\" : \"description\",    \"onSale\" : \"onSale\",    \"id\" : 7  }, {    \"price\" : 9,    \"name\" : \"name\",    \"description\" : \"description\",    \"onSale\" : \"onSale\",    \"id\" : 7  } ]}", ProductContainerDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -108,7 +108,7 @@ public interface CatalogControllerApi {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"pagination\" : {    \"currentPageOffset\" : 5,    \"itemCountPerPage\" : 1,    \"totalItemCount\" : 5  },  \"products\" : [ {    \"item\" : {      \"imageId\" : 2,      \"categoryPath\" : \"categoryPath\",      \"imagePath\" : \"imagePath\",      \"categoryDisplayName\" : \"categoryDisplayName\",      \"description\" : \"description\",      \"createdAt\" : 6,      \"price\" : 5,      \"name\" : \"name\",      \"onSale\" : \"onSale\",      \"id\" : 0,      \"imageType\" : \"imageType\",      \"categoryId\" : 5,      \"updatedAt\" : 1    },    \"options\" : [ {      \"price\" : 6,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 0    }, {      \"price\" : 6,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 0    } ]  }, {    \"item\" : {      \"imageId\" : 2,      \"categoryPath\" : \"categoryPath\",      \"imagePath\" : \"imagePath\",      \"categoryDisplayName\" : \"categoryDisplayName\",      \"description\" : \"description\",      \"createdAt\" : 6,      \"price\" : 5,      \"name\" : \"name\",      \"onSale\" : \"onSale\",      \"id\" : 0,      \"imageType\" : \"imageType\",      \"categoryId\" : 5,      \"updatedAt\" : 1    },    \"options\" : [ {      \"price\" : 6,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 0    }, {      \"price\" : 6,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 0    } ]  } ]}", PaginatedProductDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"pagination\" : {    \"currentPageOffset\" : 6,    \"itemCountPerPage\" : 0,    \"totalItemCount\" : 1  },  \"products\" : [ {    \"item\" : {      \"imageId\" : 2,      \"categoryPath\" : \"categoryPath\",      \"imagePath\" : \"imagePath\",      \"categoryDisplayName\" : \"categoryDisplayName\",      \"description\" : \"description\",      \"createdAt\" : 6,      \"price\" : 5,      \"name\" : \"name\",      \"onSale\" : \"onSale\",      \"id\" : 0,      \"imageType\" : \"imageType\",      \"categoryId\" : 5,      \"updatedAt\" : 1    },    \"options\" : [ {      \"price\" : 9,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 7    }, {      \"price\" : 9,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 7    } ]  }, {    \"item\" : {      \"imageId\" : 2,      \"categoryPath\" : \"categoryPath\",      \"imagePath\" : \"imagePath\",      \"categoryDisplayName\" : \"categoryDisplayName\",      \"description\" : \"description\",      \"createdAt\" : 6,      \"price\" : 5,      \"name\" : \"name\",      \"onSale\" : \"onSale\",      \"id\" : 0,      \"imageType\" : \"imageType\",      \"categoryId\" : 5,      \"updatedAt\" : 1    },    \"options\" : [ {      \"price\" : 9,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 7    }, {      \"price\" : 9,      \"name\" : \"name\",      \"description\" : \"description\",      \"onSale\" : \"onSale\",      \"id\" : 7    } ]  } ]}", PaginatedProductDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

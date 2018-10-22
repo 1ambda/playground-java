@@ -108,3 +108,5 @@ securityDefinitions:
   basicAuth:
     type: basic
     description: HTTP Basic Authentication.
+    in: header
+    name: Authorization

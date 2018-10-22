@@ -3,7 +3,9 @@ package com.github.lambda.gateway.config;
 import com.github.lambda.gateway.exception.SecurityExceptionHandler;
 import com.github.lambda.gateway.security.SecurityLogoutHandler;
 import com.github.lambda.gateway.security.UserDetailsServiceImpl;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.NullRequestCache;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Profile({"!unit"})
 @EnableWebSecurity
@@ -84,6 +90,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     http
         .authorizeRequests()
+        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+
+        // TODO: spring boot admin
+        // .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
+        // .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+        .antMatchers(HttpMethod.GET, "/").permitAll()
+
         .antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
         .antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
         .antMatchers(HttpMethod.GET, "/configuration/**").permitAll()
@@ -94,5 +107,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/**").hasRole("USER")
         .anyRequest().authenticated();
     // @formatter:on
+  }
+
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    final CorsConfiguration configuration = new CorsConfiguration();
+
+    // TODO: configurable origin
+    configuration.setAllowedOrigins(ImmutableList.of("*"));
+    configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                                                     "GET",
+                                                     "POST",
+                                                     "PUT",
+                                                     "DELETE",
+                                                     "PATCH"));
+
+    // setAllowCredentials(true) is important, otherwise:
+    // The value of the 'Access-Control-Allow-Origin' header in the response
+    // must not be the wildcard '*' when the request's credentials mode is 'include'.
+    configuration.setAllowCredentials(true);
+
+    // setAllowedHeaders is important! Without it, OPTIONS preflight request
+    // will fail with 403 Invalid CORS request
+    configuration.setAllowedHeaders(ImmutableList.of("Authorization",
+                                                     "Cache-Control",
+                                                     "Content-Type"));
+
+    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 }

@@ -44,6 +44,15 @@ logbook:
     chunk-size: 1000
 
 #
+# spring boot admin
+#
+# spring.boot.admin:
+#   client:
+#     username: admin
+#     password: admin
+#     url: http://localhost:8099
+
+#
 # spring actuactor
 #
 management:

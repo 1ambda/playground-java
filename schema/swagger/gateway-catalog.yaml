@@ -44,7 +44,7 @@ api:
         200:
           description: OK
           schema:
-            $ref: "./gateway-catalog.yaml#/definitions/ProductDTO"
+            $ref: "./gateway-catalog.yaml#/definitions/ProductContainerDTO"
         default:
           description: error
           schema:
