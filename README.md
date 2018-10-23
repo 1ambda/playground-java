@@ -5,7 +5,19 @@ Highly opinionated DDD implementation which has
 - Shopify like E-commerce Domain
     * Sellers can register their products
     * Customers are able to add items into cart and order them
-    * Store, Payment and Event (Discount, ..) domains are TODOs
+    * Domains
+        * **User**
+        * **Catalog**
+        * **Cart**
+        * **Order**
+        * (TODO) **Inventory**: *store*
+        * (TODO) **Promotion**: *coupon, Discount*
+        * (TODO) **Marketing**: *seller managed campaigns with 3rd parties*
+        * (TODO) **Analytics**: *dashboard for sellers* 
+        * (TODO) **Advertisement**: *recommendation, curation* 
+        * (TODO) **Membership**: *customer loyalty management* 
+        * (TODO) **Support**: *customer management such as VOC*
+        
 - Terraformed Infrastructure
     * Google Kubernetes Engine
     * [Google Ingress (GLBC)](https://github.com/kubernetes/ingress-gce) 
