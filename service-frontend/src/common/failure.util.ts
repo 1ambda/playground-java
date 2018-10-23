@@ -11,9 +11,20 @@ export const handleFailure = (notifier: any) => {
       return
     }
 
-    response.json().then((parsed: Failure) => {
+    if (response.status === 404) {
       notifier.error({
-        title: `Error (${parsed.type})`,
+        title: `Error (Not Found)`,
+        message: `${response.url}`,
+      })
+      return
+    }
+
+    response.json().then((parsed: Failure) => {
+      const splitted = parsed.type.split('.')
+      const canonical = splitted[splitted.length - 1]
+
+      notifier.error({
+        title: `Error (${canonical})`,
         message: parsed.message,
       })
     })
