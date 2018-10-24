@@ -52,7 +52,7 @@ public class UserServiceTest {
     doReturn(roleCustomer).when(roleRepository).findByCode(Role.Code.ROLE_CUSTOMER);
 
     // when
-    UserDTO created = userService.addNewCustomer(userDTO);
+    UserDTO created = userService.handleAddNewCustomerRequest(userDTO);
 
     // then
     assertThat(created.getRoles()).containsAnyOf(

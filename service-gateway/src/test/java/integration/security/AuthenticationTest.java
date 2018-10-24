@@ -55,7 +55,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldFailToRegister_WhenUserAlreadyRegistered() {
     // given: user already exists
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     // when
     AuthControllerApi client = swaggerClientApi.getAuthClientApi(randomServerPort);
@@ -69,7 +69,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldLogin() {
     // given
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     // when
     AuthControllerApi client =
@@ -97,7 +97,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldFailToLogin_WhenPasswordIsInvalid() {
     // given
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     // when
     AuthControllerApi client =
@@ -113,7 +113,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldFailToLogin_WhenUsernameDoesNotExist() {
     // given
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     // when
     AuthControllerApi client =
@@ -129,7 +129,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldCreateSessionAndReturn_AfterLogin() {
     // given: register user
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     String redisSessionKey =
         new StringBuilder()
@@ -172,7 +172,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldSendAlreadyLoggedOutFailure_WhenNoSessionHeaderExistsInRequest() {
     // given: register user
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     String redisSessionKey =
         new StringBuilder()
@@ -217,7 +217,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void shouldRemoveSessionInRedis_AfterLogout() {
     // given: register user
     UserDTO request = createUserDTO();
-    userService.addNewCustomer(request);
+    userService.handleAddNewCustomerRequest(request);
 
     String redisSessionKey =
         new StringBuilder()

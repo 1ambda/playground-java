@@ -49,7 +49,7 @@ public class CatalogServiceTest {
     Product product = prepareProduct();
 
     // when
-    ProductContainerDTO productDTO = catalogService.getProductDTOById(product.getId());
+    ProductContainerDTO productDTO = catalogService.handleGetProductByIdRequest(product.getId());
 
     // then
     assertThat(productDTO).isNotNull();
@@ -63,7 +63,7 @@ public class CatalogServiceTest {
     assertThat(productRepository.findById(productId)).isEmpty();
 
     // when
-    catalogService.getProductDTOById(productId);
+    catalogService.handleGetProductByIdRequest(productId);
 
     // then
     fail("should throw an exception");
