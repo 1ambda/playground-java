@@ -127,7 +127,7 @@ export interface CartLineDTO {
      * @type {number}
      * @memberof CartLineDTO
      */
-    cartLineID?: number;
+    cartLineId?: number;
     /**
      * 
      * @type {number}
@@ -158,6 +158,18 @@ export interface CartLineDTO {
      * @memberof CartLineDTO
      */
     quantity?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineDTO
+     */
+    productName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineDTO
+     */
+    productDescription?: string;
     /**
      * 
      * @type {number}
@@ -210,6 +222,18 @@ export interface CartLineOptionDTO {
     quantity?: number;
     /**
      * 
+     * @type {string}
+     * @memberof CartLineOptionDTO
+     */
+    productOptionName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartLineOptionDTO
+     */
+    productOptionDescription?: string;
+    /**
+     * 
      * @type {number}
      * @memberof CartLineOptionDTO
      */
@@ -220,64 +244,6 @@ export interface CartLineOptionDTO {
      * @memberof CartLineOptionDTO
      */
     productOptionPrice?: number;
-}
-
-/**
- * 
- * @export
- * @interface CartLineOptionRequestDTO
- */
-export interface CartLineOptionRequestDTO {
-    /**
-     * might be null depending on the request type
-     * @type {number}
-     * @memberof CartLineOptionRequestDTO
-     */
-    cartLineOptionId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CartLineOptionRequestDTO
-     */
-    productOptionId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CartLineOptionRequestDTO
-     */
-    quantity?: number;
-}
-
-/**
- * 
- * @export
- * @interface CartLineRequestDTO
- */
-export interface CartLineRequestDTO {
-    /**
-     * might be null depending on the request type
-     * @type {number}
-     * @memberof CartLineRequestDTO
-     */
-    cartLineId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CartLineRequestDTO
-     */
-    productId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CartLineRequestDTO
-     */
-    quantity?: number;
-    /**
-     * 
-     * @type {Array&lt;CartLineOptionRequestDTO&gt;}
-     * @memberof CartLineRequestDTO
-     */
-    options?: Array<CartLineOptionRequestDTO>;
 }
 
 /**
@@ -933,28 +899,6 @@ export const CartControllerApiFetchParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        clearUserCartLines(options: any = {}): FetchArgs {
-            const localVarPath = `/cart/user/lines`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         getUserCartLines(options: any = {}): FetchArgs {
             const localVarPath = `/cart/user/lines`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1036,12 +980,39 @@ export const CartControllerApiFetchParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {number} lineId 
-         * @param {CartLineRequestDTO} [body] 
+         * @param {string} [idList] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLine(lineId: number, body?: CartLineRequestDTO, options: any = {}): FetchArgs {
+        removeUserCartLines(idList?: string, options: any = {}): FetchArgs {
+            const localVarPath = `/cart/user/lines`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (idList !== undefined) {
+                localVarQueryParameter['idList'] = idList;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} lineId 
+         * @param {CartLineDTO} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserCartLine(lineId: number, body?: CartLineDTO, options: any = {}): FetchArgs {
             // verify required parameter 'lineId' is not null or undefined
             if (lineId === null || lineId === undefined) {
                 throw new RequiredError('lineId','Required parameter lineId was null or undefined when calling updateUserCartLine.');
@@ -1059,7 +1030,7 @@ export const CartControllerApiFetchParamCreator = function (configuration?: Conf
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CartLineRequestDTO" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            const needsSerialization = (<any>"CartLineDTO" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
@@ -1071,11 +1042,11 @@ export const CartControllerApiFetchParamCreator = function (configuration?: Conf
          * 
          * @param {number} lineId 
          * @param {number} optionId 
-         * @param {CartLineOptionRequestDTO} [body] 
+         * @param {CartLineOptionDTO} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionRequestDTO, options: any = {}): FetchArgs {
+        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionDTO, options: any = {}): FetchArgs {
             // verify required parameter 'lineId' is not null or undefined
             if (lineId === null || lineId === undefined) {
                 throw new RequiredError('lineId','Required parameter lineId was null or undefined when calling updateUserCartLineOption.');
@@ -1098,7 +1069,7 @@ export const CartControllerApiFetchParamCreator = function (configuration?: Conf
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CartLineOptionRequestDTO" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            const needsSerialization = (<any>"CartLineOptionDTO" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
@@ -1127,23 +1098,6 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        clearUserCartLines(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
-            const localVarFetchArgs = CartControllerApiFetchParamCreator(configuration).clearUserCartLines(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response;
                     } else {
                         throw response;
                     }
@@ -1206,12 +1160,30 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} lineId 
-         * @param {CartLineRequestDTO} [body] 
+         * @param {string} [idList] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLine(lineId: number, body?: CartLineRequestDTO, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CartLineDTO> {
+        removeUserCartLines(idList?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = CartControllerApiFetchParamCreator(configuration).removeUserCartLines(idList, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {number} lineId 
+         * @param {CartLineDTO} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserCartLine(lineId: number, body?: CartLineDTO, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CartLineDTO> {
             const localVarFetchArgs = CartControllerApiFetchParamCreator(configuration).updateUserCartLine(lineId, body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -1227,11 +1199,11 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} lineId 
          * @param {number} optionId 
-         * @param {CartLineOptionRequestDTO} [body] 
+         * @param {CartLineOptionDTO} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionRequestDTO, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CartLineOptionDTO> {
+        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionDTO, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CartLineOptionDTO> {
             const localVarFetchArgs = CartControllerApiFetchParamCreator(configuration).updateUserCartLineOption(lineId, optionId, body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -1266,14 +1238,6 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        clearUserCartLines(options?: any) {
-            return CartControllerApiFp(configuration).clearUserCartLines(options)(fetch, basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         getUserCartLines(options?: any) {
             return CartControllerApiFp(configuration).getUserCartLines(options)(fetch, basePath);
         },
@@ -1298,23 +1262,32 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
-         * @param {number} lineId 
-         * @param {CartLineRequestDTO} [body] 
+         * @param {string} [idList] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLine(lineId: number, body?: CartLineRequestDTO, options?: any) {
+        removeUserCartLines(idList?: string, options?: any) {
+            return CartControllerApiFp(configuration).removeUserCartLines(idList, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {number} lineId 
+         * @param {CartLineDTO} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserCartLine(lineId: number, body?: CartLineDTO, options?: any) {
             return CartControllerApiFp(configuration).updateUserCartLine(lineId, body, options)(fetch, basePath);
         },
         /**
          * 
          * @param {number} lineId 
          * @param {number} optionId 
-         * @param {CartLineOptionRequestDTO} [body] 
+         * @param {CartLineOptionDTO} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionRequestDTO, options?: any) {
+        updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionDTO, options?: any) {
             return CartControllerApiFp(configuration).updateUserCartLineOption(lineId, optionId, body, options)(fetch, basePath);
         },
     };
@@ -1336,16 +1309,6 @@ export class CartControllerApi extends BaseAPI {
      */
     public addUserCartLine(body?: CartLineDTO, options?: any) {
         return CartControllerApiFp(this.configuration).addUserCartLine(body, options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CartControllerApi
-     */
-    public clearUserCartLines(options?: any) {
-        return CartControllerApiFp(this.configuration).clearUserCartLines(options)(this.fetch, this.basePath);
     }
 
     /**
@@ -1383,13 +1346,24 @@ export class CartControllerApi extends BaseAPI {
 
     /**
      * 
+     * @param {} [idList] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApi
+     */
+    public removeUserCartLines(idList?: string, options?: any) {
+        return CartControllerApiFp(this.configuration).removeUserCartLines(idList, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @param {} lineId 
      * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CartControllerApi
      */
-    public updateUserCartLine(lineId: number, body?: CartLineRequestDTO, options?: any) {
+    public updateUserCartLine(lineId: number, body?: CartLineDTO, options?: any) {
         return CartControllerApiFp(this.configuration).updateUserCartLine(lineId, body, options)(this.fetch, this.basePath);
     }
 
@@ -1402,7 +1376,7 @@ export class CartControllerApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CartControllerApi
      */
-    public updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionRequestDTO, options?: any) {
+    public updateUserCartLineOption(lineId: number, optionId: number, body?: CartLineOptionDTO, options?: any) {
         return CartControllerApiFp(this.configuration).updateUserCartLineOption(lineId, optionId, body, options)(this.fetch, this.basePath);
     }
 
@@ -1528,7 +1502,7 @@ export const CatalogControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findOneProduct(productId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ProductDTO> {
+        findOneProduct(productId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ProductContainerDTO> {
             const localVarFetchArgs = CatalogControllerApiFetchParamCreator(configuration).findOneProduct(productId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

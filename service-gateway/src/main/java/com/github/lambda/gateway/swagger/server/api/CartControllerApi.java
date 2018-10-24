@@ -8,8 +8,6 @@ package com.github.lambda.gateway.swagger.server.api;
 import com.github.lambda.gateway.swagger.model.CartDTO;
 import com.github.lambda.gateway.swagger.model.CartLineDTO;
 import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
-import com.github.lambda.gateway.swagger.model.CartLineOptionRequestDTO;
-import com.github.lambda.gateway.swagger.model.CartLineRequestDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -63,28 +61,12 @@ public interface CartControllerApi {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"createdAt\" : 2,  \"quantity\" : 2,  \"productId\" : 7,  \"totalPrice\" : 9,  \"cartLineID\" : 5,  \"cartLineOptions\" : [ {    \"createdAt\" : 1,    \"quantity\" : 6,    \"productOptionId\" : 7,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 1,    \"updatedAt\" : 1  }, {    \"createdAt\" : 1,    \"quantity\" : 6,    \"productOptionId\" : 7,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 1,    \"updatedAt\" : 1  } ],  \"index\" : 3,  \"productPrice\" : 4,  \"updatedAt\" : 7}", CartLineDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"createdAt\" : 2,  \"quantity\" : 0,  \"productId\" : 1,  \"totalPrice\" : 9,  \"cartLineId\" : 1,  \"cartLineOptions\" : [ {    \"productOptionName\" : \"productOptionName\",    \"createdAt\" : 1,    \"productOptionDescription\" : \"productOptionDescription\",    \"quantity\" : 1,    \"productOptionId\" : 1,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 0,    \"updatedAt\" : 1  }, {    \"productOptionName\" : \"productOptionName\",    \"createdAt\" : 1,    \"productOptionDescription\" : \"productOptionDescription\",    \"quantity\" : 1,    \"productOptionId\" : 1,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 0,    \"updatedAt\" : 1  } ],  \"index\" : 3,  \"productName\" : \"productName\",  \"productDescription\" : \"productDescription\",  \"productPrice\" : 4,  \"updatedAt\" : 7}", CartLineDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default CartControllerApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-
-    @ApiOperation(value = "", nickname = "clearUserCartLines", notes = "", tags={ "cart-controller", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 204, message = "No Content"),
-        @ApiResponse(code = 200, message = "error", response = Failure.class) })
-    @RequestMapping(value = "/cart/user/lines",
-        produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
-    default ResponseEntity<Void> clearUserCartLines() {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
         } else {
             log.warn("ObjectMapper or HttpServletRequest not configured in default CartControllerApi interface so no example is generated");
         }
@@ -103,7 +85,7 @@ public interface CartControllerApi {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"totalPrice\" : 1,  \"cartId\" : 0,  \"cartLines\" : [ {    \"createdAt\" : 2,    \"quantity\" : 2,    \"productId\" : 7,    \"totalPrice\" : 9,    \"cartLineID\" : 5,    \"cartLineOptions\" : [ {      \"createdAt\" : 1,      \"quantity\" : 6,      \"productOptionId\" : 7,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 1,      \"updatedAt\" : 1    }, {      \"createdAt\" : 1,      \"quantity\" : 6,      \"productOptionId\" : 7,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 1,      \"updatedAt\" : 1    } ],    \"index\" : 3,    \"productPrice\" : 4,    \"updatedAt\" : 7  }, {    \"createdAt\" : 2,    \"quantity\" : 2,    \"productId\" : 7,    \"totalPrice\" : 9,    \"cartLineID\" : 5,    \"cartLineOptions\" : [ {      \"createdAt\" : 1,      \"quantity\" : 6,      \"productOptionId\" : 7,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 1,      \"updatedAt\" : 1    }, {      \"createdAt\" : 1,      \"quantity\" : 6,      \"productOptionId\" : 7,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 1,      \"updatedAt\" : 1    } ],    \"index\" : 3,    \"productPrice\" : 4,    \"updatedAt\" : 7  } ],  \"updatedAt\" : 6,  \"itemCount\" : 5}", CartDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"totalPrice\" : 1,  \"cartId\" : 0,  \"cartLines\" : [ {    \"createdAt\" : 2,    \"quantity\" : 0,    \"productId\" : 1,    \"totalPrice\" : 9,    \"cartLineId\" : 1,    \"cartLineOptions\" : [ {      \"productOptionName\" : \"productOptionName\",      \"createdAt\" : 1,      \"productOptionDescription\" : \"productOptionDescription\",      \"quantity\" : 1,      \"productOptionId\" : 1,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 0,      \"updatedAt\" : 1    }, {      \"productOptionName\" : \"productOptionName\",      \"createdAt\" : 1,      \"productOptionDescription\" : \"productOptionDescription\",      \"quantity\" : 1,      \"productOptionId\" : 1,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 0,      \"updatedAt\" : 1    } ],    \"index\" : 3,    \"productName\" : \"productName\",    \"productDescription\" : \"productDescription\",    \"productPrice\" : 4,    \"updatedAt\" : 7  }, {    \"createdAt\" : 2,    \"quantity\" : 0,    \"productId\" : 1,    \"totalPrice\" : 9,    \"cartLineId\" : 1,    \"cartLineOptions\" : [ {      \"productOptionName\" : \"productOptionName\",      \"createdAt\" : 1,      \"productOptionDescription\" : \"productOptionDescription\",      \"quantity\" : 1,      \"productOptionId\" : 1,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 0,      \"updatedAt\" : 1    }, {      \"productOptionName\" : \"productOptionName\",      \"createdAt\" : 1,      \"productOptionDescription\" : \"productOptionDescription\",      \"quantity\" : 1,      \"productOptionId\" : 1,      \"cartLineOptionId\" : 1,      \"productOptionPrice\" : 0,      \"updatedAt\" : 1    } ],    \"index\" : 3,    \"productName\" : \"productName\",    \"productDescription\" : \"productDescription\",    \"productPrice\" : 4,    \"updatedAt\" : 7  } ],  \"updatedAt\" : 6,  \"itemCount\" : 5}", CartDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -148,6 +130,22 @@ public interface CartControllerApi {
     }
 
 
+    @ApiOperation(value = "", nickname = "removeUserCartLines", notes = "", tags={ "cart-controller", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 200, message = "error", response = Failure.class) })
+    @RequestMapping(value = "/cart/user/lines",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    default ResponseEntity<Void> removeUserCartLines(@ApiParam(value = "") @Valid @RequestParam(value = "idList", required = false) String idList) {
+        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+        } else {
+            log.warn("ObjectMapper or HttpServletRequest not configured in default CartControllerApi interface so no example is generated");
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+
     @ApiOperation(value = "", nickname = "updateUserCartLine", notes = "", response = CartLineDTO.class, tags={ "cart-controller", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = CartLineDTO.class),
@@ -156,11 +154,11 @@ public interface CartControllerApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    default ResponseEntity<CartLineDTO> updateUserCartLine(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineRequestDTO body) {
+    default ResponseEntity<CartLineDTO> updateUserCartLine(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineDTO body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"createdAt\" : 2,  \"quantity\" : 2,  \"productId\" : 7,  \"totalPrice\" : 9,  \"cartLineID\" : 5,  \"cartLineOptions\" : [ {    \"createdAt\" : 1,    \"quantity\" : 6,    \"productOptionId\" : 7,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 1,    \"updatedAt\" : 1  }, {    \"createdAt\" : 1,    \"quantity\" : 6,    \"productOptionId\" : 7,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 1,    \"updatedAt\" : 1  } ],  \"index\" : 3,  \"productPrice\" : 4,  \"updatedAt\" : 7}", CartLineDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"createdAt\" : 2,  \"quantity\" : 0,  \"productId\" : 1,  \"totalPrice\" : 9,  \"cartLineId\" : 1,  \"cartLineOptions\" : [ {    \"productOptionName\" : \"productOptionName\",    \"createdAt\" : 1,    \"productOptionDescription\" : \"productOptionDescription\",    \"quantity\" : 1,    \"productOptionId\" : 1,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 0,    \"updatedAt\" : 1  }, {    \"productOptionName\" : \"productOptionName\",    \"createdAt\" : 1,    \"productOptionDescription\" : \"productOptionDescription\",    \"quantity\" : 1,    \"productOptionId\" : 1,    \"cartLineOptionId\" : 1,    \"productOptionPrice\" : 0,    \"updatedAt\" : 1  } ],  \"index\" : 3,  \"productName\" : \"productName\",  \"productDescription\" : \"productDescription\",  \"productPrice\" : 4,  \"updatedAt\" : 7}", CartLineDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -181,11 +179,11 @@ public interface CartControllerApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    default ResponseEntity<CartLineOptionDTO> updateUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = "",required=true) @PathVariable("optionId") Long optionId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineOptionRequestDTO body) {
+    default ResponseEntity<CartLineOptionDTO> updateUserCartLineOption(@ApiParam(value = "",required=true) @PathVariable("lineId") Long lineId,@ApiParam(value = "",required=true) @PathVariable("optionId") Long optionId,@ApiParam(value = ""  )  @Valid @RequestBody CartLineOptionDTO body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"createdAt\" : 1,  \"quantity\" : 6,  \"productOptionId\" : 7,  \"cartLineOptionId\" : 1,  \"productOptionPrice\" : 1,  \"updatedAt\" : 1}", CartLineOptionDTO.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"productOptionName\" : \"productOptionName\",  \"createdAt\" : 1,  \"productOptionDescription\" : \"productOptionDescription\",  \"quantity\" : 1,  \"productOptionId\" : 1,  \"cartLineOptionId\" : 1,  \"productOptionPrice\" : 0,  \"updatedAt\" : 1}", CartLineOptionDTO.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

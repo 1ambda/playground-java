@@ -28,8 +28,8 @@ import lombok.ToString;
 @Validated
 
 public class CartLineDTO   {
-  @JsonProperty(value = "cartLineID")
-  private Long cartLineID;
+  @JsonProperty(value = "cartLineId")
+  private Long cartLineId;
 
   @JsonProperty(value = "createdAt")
   private Long createdAt;
@@ -46,6 +46,12 @@ public class CartLineDTO   {
   @JsonProperty(value = "quantity")
   private Long quantity;
 
+  @JsonProperty(value = "productName")
+  private String productName;
+
+  @JsonProperty(value = "productDescription")
+  private String productDescription;
+
   @JsonProperty(value = "productPrice")
   private Long productPrice;
 
@@ -60,18 +66,19 @@ public class CartLineDTO   {
 
 
   /**
-   * Get cartLineID
-   * @return cartLineID
+   * Get cartLineId
+   * minimum: 1
+   * @return cartLineId
   **/
   @ApiModelProperty(value = "")
 
-
-  public Long getCartLineID() {
-    return cartLineID;
+@Min(1)
+  public Long getCartLineId() {
+    return cartLineId;
   }
 
-  public void setCartLineID(Long cartLineID) {
-    this.cartLineID = cartLineID;
+  public void setCartLineId(Long cartLineId) {
+    this.cartLineId = cartLineId;
   }
 
 
@@ -146,17 +153,52 @@ public class CartLineDTO   {
 
   /**
    * Get quantity
+   * minimum: 0
    * @return quantity
   **/
   @ApiModelProperty(value = "")
 
-
+@Min(0)
   public Long getQuantity() {
     return quantity;
   }
 
   public void setQuantity(Long quantity) {
     this.quantity = quantity;
+  }
+
+
+
+  /**
+   * Get productName
+   * @return productName
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getProductName() {
+    return productName;
+  }
+
+  public void setProductName(String productName) {
+    this.productName = productName;
+  }
+
+
+
+  /**
+   * Get productDescription
+   * @return productDescription
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getProductDescription() {
+    return productDescription;
+  }
+
+  public void setProductDescription(String productDescription) {
+    this.productDescription = productDescription;
   }
 
 
@@ -180,11 +222,12 @@ public class CartLineDTO   {
 
   /**
    * Get productId
+   * minimum: 1
    * @return productId
   **/
   @ApiModelProperty(value = "")
 
-
+@Min(1)
   public Long getProductId() {
     return productId;
   }

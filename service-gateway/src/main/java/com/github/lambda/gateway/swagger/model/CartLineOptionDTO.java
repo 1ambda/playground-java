@@ -37,6 +37,12 @@ public class CartLineOptionDTO   {
   @JsonProperty(value = "quantity")
   private Long quantity;
 
+  @JsonProperty(value = "productOptionName")
+  private String productOptionName;
+
+  @JsonProperty(value = "productOptionDescription")
+  private String productOptionDescription;
+
   @JsonProperty(value = "productOptionId")
   private Long productOptionId;
 
@@ -47,11 +53,12 @@ public class CartLineOptionDTO   {
 
   /**
    * Get cartLineOptionId
+   * minimum: 1
    * @return cartLineOptionId
   **/
   @ApiModelProperty(value = "")
 
-
+@Min(1)
   public Long getCartLineOptionId() {
     return cartLineOptionId;
   }
@@ -98,11 +105,13 @@ public class CartLineOptionDTO   {
 
   /**
    * Get quantity
+   * minimum: 1
+   * maximum: 1
    * @return quantity
   **/
   @ApiModelProperty(value = "")
 
-
+@Min(1) @Max(1) 
   public Long getQuantity() {
     return quantity;
   }
@@ -114,12 +123,47 @@ public class CartLineOptionDTO   {
 
 
   /**
-   * Get productOptionId
-   * @return productOptionId
+   * Get productOptionName
+   * @return productOptionName
   **/
   @ApiModelProperty(value = "")
 
 
+  public String getProductOptionName() {
+    return productOptionName;
+  }
+
+  public void setProductOptionName(String productOptionName) {
+    this.productOptionName = productOptionName;
+  }
+
+
+
+  /**
+   * Get productOptionDescription
+   * @return productOptionDescription
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getProductOptionDescription() {
+    return productOptionDescription;
+  }
+
+  public void setProductOptionDescription(String productOptionDescription) {
+    this.productOptionDescription = productOptionDescription;
+  }
+
+
+
+  /**
+   * Get productOptionId
+   * minimum: 1
+   * @return productOptionId
+  **/
+  @ApiModelProperty(value = "")
+
+@Min(1)
   public Long getProductOptionId() {
     return productOptionId;
   }
@@ -132,11 +176,12 @@ public class CartLineOptionDTO   {
 
   /**
    * Get productOptionPrice
+   * minimum: 0
    * @return productOptionPrice
   **/
   @ApiModelProperty(value = "")
 
-
+@Min(0)
   public Long getProductOptionPrice() {
     return productOptionPrice;
   }

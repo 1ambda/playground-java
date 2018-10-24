@@ -34,16 +34,6 @@ public interface CartControllerApi extends ApiClient.Api {
   /**
    * 
    * 
-   */
-  @RequestLine("DELETE /cart/user/lines")
-  @Headers({
-    "Accept: application/json",
-  })
-  void clearUserCartLines();
-
-  /**
-   * 
-   * 
    * @return CartDTO
    */
   @RequestLine("GET /cart/user/lines")
@@ -74,6 +64,48 @@ public interface CartControllerApi extends ApiClient.Api {
     "Accept: application/json",
   })
   void removeUserCartLineOption(@Param("lineId") Long lineId, @Param("optionId") Long optionId);
+
+  /**
+   * 
+   * 
+    * @param idList  (optional)
+   */
+  @RequestLine("DELETE /cart/user/lines?idList={idList}")
+  @Headers({
+    "Accept: application/json",
+  })
+  void removeUserCartLines(@Param("idList") String idList);
+
+  /**
+   * 
+   * 
+   * Note, this is equivalent to the other <code>removeUserCartLines</code> method,
+   * but with the query parameters collected into a single Map parameter. This
+   * is convenient for services with optional query parameters, especially when
+   * used with the {@link RemoveUserCartLinesQueryParams} class that allows for
+   * building up this map in a fluent style.
+   * @param queryParams Map of query parameters as name-value pairs
+   *   <p>The following elements may be specified in the query map:</p>
+   *   <ul>
+   *   <li>idList -  (optional)</li>
+   *   </ul>
+   */
+  @RequestLine("DELETE /cart/user/lines?idList={idList}")
+  @Headers({
+  "Accept: application/json",
+  })
+  void removeUserCartLines(@QueryMap(encoded=true) Map<String, Object> queryParams);
+
+  /**
+   * A convenience class for generating query parameters for the
+   * <code>removeUserCartLines</code> method in a fluent style.
+   */
+  public static class RemoveUserCartLinesQueryParams extends HashMap<String, Object> {
+    public RemoveUserCartLinesQueryParams idList(final String value) {
+      put("idList", EncodingUtils.encode(value));
+      return this;
+    }
+  }
 
   /**
    * 

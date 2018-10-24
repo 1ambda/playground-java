@@ -22,10 +22,14 @@ api:
     delete:
       tags:
       - cart-controller
-      operationId: clearUserCartLines
+      operationId: removeUserCartLines
       consumes: []
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: idList # comma separated id list.
+        type: string
       responses:
         204:
           description: No Content
@@ -97,7 +101,7 @@ api:
       - name: body
         in: body
         schema:
-          $ref: "./gateway-cart.yaml#/definitions/CartLineRequestDTO"
+          $ref: "./gateway-cart.yaml#/definitions/CartLineDTO"
       responses:
         200:
           description: OK
@@ -180,7 +184,7 @@ api:
       - name: body
         in: body
         schema:
-          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionRequestDTO"
+          $ref: "./gateway-cart.yaml#/definitions/CartLineOptionDTO"
       responses:
         200:
           description: OK
@@ -216,9 +220,10 @@ definitions:
   CartLineDTO:
     type: object
     properties:
-      cartLineID:
+      cartLineId:
         type: integer
         format: int64
+        minimum: 1
       createdAt:
         type: integer
         format: int64
@@ -234,12 +239,18 @@ definitions:
       quantity:
         type: integer
         format: int64
+        minimum: 0
+      productName:
+        type: string
+      productDescription:
+        type: string
       productPrice:
         type: integer
         format: int64
       productId:
         type: integer
         format: int64
+        minimum: 1
       cartLineOptions:
         type: array
         items:
@@ -251,6 +262,7 @@ definitions:
       cartLineOptionId:
         type: integer
         format: int64
+        minimum: 1
       updatedAt:
         type: integer
         format: int64
@@ -260,12 +272,20 @@ definitions:
       quantity:
         type: integer
         format: int64
+        minimum: 1
+        maximum: 1
+      productOptionName:
+        type: string
+      productOptionDescription:
+        type: string
       productOptionId:
         type: integer
         format: int64
+        minimum: 1
       productOptionPrice:
         type: integer
         format: int64
+        minimum: 0
 
   CartLineRequestDTO:
     type: object
