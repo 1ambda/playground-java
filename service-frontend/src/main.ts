@@ -15,9 +15,11 @@ import {AuthAPI} from '@/common/auth.service.ts'
 import {Failure} from '@/generated/swagger'
 
 import Icon from 'vue-awesome/components/Icon.vue'
+import BackToTop from 'vue-backtotop'
+
 Vue.use(ElementUI, {locale})
 Vue.component('v-icon', Icon)
-
+Vue.component('back-to-top', BackToTop)
 
 const router = new Router({
   routes,

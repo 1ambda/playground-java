@@ -2,25 +2,35 @@
   <el-row type="flex" justify="center">
     <el-col :xs="16" :sm="12" :md="8" :lg="6">
       <div style="margin: 20px;"></div>
-      <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
+      <el-form name="registerForm"
+               :label-position="'right'"
+               :rules="rules"
+               label-width="100px"
+               :model="ruleForm" ref="ruleForm">
         <el-form-item label="ID" prop="username">
-          <el-input v-model="ruleForm.username"></el-input>
+          <el-input name="inputID"
+                    v-model="ruleForm.username"></el-input>
         </el-form-item>
 
         <el-form-item label="Name" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+          <el-input name="inputName"
+                    v-model="ruleForm.name"></el-input>
         </el-form-item>
 
         <el-form-item label="Address" prop="address">
-          <el-input v-model="ruleForm.address"></el-input>
+          <el-input name="inputAddress"
+                    v-model="ruleForm.address"></el-input>
         </el-form-item>
 
         <el-form-item label="Email" prop="email">
-          <el-input v-model="ruleForm.email"></el-input>
+          <el-input name="inputEmail"
+                    v-model="ruleForm.email"></el-input>
         </el-form-item>
 
         <el-form-item label="Password">
-          <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+          <el-input name="inputPassword" type="password"
+                    v-model="ruleForm.password"
+                    auto-complete="off"></el-input>
         </el-form-item>
 
         <el-form-item>

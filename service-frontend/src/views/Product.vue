@@ -4,12 +4,10 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div>
           <h1>Product List</h1>
-          <el-table
-            :data="productList"
-            stripe
-            border
-            @cell-click='handleCellClick'
-            style="width: 100%">
+          <el-table :data="productList"
+                    stripe border
+                    @cell-click='handleCellClick'
+                    style="width: 100%">
 
             <el-table-column v-for="column in columns"
                              :class-name="column.prop === 'name' ? 'column-name' : 'column-default'"
@@ -21,13 +19,12 @@
     </el-row>
     <el-row type="flex" justify="center" class="pagination">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="itemCountPerPage"
-          :current-page.sync="currentPage"
-          @current-change="handleCurrentPageChange"
-          :total="totalItemCount">
+        <el-pagination background
+                       layout="prev, pager, next"
+                       :page-size="itemCountPerPage"
+                       :current-page.sync="currentPage"
+                       @current-change="handleCurrentPageChange"
+                       :total="totalItemCount">
         </el-pagination>
       </el-col>
     </el-row>
@@ -38,8 +35,8 @@
   import {Component, Vue} from 'vue-property-decorator'
   import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
   import {Pagination} from '@/generated/swagger'
-  import {ProductAPI,} from '@/common/product.service.ts'
-  import {handleFailure} from "../common/failure.util";
+  import {CatalogAPI,} from '@/common/product.service.ts'
+  import {handleFailure} from "../common/failure.util"
 
   @Component({
     components: {},
@@ -67,8 +64,24 @@
     ]
     public productList = []
 
+    /**
+     * life-cycle methods
+     */
+
+    mounted() {
+      this.fetchAllProducts(this.currentPage)
+    }
+
+    /**
+     * event handlers
+     */
+
+    /**
+     * helpers
+     */
+
     fetchAllProducts(currentPage) {
-      ProductAPI.findPaginatedProducts(
+      CatalogAPI.findPaginatedProducts(
         currentPage - 1,
         this.itemCountPerPage,
         {credentials: 'include'}
@@ -77,10 +90,6 @@
         this.totalItemCount = pagination.totalItemCount
         this.productList = response.products.map(p => p.item)
       }).catch(handleFailure(this.$notify))
-    }
-
-    mounted() {
-      this.fetchAllProducts(this.currentPage)
     }
 
     handleCurrentPageChange(newPage) {
