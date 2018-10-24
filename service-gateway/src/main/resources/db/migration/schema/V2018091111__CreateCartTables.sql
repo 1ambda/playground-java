@@ -31,7 +31,7 @@ CREATE TABLE `CartLine` (
   `id`         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
   -- FK columns
-  `cart_id`       BIGINT UNSIGNED NOT NULL,
+  `cart_id`       BIGINT UNSIGNED NULL,
   `product_id`    BIGINT UNSIGNED NOT NULL,
 
   INDEX `idx_CartLine_cartId` (`cart_id`),

@@ -30,10 +30,12 @@ public class CartConverter {
   public CartLineDTO convertToCartLineDTO(CartLine cartLine,
                                           List<CartLineOptionDTO> cartLineOptionDTOs,
                                           Long productPrice,
+                                          String productName,
+                                          String productDescription,
                                           Long productTotalPrice) {
 
     CartLineDTO.CartLineDTOBuilder builder = CartLineDTO.builder()
-        .cartLineID(cartLine.getId())
+        .cartLineId(cartLine.getId())
         .createdAt(cartLine.getCreateTimestamp())
         .updatedAt(cartLine.getUpdateTimestamp())
         .index(cartLine.getIndex())
@@ -44,13 +46,17 @@ public class CartConverter {
 
     builder
         .productPrice(productPrice)
+        .productName(productName)
+        .productDescription(productDescription)
         .totalPrice(productTotalPrice);
 
     return builder.build();
   }
 
   public CartLineOptionDTO convertToCartLineOptionDTO(CartLineOption cartLineOption,
-                                                      Long productOptionPrice) {
+                                                      Long productOptionPrice,
+                                                      String productOptionName,
+                                                      String productOptionDescription) {
     CartLineOptionDTO.CartLineOptionDTOBuilder builder = CartLineOptionDTO.builder()
         .cartLineOptionId(cartLineOption.getId())
         .createdAt(cartLineOption.getCreateTimestamp())
@@ -58,8 +64,11 @@ public class CartConverter {
         .productOptionId(cartLineOption.getProductOptionId())
         .quantity(cartLineOption.getQuantity());
 
-    builder.productOptionPrice(productOptionPrice);
+    builder
+        .productOptionPrice(productOptionPrice)
+        .productOptionName(productOptionName)
+        .productOptionDescription(productOptionDescription);
 
-    return null;
+    return builder.build();
   }
 }

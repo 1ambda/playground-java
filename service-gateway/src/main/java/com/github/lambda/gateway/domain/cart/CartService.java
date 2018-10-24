@@ -3,11 +3,14 @@ package com.github.lambda.gateway.domain.cart;
 import com.github.lambda.gateway.domain.cart.entity.Cart;
 import com.github.lambda.gateway.domain.cart.entity.CartLine;
 import com.github.lambda.gateway.domain.cart.entity.CartLineOption;
+import com.github.lambda.gateway.domain.cart.exception.CartAlreadyExistException;
 import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
 import com.github.lambda.gateway.domain.catalog.entity.ProductOption;
 import com.github.lambda.gateway.security.SecurityService;
-import com.github.lambda.gateway.swagger.model.*;
+import com.github.lambda.gateway.swagger.model.CartDTO;
+import com.github.lambda.gateway.swagger.model.CartLineDTO;
+import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -63,8 +66,7 @@ public class CartService {
     Cart existing = cartQueryFacade.getCart(userId);
 
     if (existing != null) {
-      // TODO: CartException.AlreadyExist(userId)
-      throw new IllegalArgumentException("Cart already exist");
+      throw CartAlreadyExistException.create(userId);
     }
 
     Cart created = cartActionFacade.createCart(userId);
@@ -73,46 +75,65 @@ public class CartService {
   }
 
   @Transactional
-  public CartLine addCartLine(Long userId, CartLineRequestDTO request) {
+  public CartLine addCartLine(Long userId, CartLineDTO request) {
     Long productId = request.getProductId();
+
+
     Long productQuantity = request.getQuantity();
+    Long optionQuantity = 1L; // supports 1 option quantity only
 
     List<CartLineOption> cartLineOptions = request
-        .getOptions()
+        .getCartLineOptions()
         .stream()
         .map(optionRequest -> {
-          return CartLineOption.builder()
+          CartLineOption option = CartLineOption.builder()
               .productOptionId(optionRequest.getProductOptionId())
-              .quantity(optionRequest.getQuantity())
+              .quantity(optionQuantity)
               .build();
+
+          return option;
         })
         .collect(Collectors.toList());
 
     CartLine cartLine = CartLine.builder()
         .productId(productId)
         .quantity(productQuantity)
-        .cartLineOptions(cartLineOptions)
-        .index(0L) // TODO
+        .index(0L)
         .build();
 
-    cartLine = cartActionFacade.addCartLine(userId, cartLine);
-    return cartLine;
+    for (int i = 0; i < request.getCartLineOptions().size(); i++) {
+      CartLineOption cartLineOption = cartLineOptions.get(i);
+      cartLine.addCartLineOption(cartLineOption);
+    }
+
+    // TODO cart full exception
+    CartLine created = cartActionFacade.addCartLine(userId, cartLine);
+    return created;
   }
 
   @Transactional
   public CartLineDTO handleAddCartLineRequest(Long userId,
-                                              CartLineRequestDTO request) {
+                                              CartLineDTO request) {
 
     CartLine cartLine = addCartLine(userId, request);
-    return buildCartLineDTO(cartLine);
+
+    CartLineDTO dto = buildCartLineDTO(cartLine);
+    return dto;
   }
 
   @Transactional
-  public CartDTO handleGetCart(long userId) {
+  public Cart getUserCartOrThrow(Long userId) {
     Cart cart = cartQueryFacade.getCart(userId);
     if (cart == null) {
       throw new IllegalStateException("Cart does not exist");
     }
+
+    return cart;
+  }
+
+  @Transactional
+  public CartDTO handleGetCartRequest(Long userId) {
+    Cart cart = getUserCartOrThrow(userId);
 
     List<CartLineDTO> cartLineDTOs = new ArrayList<>();
     List<CartLine> cartLines = cart.getCartLines();
@@ -129,6 +150,22 @@ public class CartService {
   }
 
   @Transactional
+  public CartLineDTO handleRemoveCartLineRequest(Long userId, Long cartLineId) {
+    CartLine deleted = cartActionFacade.removeCartLine(userId, cartLineId);
+
+    CartLineDTO dto = buildCartLineDTO(deleted);
+
+    return dto;
+  }
+
+  @Transactional(rollbackOn = Exception.class)
+  public void removeCartLines(Long userId, List<Long> cartLineIdList) {
+    cartLineIdList.forEach(cartLineId -> {
+      cartActionFacade.removeCartLine(userId, cartLineId);
+    });
+  }
+
+  @Transactional
   public CartLine removeCartLine(Long userId, Long cartLineId) {
     CartLine deleted = cartActionFacade.removeCartLine(userId, cartLineId);
 
@@ -138,34 +175,46 @@ public class CartService {
   @Transactional
   public CartLine updateCartLine(Long userId,
                                  Long cartLineId,
-                                 CartLineRequestDTO request) {
+                                 CartLineDTO request) {
 
     // support quantity update only
     Long quantity = request.getQuantity();
-    CartLine updated = cartActionFacade.updateCartLineQuantity(
-        userId, cartLineId, quantity);
+    CartLine updated = cartActionFacade.updateCartLineQuantity(userId, cartLineId, quantity);
 
     return updated;
+  }
+
+  public CartLineDTO handleUpdateCartLineRequest(Long userId,
+                                                 Long cartLineId,
+                                                 CartLineDTO request) {
+
+    Long quantity = request.getQuantity();
+    CartLine cartLine =
+        cartActionFacade.updateCartLineQuantity(userId, cartLineId, quantity);
+
+    CartLineDTO cartLineDTO = buildCartLineDTO(cartLine);
+
+    return cartLineDTO;
   }
 
   public CartLineOption updateCartLineOption(Long userId,
                                              Long cartLineId,
                                              Long cartLineOptionId,
-                                             CartLineOptionRequestDTO request) {
+                                             CartLineOptionDTO request) {
 
     throw new NotImplementedException();
   }
 
   public CartLineOption addCartLineOption(Long userId,
                                           Long cartLineId,
-                                          CartLineOptionRequestDTO request) {
+                                          CartLineOptionDTO request) {
 
     throw new NotImplementedException();
   }
 
   public CartLineOption removeCartLineOption(Long userId,
                                              Long cartLineId,
-                                             CartLineOptionRequestDTO request) {
+                                             CartLineOptionDTO request) {
     throw new NotImplementedException();
   }
 
@@ -195,13 +244,18 @@ public class CartService {
 
       ProductOption productOption = productOptions.get(productOptionId);
       CartLineOptionDTO cartLineOptionDTO =
-          cartConverter.convertToCartLineOptionDTO(cartLineOption, productOption.getPrice());
+          cartConverter.convertToCartLineOptionDTO(cartLineOption,
+                                                   productOption.getPrice(),
+                                                   productOption.getName(),
+                                                   productOption.getDescription());
       cartLineOptionDTOs.add(cartLineOptionDTO);
     }
 
     CartLineDTO cartLineDTO = cartConverter.convertToCartLineDTO(cartLine,
                                                                  cartLineOptionDTOs,
                                                                  productPrice,
+                                                                 product.getName(),
+                                                                 product.getDescription(),
                                                                  productTotalPrice);
     return cartLineDTO;
   }

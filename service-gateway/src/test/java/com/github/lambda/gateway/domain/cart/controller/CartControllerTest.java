@@ -41,13 +41,13 @@ public class CartControllerTest {
 
   @Test
   public void testClearUserCartLines() {
-    // given 
+    // given
     final ResponseEntity<Void> expectedResult = null;
 
-    // when 
-    final ResponseEntity<Void> result = cartControllerUnderTest.clearUserCartLines();
+    // when
+    final ResponseEntity<Void> result = cartControllerUnderTest.removeUserCartLines("");
 
-    // then 
+    // then
     assertThat(result).isEqualTo(expectedResult);
   }
 

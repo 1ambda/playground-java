@@ -49,10 +49,12 @@ public class Cart extends BaseEntity {
    * functions
    */
   public void addCartLine(CartLine cartLine) {
+    cartLine.setCartId(this.getId());
     cartLines.add(cartLine);
   }
 
   public void removeCartLine(CartLine cartLine) {
+    cartLine.setCartId(null);
     cartLines.remove(cartLine);
   }
 }

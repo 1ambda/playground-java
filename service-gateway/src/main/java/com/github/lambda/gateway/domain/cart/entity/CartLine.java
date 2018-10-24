@@ -44,6 +44,9 @@ public class CartLine extends BaseEntity {
   /**
    * relations
    */
+  @Column(name = "`cart_id`", nullable = true)
+  private Long cartId;
+
   @ToString.Exclude
   @Builder.Default
   @OneToMany(
@@ -56,11 +59,13 @@ public class CartLine extends BaseEntity {
   /**
    * functions
    */
-  public void AddCartLineOption(CartLineOption orderLineOption) {
-    cartLineOptions.add(orderLineOption);
+  public void addCartLineOption(CartLineOption cartLineOption) {
+    cartLineOption.setCartLineId(this.getId());
+    cartLineOptions.add(cartLineOption);
   }
 
-  public void RemoveCartLineOption(CartLineOption orderLineOption) {
-    cartLineOptions.remove(orderLineOption);
+  public void removeCartLineOption(CartLineOption cartLineOption) {
+    cartLineOption.setCartLineId(null);
+    cartLineOptions.remove(cartLineOption);
   }
 }

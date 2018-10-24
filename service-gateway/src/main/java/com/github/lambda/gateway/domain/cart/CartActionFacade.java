@@ -1,5 +1,6 @@
 package com.github.lambda.gateway.domain.cart;
 
+import com.github.lambda.gateway.common.Time;
 import com.github.lambda.gateway.domain.cart.entity.Cart;
 import com.github.lambda.gateway.domain.cart.entity.CartLine;
 import com.github.lambda.gateway.domain.cart.repository.CartLineOptionRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -58,29 +60,29 @@ public class CartActionFacade {
     Cart cart = cartRepository.findByUserId(userId);
     List<CartLine> cartLines = cart.getCartLines();
 
-    CartLine found = cartLines
+    CartLine cartLine = cartLines
         .stream()
         .filter(line -> cartLineId == line.getId())
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException("CartLine does not exist"));
 
+    LocalDateTime now = Time.getCurrentUTCDateTime();
+
     // soft delete CartLine
-    found.markDeleted();
-    cartLineRepository.save(found);
+    cartLine.setDeletedAt(now);
 
     // soft delete CartLineOption
-    found.getCartLineOptions()
-        .stream()
+    cartLine.getCartLineOptions()
         .forEach(cartLineOption -> {
-          cartLineOption.markDeleted();
-          cartLineOptionRepository.save(cartLineOption);
+          cartLineOption.setDeletedAt(now);
         });
 
     // remove relation from CartLine w/ Cart
-    cart.removeCartLine(found);
+    cart.removeCartLine(cartLine);
+    cartLineRepository.save(cartLine);
     cartRepository.save(cart);
 
-    return found;
+    return cartLine;
   }
 
   public CartLine updateCartLineQuantity(Long userId, Long cartLineId, Long quantity) {

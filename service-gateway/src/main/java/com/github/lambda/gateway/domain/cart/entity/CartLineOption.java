@@ -40,6 +40,8 @@ public class CartLineOption extends BaseEntity {
   /**
    * relations
    */
+  @Column(name = "`cart_line_id`", nullable = true)
+  private Long cartLineId;
 
   /**
    * functions
