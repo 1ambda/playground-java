@@ -1,6 +1,7 @@
 package com.github.lambda.gateway;
 
 import com.github.lambda.gateway.config.ProfileManager;
+import com.github.lambda.gateway.environment.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +16,7 @@ import java.util.TimeZone;
 public class GatewayApplication {
 
   @Autowired
-  private LocalEnvironment localEnvironment;
+  private Environment environment;
 
   public static void main(String[] args) {
     SpringApplication.run(GatewayApplication.class, args);
@@ -32,10 +33,8 @@ public class GatewayApplication {
     // set local
     Locale.setDefault(new Locale("en", "US"));
 
-    // configure application
-    if (profileManager.hasLocalProfile()) {
-      localEnvironment.setup();
-    }
+    // configure application environment based on the current profile
+    environment.setup();
   }
 
 }

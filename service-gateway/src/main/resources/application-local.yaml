@@ -24,6 +24,15 @@ spring.jpa.properties.hibernate.format_sql: true
 spring.jpa.properties.hibernate.generate_statistics: false
 spring.jpa.properties.hibernate.type: TRACE
 
+application:
+  gateway:
+    cors:
+      origin: '*' # TODO
+    test:
+      customer-username: test
+      customer-password: test
+      customer-email: test@test.com
+
 # http logging
 logbook:
   exclude:
