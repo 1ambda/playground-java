@@ -2,6 +2,7 @@ package com.github.lambda.gateway.domain.catalog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.lambda.gateway.domain.base.BaseEntity;
+import com.github.lambda.gateway.domain.catalog.exception.ProductOptionUnavailableException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,6 +10,8 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -71,10 +74,46 @@ public class Product extends BaseEntity {
   public Long getTotalPrice() {
     Long totalPrice = price;
 
-    for(ProductOption productOption : productOptions) {
+    for (ProductOption productOption : productOptions) {
       totalPrice += productOption.getPrice();
     }
 
     return totalPrice;
+  }
+
+  /**
+   * @param requestedOptionIdList
+   * @throws ProductOptionUnavailableException
+   */
+  public void validateAvailableOptionsOrThrow(List<Long> requestedOptionIdList) {
+    List<ProductOption> existingOptions = getProductOptions();
+
+    if (existingOptions.size() == 0 || requestedOptionIdList.size() == 0) {
+      return;
+    }
+
+    if (requestedOptionIdList.size() > existingOptions.size()) {
+      throw ProductOptionUnavailableException.create(
+          "Requested options are much more than existing options");
+    }
+
+    Map<Long, ProductOption> existingOptionMap = existingOptions
+        .stream()
+        .collect(Collectors.toMap(ProductOption::getId, o -> o));
+
+    requestedOptionIdList.forEach(requestOptionId -> {
+      if (!existingOptionMap.containsKey(requestOptionId)) {
+        throw ProductOptionUnavailableException
+            .create(requestOptionId, "does not exist");
+      }
+
+      ProductOption existing = existingOptionMap.get(requestOptionId);
+      if (!existing.isAvailable()) {
+        throw ProductOptionUnavailableException
+            .create(requestOptionId, "unavailable");
+      }
+    });
+
+    return;
   }
 }
