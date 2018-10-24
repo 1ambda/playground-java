@@ -7,6 +7,8 @@ import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.domain.user.repository.RoleRepository;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 
+import javax.transaction.Transactional;
+
 import static org.mockito.Mockito.doReturn;
 
 public interface UserFixture {
@@ -33,9 +35,17 @@ public interface UserFixture {
     doReturn(roleCustomer).when(mockRoleRepository).findByCode(Role.Code.ROLE_CUSTOMER);
 
     UserService userService = getUserService();
-    UserDTO created = userService.addNewCustomer(userDTO);
+    UserDTO created = userService.handleAddNewCustomerRequest(userDTO);
     User user = userService.getUserByUsername(created.getUsername());
 
     return user;
+  }
+
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  default Long prepareUserInTransaction() {
+    User user = prepareUser();
+    Long userId = user.getId();
+
+    return userId;
   }
 }

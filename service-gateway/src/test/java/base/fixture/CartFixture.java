@@ -3,11 +3,18 @@ package base.fixture;
 import com.github.lambda.gateway.domain.cart.CartService;
 import com.github.lambda.gateway.domain.cart.entity.Cart;
 import com.github.lambda.gateway.domain.cart.entity.CartLine;
+import com.github.lambda.gateway.domain.cart.repository.CartLineRepository;
 import com.github.lambda.gateway.swagger.model.CartLineDTO;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface CartFixture {
 
   CartService getCartService();
+
+  CartLineRepository getCartLineRepository();
 
   default Cart prepareCart(Long userId) {
     CartService cartService = getCartService();
@@ -23,5 +30,24 @@ public interface CartFixture {
         .build();
 
     return cartService.addCartLine(userId, request);
+  }
+
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  default List<Long> prepareCartLinesInTransaction(Long userId, Long productId, int cartLineCount) {
+    List<Long> cartLineIdList = new ArrayList<>();
+
+    for (int i = 0; i < cartLineCount; i++) {
+      CartLine cartLine = prepareCartLine(userId, productId);
+      cartLineIdList.add(cartLine.getId());
+    }
+
+    return cartLineIdList;
+  }
+
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  default boolean isCartLineDeleted(Long cartLineId) {
+    CartLineRepository cartLineRepository = getCartLineRepository();
+    CartLine cartLine = cartLineRepository.findById(cartLineId).get();
+    return cartLine.isDeleted() && cartLine.getCartId() == null;
   }
 }

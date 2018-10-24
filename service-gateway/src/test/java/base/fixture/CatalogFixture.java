@@ -7,6 +7,7 @@ import com.github.lambda.gateway.domain.catalog.repository.CategoryRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductOptionRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -78,5 +79,15 @@ public interface CatalogFixture {
     product = productRepository.save(product);
 
     return product;
+  }
+
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  default Long prepareProductInTransaction() {
+    // given: prepare Product
+    Category category = prepareCategory();
+    Product product = prepareProduct(category);
+    Long productId = product.getId();
+
+    return productId;
   }
 }
