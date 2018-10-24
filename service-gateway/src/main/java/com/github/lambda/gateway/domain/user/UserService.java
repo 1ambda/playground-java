@@ -1,5 +1,6 @@
 package com.github.lambda.gateway.domain.user;
 
+import com.github.lambda.gateway.domain.cart.CartService;
 import com.github.lambda.gateway.domain.user.entity.AuthIdentity;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.swagger.model.UserDTO;
@@ -17,17 +18,20 @@ public class UserService {
   private UserConverter userConverter;
   private UserActionFacade userActionFacade;
   private UserQueryFacade userQueryFacade;
+  private CartService cartService;
 
   @Autowired
   public UserService(PasswordEncoder passwordEncoder,
                      UserConverter userConverter,
                      UserActionFacade userActionFacade,
-                     UserQueryFacade userQueryFacade) {
+                     UserQueryFacade userQueryFacade,
+                     CartService cartService) {
 
     this.passwordEncoder = passwordEncoder;
     this.userConverter = userConverter;
     this.userActionFacade = userActionFacade;
     this.userQueryFacade = userQueryFacade;
+    this.cartService = cartService;
   }
 
   @Transactional
@@ -46,7 +50,7 @@ public class UserService {
   }
 
   @Transactional(rollbackOn = Exception.class)
-  public UserDTO addNewCustomer(UserDTO userDTO) {
+  public UserDTO handleAddNewCustomerRequest(UserDTO userDTO) {
 
     AuthIdentity.Provider provider = AuthIdentity.Provider.valueOf(userDTO.getProvider());
     String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
@@ -57,8 +61,13 @@ public class UserService {
                                 "Invalid password encoding");
 
     User user = userActionFacade.addNewCustomer(userDTO, provider, encodedPassword);
-    UserDTO dto = userConverter.convertToUserDTO(user);
 
+    // additional logic for a newly created user.
+    Long userId = user.getId();
+    cartService.createCart(userId);
+
+    // return response
+    UserDTO dto = userConverter.convertToUserDTO(user);
     return dto;
   }
 }

@@ -1,6 +1,6 @@
 package com.github.lambda.gateway.security;
 
-import com.github.lambda.gateway.domain.user.UserService;
+import com.github.lambda.gateway.domain.user.UserQueryFacade;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.security.exception.InvalidUserPrincipalException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ import javax.transaction.Transactional;
  */
 @Service
 public class SecurityService {
-
-  private UserService userService;
+  // use `UserFacade` to remove circular dependency
+  private UserQueryFacade userQueryFacade;
 
   @Autowired
-  public SecurityService(UserService userService) {
-    this.userService = userService;
+  public SecurityService(UserQueryFacade userQueryFacade) {
+    this.userQueryFacade = userQueryFacade;
   }
 
   /**
@@ -48,7 +48,7 @@ public class SecurityService {
   public long getUserIdOrThrow() {
     UserPrincipal principal = getPrincipalThrow();
 
-    User user = userService.getUserByUsername(principal.getUsername());
+    User user = userQueryFacade.getUserByUsername(principal.getUsername());
     if (user == null) {
       throw new InvalidUserPrincipalException("Invalid username");
     }
