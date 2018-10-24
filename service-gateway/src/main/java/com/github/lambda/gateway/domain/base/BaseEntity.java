@@ -14,87 +14,91 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseEntity {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @JsonProperty("_id")
-    @Column(name = "`id`")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+  @Id
+  @JsonProperty("_id")
+  @Column(name = "`id`")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  protected Long id;
 
-    @Version
-    @Column(name = "`version`")
-    protected Long version;
+  @Version
+  @Column(name = "`version`")
+  protected Long version;
 
-    @Column(name = "`created_at`")
-    protected LocalDateTime createdAt;
+  @Column(name = "`created_at`")
+  protected LocalDateTime createdAt;
 
-    @Column(name = "`updated_at`")
-    protected LocalDateTime updatedAt;
+  @Column(name = "`updated_at`")
+  protected LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = Time.getCurrentUTCDateTime();
-        this.updatedAt = Time.getCurrentUTCDateTime();
-        this.locked = YesNo.N;
+  @PrePersist
+  protected void onCreate() {
+    this.createdAt = Time.getCurrentUTCDateTime();
+    this.updatedAt = Time.getCurrentUTCDateTime();
+    this.locked = YesNo.N;
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    this.updatedAt = Time.getCurrentUTCDateTime();
+  }
+
+  protected static final String NOT_DELETED =
+      "deleted_at > CURRENT_TIMESTAMP OR deleted_at IS NULL";
+
+  @Column(name = "`deleted_at`")
+  protected LocalDateTime deletedAt;
+
+  public void markDeleted() {
+    this.deletedAt = Time.getCurrentUTCDateTime();
+  }
+
+  public boolean isDeleted() {
+    if (this.getDeletedAt() == null) {
+      return false;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = Time.getCurrentUTCDateTime();
-    }
+    return Time.getCurrentUTCDateTime().isAfter(this.deletedAt);
+  }
 
-    protected static final String NOT_DELETED =
-            "deleted_at > CURRENT_TIMESTAMP OR deleted_at IS NULL";
+  @Enumerated(EnumType.STRING)
+  @Column(name = "`locked`")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  protected YesNo locked;
 
-    @Column(name = "`deleted_at`")
-    protected LocalDateTime deletedAt;
+  /**
+   * @return true if temporarily disabled.
+   */
+  public boolean isLocked() {
+    return YesNo.Y.equals(this.locked);
+  }
 
-    public void markDeleted() {
-      this.deletedAt = Time.getCurrentUTCDateTime();
-    }
+  /**
+   * @return true if not disabled (locked) and not deleted.
+   */
+  public boolean isAvailable() {
+    return !isLocked() && !isDeleted();
+  }
 
-    public boolean isDeleted() {
-        return Time.getCurrentUTCDateTime().isAfter(this.deletedAt);
-    }
+  /**
+   * @return timestamp for `createdAt`
+   */
+  public Long getCreateTimestamp() {
+    return Time.getTimestamp(createdAt);
+  }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "`locked`")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected YesNo locked;
+  /**
+   * @return timestamp for `updatedAt`
+   */
+  public Long getUpdateTimestamp() {
+    return Time.getTimestamp(updatedAt);
+  }
 
-    /**
-     * @return true if temporarily disabled.
-     */
-    public boolean isLocked() {
-        return YesNo.N.equals(this.locked);
-    }
-
-    /**
-     * @return true if not disabled (locked) and not deleted.
-     */
-    public boolean isAvailable() {
-        return !isLocked() && !isDeleted();
-    }
-
-    /**
-     * @return timestamp for `createdAt`
-     */
-    public Long getCreateTimestamp() {
-        return Time.getTimestamp(createdAt);
-    }
-
-    /**
-     * @return timestamp for `updatedAt`
-     */
-    public Long getUpdateTimestamp() {
-        return Time.getTimestamp(updatedAt);
-    }
-
-    /**
-     * @return timestamp for `deletedAt`
-     */
-    public Long getDeleteTimestamp() {
-        return Time.getTimestamp(deletedAt);
-    }
+  /**
+   * @return timestamp for `deletedAt`
+   */
+  public Long getDeleteTimestamp() {
+    return Time.getTimestamp(deletedAt);
+  }
 }
