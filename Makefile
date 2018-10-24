@@ -23,6 +23,19 @@ compose:
 	@ docker-compose -f docker-compose.storage.yml rm -fsv || true
 	@ docker-compose -f docker-compose.storage.yml up
 
+.PHONY: compose.clean
+compose.clean:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Starting: Cleaning docker resources"
+	@ echo "-----------------------------------------\n"
+	@ docker stop `docker ps -a -q` || true
+	@ docker rm -f `docker ps -a -q` || true
+	@ docker rmi -f `docker images --quiet --filter "dangling=true"` || true
+	@ docker volume rm `docker volume ls -f dangling=true -q` || true
+	@ docker network rm `docker network ls -q` || true
+	@ echo ""
+	@ echo "\n-----------------------------------------"
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Finished: Cleaning docker resources"
+
 .PHONY: mycli
 mycli:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Connecting to mysql"
