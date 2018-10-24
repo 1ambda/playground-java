@@ -1,8 +1,10 @@
 package com.github.lambda.gateway.domain.catalog;
 
+import com.github.lambda.gateway.common.Time;
 import com.github.lambda.gateway.domain.catalog.entity.Category;
 import com.github.lambda.gateway.domain.catalog.entity.Product;
-import com.github.lambda.gateway.domain.catalog.entity.ProductOption;
+import com.github.lambda.gateway.domain.catalog.exception.ProductOptionUnavailableException;
+import com.github.lambda.gateway.domain.catalog.exception.ProductUnavailableException;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,29 +38,37 @@ public class CatalogService {
   }
 
   @Transactional
-  public ProductContainerDTO getProductDTOById(Long productId) {
+  public ProductContainerDTO handleGetProductByIdRequest(Long productId) {
     Product product = getProductById(productId);
     ProductContainerDTO dto = catalogConverter.convertToProductDTO(product);
 
     return dto;
   }
 
+  /**
+   * @param productId
+   * @return Product
+   * @throws ProductUnavailableException
+   * @throws ProductOptionUnavailableException
+   */
   @Transactional
   public Product getProductById(Long productId) {
-    Product product = productQueryFacade.getProductById(productId);
+    LocalDateTime now = Time.getCurrentUTCDateTime();
+    Product product = productQueryFacade.getAvailableProductById(productId, now);
+
     return product;
   }
 
   @Transactional
-  public PaginatedProductDTO getPaginatedProductDTO(Pageable pageable) {
-    Page<Product> paginated = productQueryFacade.getPaginatedProducts(pageable);
+  public PaginatedProductDTO handleGetPaginatedProductsRequest(Pageable pageable) {
+    Page<Product> paginated = productQueryFacade.getPaginatedAvailableProducts(pageable);
     PaginatedProductDTO dto = catalogConverter.convertToPaginatedProductDTO(paginated);
 
     return dto;
   }
 
   @Transactional
-  public CategoryListDTO getCategoryListDTO() {
+  public CategoryListDTO handleGetCategoryRequest() {
     List<Category> categories = productQueryFacade.getAllCategories();
     CategoryListDTO dto = catalogConverter.convertToCategoryListDTO(categories);
 

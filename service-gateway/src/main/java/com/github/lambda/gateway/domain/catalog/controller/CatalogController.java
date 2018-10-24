@@ -36,7 +36,7 @@ public class CatalogController implements CatalogControllerApi {
                   produces = {"application/json"},
                   method = RequestMethod.GET)
   public ResponseEntity<CategoryListDTO> findAllCategories() {
-    CategoryListDTO dto = catalogService.getCategoryListDTO();
+    CategoryListDTO dto = catalogService.handleGetCategoryRequest();
 
     return ResponseEntity.ok(dto);
   }
@@ -48,7 +48,7 @@ public class CatalogController implements CatalogControllerApi {
   public ResponseEntity<ProductContainerDTO> findOneProduct(@PathVariable("productId") Long productId) {
     Preconditions.checkArgument(productId > 0L, "Invalid productId");
 
-    ProductContainerDTO dto = catalogService.getProductDTOById(productId);
+    ProductContainerDTO dto = catalogService.handleGetProductByIdRequest(productId);
 
     return ResponseEntity.ok(dto);
   }
@@ -66,7 +66,7 @@ public class CatalogController implements CatalogControllerApi {
     Preconditions.checkArgument(count > 0L, "invalid count value");
 
     Pageable pageable = PageRequest.of(page.intValue(), count.intValue());
-    PaginatedProductDTO dto = catalogService.getPaginatedProductDTO(pageable);
+    PaginatedProductDTO dto = catalogService.handleGetPaginatedProductsRequest(pageable);
 
     return ResponseEntity.ok(dto);
   }

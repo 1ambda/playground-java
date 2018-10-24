@@ -50,16 +50,27 @@ public class BaseEntity {
   @Column(name = "`deleted_at`")
   protected LocalDateTime deletedAt;
 
-  public void markDeleted() {
-    this.deletedAt = Time.getCurrentUTCDateTime();
-  }
-
+  /**
+   * @return true if its deleted
+   */
   public boolean isDeleted() {
-    if (this.getDeletedAt() == null) {
+    if (this.deletedAt == null) {
       return false;
     }
 
     return Time.getCurrentUTCDateTime().isAfter(this.deletedAt);
+  }
+
+  /**
+   * @param then
+   * @return true if its deleted
+   */
+  private boolean isDeletedAt(LocalDateTime then) {
+    if (this.deletedAt == null) {
+      return false;
+    }
+
+    return then.isAfter(this.deletedAt);
   }
 
   @Enumerated(EnumType.STRING)
@@ -79,6 +90,14 @@ public class BaseEntity {
    */
   public boolean isAvailable() {
     return !isLocked() && !isDeleted();
+  }
+
+  /**
+   * @param then
+   * @return true if not disabled (locked) and not deleted.
+   */
+  public boolean isAvailableAt(LocalDateTime then) {
+    return !isLocked() && !isDeletedAt(then);
   }
 
   /**

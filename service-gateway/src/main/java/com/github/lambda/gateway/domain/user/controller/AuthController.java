@@ -77,7 +77,7 @@ public class AuthController implements AuthControllerApi {
                   method = RequestMethod.POST)
   public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO request) {
 
-    UserDTO userDTO = userService.addNewCustomer(request);
+    UserDTO userDTO = userService.handleAddNewCustomerRequest(request);
 
     return ResponseEntity.ok(userDTO);
   }
