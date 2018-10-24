@@ -6,8 +6,6 @@ import com.github.lambda.gateway.swagger.client.invoker.EncodingUtils;
 import com.github.lambda.gateway.swagger.model.CartDTO;
 import com.github.lambda.gateway.swagger.model.CartLineDTO;
 import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
-import com.github.lambda.gateway.swagger.model.CartLineOptionRequestDTO;
-import com.github.lambda.gateway.swagger.model.CartLineRequestDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
 
 import java.util.ArrayList;
@@ -89,7 +87,7 @@ public interface CartControllerApi extends ApiClient.Api {
     "Content-Type: application/json",
     "Accept: application/json",
   })
-  CartLineDTO updateUserCartLine(@Param("lineId") Long lineId, CartLineRequestDTO body);
+  CartLineDTO updateUserCartLine(@Param("lineId") Long lineId, CartLineDTO body);
 
   /**
    * 
@@ -104,5 +102,5 @@ public interface CartControllerApi extends ApiClient.Api {
     "Content-Type: application/json",
     "Accept: application/json",
   })
-  CartLineOptionDTO updateUserCartLineOption(@Param("lineId") Long lineId, @Param("optionId") Long optionId, CartLineOptionRequestDTO body);
+  CartLineOptionDTO updateUserCartLineOption(@Param("lineId") Long lineId, @Param("optionId") Long optionId, CartLineOptionDTO body);
 }

@@ -18,8 +18,8 @@ import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.domain.user.repository.RoleRepository;
 import com.github.lambda.gateway.swagger.model.CartDTO;
-import com.github.lambda.gateway.swagger.model.CartLineOptionRequestDTO;
-import com.github.lambda.gateway.swagger.model.CartLineRequestDTO;
+import com.github.lambda.gateway.swagger.model.CartLineDTO;
+import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
 import lombok.Getter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,7 +85,7 @@ public class CartServiceTest implements CatalogFixture,
     CartDTO created = cartService.handleCreateCartAction(userId);
 
     // when
-    CartDTO found = cartService.handleGetCart(userId);
+    CartDTO found = cartService.handleGetCartRequest(userId);
 
     // then
     assertThat(found.getCartId()).isEqualTo(created.getCartId());
@@ -107,20 +107,20 @@ public class CartServiceTest implements CatalogFixture,
     List<ProductOption> productOptionList = prepareProductOptions(product);
 
     // given: request
-    List<CartLineOptionRequestDTO> optionsRequest = productOptionList
+    List<CartLineOptionDTO> optionsRequest = productOptionList
         .stream()
         .map(o -> {
-          return CartLineOptionRequestDTO.builder()
+          return CartLineOptionDTO.builder()
               .productOptionId(o.getId())
               .quantity(1L)
               .build();
         })
         .collect(Collectors.toList());
 
-    CartLineRequestDTO lineRequest = CartLineRequestDTO.builder()
+    CartLineDTO lineRequest = CartLineDTO.builder()
         .productId(product.getId())
         .quantity(1L)
-        .options(optionsRequest)
+        .cartLineOptions(optionsRequest)
         .build();
 
     // when
@@ -133,14 +133,14 @@ public class CartServiceTest implements CatalogFixture,
 
     // then: CartLineOption
     List<CartLineOption> cartLineOptions = cartLine.getCartLineOptions();
-    Map<Long, CartLineOptionRequestDTO> productOptionIdToRequest =
+    Map<Long, CartLineOptionDTO> productOptionIdToRequest =
         optionsRequest
             .stream()
-            .collect(Collectors.toMap(CartLineOptionRequestDTO::getProductOptionId,
+            .collect(Collectors.toMap(CartLineOptionDTO::getProductOptionId,
                                       o -> o));
 
     for (CartLineOption cartLineOption : cartLineOptions) {
-      CartLineOptionRequestDTO request =
+      CartLineOptionDTO request =
           productOptionIdToRequest.get(cartLineOption.getProductOptionId());
 
       assertThat(cartLineOption.getQuantity()).isEqualTo(request.getQuantity());
@@ -189,7 +189,7 @@ public class CartServiceTest implements CatalogFixture,
     Long cartLineId = cartLine.getId();
 
     Long newQuantity = cartLine.getQuantity() + 1;
-    CartLineRequestDTO request = CartLineRequestDTO.builder()
+    CartLineDTO request = CartLineDTO.builder()
         .cartLineId(cartLineId)
         .quantity(newQuantity)
         .build();

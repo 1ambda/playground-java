@@ -82,8 +82,8 @@ public class CatalogServiceTest {
     PageRequest pagination2 = PageRequest.of(2, 10);
 
     // when
-    PaginatedProductDTO dto1 = catalogService.getPaginatedProductDTO(pagination1);
-    PaginatedProductDTO dto2 = catalogService.getPaginatedProductDTO(pagination2);
+    PaginatedProductDTO dto1 = catalogService.handleGetPaginatedProductsRequest(pagination1);
+    PaginatedProductDTO dto2 = catalogService.handleGetPaginatedProductsRequest(pagination2);
 
     // then
     assertThat(dto1.getProducts().size()).isEqualTo(10);
@@ -100,7 +100,7 @@ public class CatalogServiceTest {
     assertThat(categoryRepository.count()).isEqualTo(totalCategoryCount);
 
     // when
-    CategoryListDTO categoryListDTO = catalogService.getCategoryListDTO();
+    CategoryListDTO categoryListDTO = catalogService.handleGetCategoryRequest();
 
     // then
     assertThat(categoryListDTO.getItems().size()).isEqualTo(totalCategoryCount);
