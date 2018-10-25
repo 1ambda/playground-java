@@ -1,5 +1,6 @@
 package base;
 
+import base.storage.TestStorageConfig;
 import com.github.lambda.gateway.GatewayApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -15,6 +16,7 @@ import java.lang.annotation.*;
     webEnvironment = SpringBootTest.WebEnvironment.MOCK,
     classes = {
         GatewayApplication.class,
+        TestStorageConfig.class,
     }
 )
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
