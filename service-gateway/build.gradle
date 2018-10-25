@@ -27,6 +27,7 @@ buildscript {
 }
 
 // framework, IDE
+apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -47,6 +48,13 @@ repositories {
     mavenCentral()
 }
 
+idea {
+    module {
+        sourceDirs += file('out/production/classes/generated/')
+        // generatedSourceDirs += file('out/production/classes/generated/') 
+    }
+}
+
 ext {
     guavaVersion = '26.0-jre'
     springBootAdminVersion = '2.0.3'
@@ -54,6 +62,7 @@ ext {
     springfoxVersion = '2.9.2'
     logbookVersion = '1.9.1'
 
+    // storage
     mysqlConnectorVersion = '5.1.47'
 
     // test
@@ -96,7 +105,7 @@ dependencies {
     // Query DSL
     compile("com.querydsl:querydsl-core:${queryDslVersion}")
     compile("com.querydsl:querydsl-jpa:${queryDslVersion}")
-    
+
     // code generation
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
