@@ -1,20 +1,41 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.5.RELEASE'
+        // springBootVersion = '2.1.0.RC1'
+        springBootVersion = '2.0.6.RELEASE'
         gradleAptVersion = '0.18'
+        owaspVersion = '3.3.1'
     }
     repositories {
         mavenCentral()
+        maven {
+            // for apt plugins
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            // for spring boot snapshot version
+            name "jboss"
+            url "http://repository.jboss.org/nexus/content/groups/public/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("net.ltgt.gradle:gradle-apt-plugin:${gradleAptVersion}")
+        classpath("org.owasp:dependency-check-gradle:${owaspVersion}")
     }
 }
 
+// framework, IDE
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
+// code generation
+apply plugin: 'net.ltgt.apt'
+apply plugin: 'net.ltgt.apt-idea'
+
+// check
+apply plugin: 'org.owasp.dependencycheck'
 
 group = 'com.github.lambda'
 version = '0.0.1-SNAPSHOT'
@@ -30,9 +51,10 @@ ext {
     micrometerVersion = '1.0.6'
     springfoxVersion = '2.9.2'
     logbookVersion = '1.9.1'
-    
-    mapstructVersion = '1.2.0.Final'
+
     lombokVersion = '1.18.2'
+    queryDSLVersion = '4.2.1'
+    mysqlConnectorVersion = '5.1.47'
 
     // test
     testcontainersVersion = '1.9.1'
@@ -40,7 +62,6 @@ ext {
     feignFormVersion = '2.1.0'
     oltuVersion = '1.0.1'
     migbase64Version = '2.2'
-
 }
 
 dependencies {
@@ -68,9 +89,20 @@ dependencies {
     compile("io.springfox:springfox-swagger2:${springfoxVersion}")
     compile("io.springfox:springfox-swagger-ui:${springfoxVersion}")
 
-    runtime('com.h2database:h2')
-    runtime('mysql:mysql-connector-java')
+    compile("com.querydsl:querydsl-core:${queryDSLVersion}")
+    compile("com.querydsl:querydsl-jpa:${queryDSLVersion}")
+
+    // code generation
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor(
+            "com.querydsl:querydsl-apt:${queryDSLVersion}:jpa",
+            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",
+            "javax.annotation:javax.annotation-api:1.3.2",
+            "org.projectlombok:lombok"
+    )
+
+    runtime('com.h2database:h2')
+    runtime("mysql:mysql-connector-java:${mysqlConnectorVersion}")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.testcontainers:testcontainers:${testcontainersVersion}")
@@ -87,4 +119,11 @@ dependencyManagement {
     imports {
         mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
     }
+}
+
+/**
+ * check: https://www.jhipster.tech/dependency-vulnerabities-check/
+ */
+if (project.hasProperty('strict-security')) {
+    check.dependsOn dependencyCheckAnalyze
 }

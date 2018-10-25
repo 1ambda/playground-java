@@ -99,6 +99,14 @@ run:
 .PHONY: test
 test: test.unit test.integration
 
+.PHONY: check.security
+check.security:
+	@ echo "[$(TAG)] ($$(date -u '+%H:%M:%S')) - Started: running dependency security check"
+	@ echo "-----------------------------------------\n"
+
+	@ ./gradlew dependencyCheckAnalyze
+	@ echo ""
+
 .PHONY: swagger
 swagger: swagger.clean swagger.server swagger.client
 
