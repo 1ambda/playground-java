@@ -55,7 +55,7 @@ public class Product extends BaseEntity {
 
   @ToString.Exclude
   @Builder.Default
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", orphanRemoval = false)
   private List<ProductOption> productOptions = new ArrayList<>();
 
   /**

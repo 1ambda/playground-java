@@ -35,9 +35,9 @@
                     <el-col :xs="6" :sm="6" :md="6" :lg="6">
                       <div style="height: 80px; line-height: 80px; text-align: center; border: 2px dashed #f69c55;"
                            v-if="isProduct(scope.row)">
-                    <span style="vertical-align: middle; line-height: normal;">
-                      IMAGE
-                    </span>
+                        <span style="vertical-align: middle; line-height: normal;">
+                          IMAGE
+                        </span>
                       </div>
                     </el-col>
                     <el-col :xs="18" :sm="18" :md="18" :lg="18">
@@ -223,18 +223,11 @@
     OPTION: 'OPTION',
   }
 
-  @Component({
-    components: {},
-    computed: {
-      ...mapState(['username']),
-      ...mapGetters(['authenticated']),
-    },
-  })
+  @Component
   export default class Cart extends Vue {
     public $refs: any
     public $notify: any
     public $router: any
-    public $store: any
 
     public allChecked = false
     public cartItemSelection = []

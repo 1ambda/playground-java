@@ -48,6 +48,7 @@ public class CatalogQueryFacade {
     return products;
   }
 
+  // TODO: move this function into Product entity
   public Product getAvailableProductById(Long productId, LocalDateTime then) {
     Product product = productRepository
         .findById(productId)

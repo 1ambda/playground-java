@@ -15,7 +15,11 @@
   import {Component, Vue} from "vue-property-decorator"
   import Navbar from "@/components/Navbar.vue" // @ is an alias to /src
 
-  @Component({components: {"app-navbar": Navbar}})
+  @Component({
+    components: {
+      "app-navbar": Navbar,
+    }
+  })
   export default class App extends Vue {
 
   }

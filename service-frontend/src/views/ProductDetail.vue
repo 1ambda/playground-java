@@ -258,7 +258,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .detail-container {
     margin-top: 15px;
   }
