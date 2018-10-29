@@ -5,12 +5,17 @@
     <el-row type="flex" justify="center">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 25px; width: 800px;">
-          <el-input placeholder="Please input" class="input-with-select"
+          <el-input placeholder="Please input"
+                    class="product-searchbox-input"
                     v-model="searchInsertedKeyword">
             <el-select slot="prepend" placeholder="Select"
+                       class="product-searchbox-select"
                        v-model="searchSelectedCategory">
-              <el-option label="Category 1" value="1"></el-option>
-              <el-option label="Category 2" value="2"></el-option>
+              <el-option v-for="(item, index) in searchAvailableCategoryList"
+                         :key="index"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
             </el-select>
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
@@ -21,7 +26,7 @@
     <!-- filters -->
     <el-row type="flex" justify="center">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <div class="filterArea" style="padding-top: 16px; padding-bottom: 16px; margin-top: 20px;">
+        <div class="product-filter-section" style="padding-top: 16px; padding-bottom: 16px; margin-top: 20px;">
           <span>
             <el-button type="primary" plain>Price</el-button>
           </span>
@@ -39,10 +44,23 @@
             <el-switch
               v-model="toggleGridViewType"
               disabled
-              active-text="Grid"
-              inactive-text="List">
+              active-text="Grid View"
+              inactive-color="#ff4949"
+              inactive-text="">
             </el-switch>
           </span>
+
+          <span style="float: right; vertical-align: middle; padding-top: 7px; margin-right: 15px; width: 70px;">
+              <el-select v-model="paginationSize" placeholder="Select" size="mini">
+                <el-option v-for="(item, index) in availablePaginationSizeList"
+                           :key="index"
+                           :label="item.label"
+                           :value="item.value">
+                </el-option>
+              </el-select>
+          </span>
+          <span style="float:right; vertical-align: middle; padding-top: 11px; margin-right: 10px;">Results per page</span>
+
         </div>
       </el-col>
     </el-row>
@@ -134,7 +152,20 @@
     ]
     public productList = []
 
-    public searchSelectedCategory = ""
+    public paginationSize = "8"
+    public availablePaginationSizeList = [
+      {value: "8", label: "8"},
+      {value: "16", label: "16"},
+      {value: "32", label: "32"},
+      {value: "48", label: "48"},
+    ]
+
+    public searchSelectedCategory = "category1"
+    public searchAvailableCategoryList = [
+      {value: "category1", label: "Category 1"},
+      {value: "category2", label: "Category 2"},
+      {value: "category3", label: "Category 3"},
+    ]
     public searchInsertedKeyword = ""
     public toggleGridViewType = true
 
@@ -191,7 +222,8 @@
   }
 </script>
 
-<style scoped>
+<!-- can't set element-ui inner class without global scope -->
+<style lang="scss">
   .column-name:hover {
     text-decoration: underline;
     cursor: pointer;
@@ -200,26 +232,30 @@
   .column-default {
   }
 
-  .el-select .el-input {
-    width: 110px;
-  }
-
-  .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-    height: 54px;
-  }
-
-  .el-input__inner {
-    height: 56px;
-  }
-
-  .filterArea {
+  .product-filter-section {
     border-top-color: #E4E7ED;
     border-top-style: solid;
     border-top-width: 1px;
     border-bottom-color: #E4E7ED;
     border-bottom-style: solid;
     border-bottom-width: 1px;
+  }
+
+  .product-searchbox-input .el-input {
+    width: 130px;
+  }
+
+  .product-searchbox-input .el-input-group__prepend {
+    background-color: #fff;
+  }
+
+  .product-searchbox-input {
+    background-color: #fff;
+    height: 54px;
+  }
+
+  .product-searchbox-input .el-input__inner {
+    height: 56px;
   }
 
 </style>
