@@ -59,8 +59,30 @@
                 </el-option>
               </el-select>
           </span>
-          <span style="float:right; vertical-align: middle; padding-top: 11px; margin-right: 10px;">Results per page</span>
+          <span style="float:right; vertical-align: middle; padding-top: 11px; margin-right: 10px;">
+            Results per page
+          </span>
 
+        </div>
+      </el-col>
+    </el-row>
+
+    <!-- search summary -->
+    <el-row type="flex" justify="center" v-if="toggleGridViewType">
+      <el-col :xs="20" :sm="20" :md="18" :lg="18">
+        <div style="margin-top: 30px; margin-left: 20px;">
+          <span class="search-summary-text search-summary-pagination">
+            1-{{ paginationSize }} of
+          </span>
+          <span class="search-summary-text search-summary-total-count">
+             36
+          </span>
+          <span class="search-summary-text">
+             results for
+          </span>
+          <span style="padding-top: 2px;">
+            <el-tag type="warning" size="medium">Laptop</el-tag>
+          </span>
         </div>
       </el-col>
     </el-row>
@@ -68,18 +90,13 @@
     <!-- product grid -->
     <el-row type="flex" justify="center" v-if="toggleGridViewType">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <div style="margin-top: 30px;">
-
-          <ProductGrid>
-
-          </ProductGrid>
-
+        <div style="margin-top: 40px;">
+          <ProductGrid></ProductGrid>
         </div>
       </el-col>
     </el-row>
 
-
-    <!-- product list -->
+    <!-- product list (disabled) -->
     <el-row type="flex" justify="center" v-if="!toggleGridViewType">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 40px;">
@@ -256,6 +273,16 @@
 
   .product-searchbox-input .el-input__inner {
     height: 56px;
+  }
+
+  .search-summary-text {
+    font-size: 17px;
+    font-weight: 300;
+  }
+
+  .search-summary-total-count {
+    font-size: 17px;
+    font-weight: 300;
   }
 
 </style>
