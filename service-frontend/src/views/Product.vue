@@ -211,8 +211,8 @@
       const categoryId = null
       const search = ""
 
-      const minPrice = null
-      const maxPrice = null
+      const minPrice = 0
+      const maxPrice = 300000
       const minRate = null
       const tags = []
       const minShippingDate = null

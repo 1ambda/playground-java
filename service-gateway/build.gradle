@@ -75,6 +75,7 @@ ext {
     // code generation related
     lombokVersion = "1.18.2"
     queryDslVersion = '4.2.1'
+    hibernateModelGenVersion = '5.3.3.Final'
 }
 
 dependencies {
@@ -109,6 +110,7 @@ dependencies {
     // code generation
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+    compile("org.hibernate:hibernate-jpamodelgen:${hibernateModelGenVersion}")
 
     runtime('com.h2database:h2')
     runtime("mysql:mysql-connector-java:${mysqlConnectorVersion}")

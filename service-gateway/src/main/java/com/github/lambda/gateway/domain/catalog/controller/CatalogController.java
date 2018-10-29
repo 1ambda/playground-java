@@ -1,6 +1,8 @@
 package com.github.lambda.gateway.domain.catalog.controller;
 
 import com.github.lambda.gateway.domain.catalog.CatalogService;
+import com.github.lambda.gateway.domain.catalog.specification.ProductSpecificationBuilder;
+import com.github.lambda.gateway.domain.catalog.specification.ProductSpecificationRequest;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.Failure;
@@ -11,17 +13,15 @@ import com.google.common.base.Preconditions;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.annotations.ApiIgnore;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -82,23 +82,13 @@ public class CatalogController implements CatalogControllerApi {
   @RequestMapping(value = "/catalog/products",
       produces = {"application/json"},
       method = RequestMethod.GET)
-  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(
-      @ApiIgnore Pageable pageable,
-      @ApiParam(value = "") @Valid @RequestParam( value = "categoryId", required = false) Long categoryId,
-      @ApiParam(value = "") @Valid @RequestParam( value = "search", required = false) String search,
-      @ApiParam(value = "") @Valid @RequestParam( value = "minPrice", required = false) Long minPrice,
-      @ApiParam(value = "") @Valid @RequestParam( value = "maxPrice", required = false) Long maxPrice,
-      @ApiParam(value = "") @Valid @RequestParam( value = "minRate", required = false) Long minRate,
-      @ApiParam(value = "") @Valid @RequestParam( value = "tags", required = false) List<String> tags,
-      @ApiParam(value = "") @Valid @RequestParam( value = "minShippingDate", required = false) String minShippingDate) {
+  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(@ApiIgnore Pageable pageable,
+                                                                   @ApiParam ProductSpecificationRequest query) {
 
-    // TODO: build specification using root node
-
-    PaginatedProductDTO dto = catalogService.handleGetPaginatedProductsRequest(pageable);
+    PaginatedProductDTO dto = catalogService.handleGetPaginatedProductsRequest(query, pageable);
 
     return ResponseEntity.ok(dto);
   }
-
 
   /**
    * overrided endpoints

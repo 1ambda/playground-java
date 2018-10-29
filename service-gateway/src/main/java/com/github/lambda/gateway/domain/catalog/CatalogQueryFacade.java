@@ -11,6 +11,7 @@ import com.github.lambda.gateway.exception.type.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,8 +44,8 @@ public class CatalogQueryFacade {
     return categoryRepository.findAll();
   }
 
-  public Page<Product> getPaginatedAvailableProducts(Pageable pageable) {
-    Page<Product> products = productRepository.findAll(pageable);
+  public Page<Product> getPaginatedAvailableProducts(Specification<Product> specification, Pageable pageable) {
+    Page<Product> products = productRepository.findAll(specification, pageable);
     return products;
   }
 
