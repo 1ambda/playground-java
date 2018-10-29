@@ -150,6 +150,7 @@
     font-weight: 400;
     font-family: 'Avenir', Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #7f33f1;
+    color: #3e72f1;
   }
 
   .grid-item-detail-review-rate {
