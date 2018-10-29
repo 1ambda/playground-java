@@ -27,42 +27,7 @@
     <el-row type="flex" justify="center">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div class="product-filter-section" style="padding-top: 16px; padding-bottom: 16px; margin-top: 20px;">
-          <span>
-            <el-button type="primary" plain>Price</el-button>
-          </span>
-          <span style="margin-left: 10px;">
-            <el-button type="primary" plain>Tag</el-button>
-          </span>
-          <span style="margin-left: 10px;">
-            <el-button type="primary" plain>Rate</el-button>
-          </span>
-          <span style="margin-left: 10px;">
-            <el-button type="primary" plain>Shipping</el-button>
-          </span>
-
-          <span style="float: right; vertical-align: middle; padding-top: 11px; margin-right: 5px;">
-            <el-switch
-              v-model="toggleGridViewType"
-              disabled
-              active-text="Grid View"
-              inactive-color="#ff4949"
-              inactive-text="">
-            </el-switch>
-          </span>
-
-          <span style="float: right; vertical-align: middle; padding-top: 7px; margin-right: 15px; width: 70px;">
-              <el-select v-model="paginationSize" placeholder="Select" size="mini">
-                <el-option v-for="(item, index) in availablePaginationSizeList"
-                           :key="index"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-          </span>
-          <span style="float:right; vertical-align: middle; padding-top: 11px; margin-right: 10px;">
-            Results per page
-          </span>
-
+          <ProductFilter></ProductFilter>
         </div>
       </el-col>
     </el-row>
@@ -83,6 +48,33 @@
           <span style="padding-top: 2px;">
             <el-tag type="warning" size="medium">Laptop</el-tag>
           </span>
+
+          <!-- grid view toggle -->
+          <span style="float: right; vertical-align: middle; padding-top: 4px; margin-right: 5px;">
+            <el-switch
+              v-model="toggleGridViewType"
+              disabled
+              active-text="Grid View"
+              inactive-color="#ff4949"
+              inactive-text="">
+            </el-switch>
+          </span>
+
+          <!-- pagination count control -->
+          <span style="float: right; vertical-align: middle; margin-right: 15px; width: 70px;">
+              <el-select v-model="paginationSize" placeholder="Select" size="mini">
+                <el-option v-for="(item, index) in availablePaginationSizeList"
+                           :key="index"
+                           :label="item.label"
+                           :value="item.value">
+                </el-option>
+              </el-select>
+          </span>
+
+          <span style="float:right; vertical-align: middle; padding-top: 4px; margin-right: 10px;">
+            Results per page
+          </span>
+
         </div>
       </el-col>
     </el-row>
@@ -92,25 +84,6 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 50px;">
           <ProductGrid></ProductGrid>
-        </div>
-      </el-col>
-    </el-row>
-
-    <!-- product list (disabled) -->
-    <el-row type="flex" justify="center" v-if="!toggleGridViewType">
-      <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <div style="margin-top: 40px;">
-          <el-table :data="productList"
-                    stripe border
-                    @cell-click='handleCellClick'
-                    style="width: 100%">
-
-            <el-table-column v-for="column in columns"
-                             :class-name="column.prop === 'name' ? 'column-name' : 'column-default'"
-                             :prop="column.prop" :label="column.label"
-                             :key="column.label">
-            </el-table-column>
-          </el-table>
         </div>
       </el-col>
     </el-row>
@@ -140,23 +113,17 @@
   import {CatalogAPI,} from "@/common/product.service.ts"
   import {handleFailure} from "@/common/failure.util"
   import ProductGrid from "@/views/ProductGrid.vue"
+  import ProductFilter from "@/views/ProductFilter.vue"
   import {Action, Getter, Mutation, State,} from "vuex-class"
 
   @Component({
-    components: {ProductGrid},
+    components: {ProductGrid, ProductFilter},
   })
   export default class Product extends Vue {
     public $refs: any
     public $notify: any
     public $router: any
     public $store: any
-
-    @Mutation(Mutations.PRODUCT__UPDATE_ITEMS) updateProductListStore
-    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_COUNT) updateProductTotalCount
-    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) updateProductCurrentPage
-    @State(States.PRODUCT__FETCHED_ITEMS) products
-    @State(States.PRODUCT__TOTAL_COUNT) totalItemCount
-    @State(States.PRODUCT__CURRENT_PAGE) currentPage // offset + 1
 
     public itemCountPerPage = 8
     public columns = [
@@ -184,7 +151,28 @@
       {value: "category3", label: "Category 3"},
     ]
     public searchInsertedKeyword = ""
+
     public toggleGridViewType = true
+
+    public priceFilterSliderValues = [0, 100000]
+    public priceFilterSliderMin = 0
+    public priceFilterSliderMax = 100000
+
+    /**
+     * vuex mappers and computed properties
+     */
+
+    @Mutation(Mutations.PRODUCT__UPDATE_ITEMS) updateProductListStore
+    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_COUNT) updateProductTotalCount
+    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) updateProductCurrentPage
+    @Mutation(Mutations.PRODUCT__UPDATE_FILTER_PRICE) updateProductFilterPrice
+    @Mutation(Mutations.PRODUCT__RESET_FILTER_PRICE) resetProductFilterPrice
+
+    @State(States.PRODUCT__FETCHED_ITEMS) products
+    @State(States.PRODUCT__TOTAL_COUNT) totalItemCount
+    @State(States.PRODUCT__CURRENT_PAGE) currentPage // offset + 1
+    @State(States.PRODUCT__FILTER_MAX_PRICE) filterMinPrice
+    @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
 
     /**
      * life-cycle methods
@@ -298,5 +286,14 @@
     font-size: 17px;
     font-weight: 300;
   }
+
+  .price-filter-popover-title {
+    font-size: 16px;
+  }
+
+  .price-filter-popover-slider-text {
+    font-size: 16px;
+  }
+
 
 </style>

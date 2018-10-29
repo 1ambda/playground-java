@@ -23,7 +23,7 @@
 
             <!-- review price -->
             <div class="grid-item-detail-price" style="margin-top: 7px;">
-              {{ item.price }}
+              ₩{{ item.price }}
             </div>
 
             <!-- review rate -->

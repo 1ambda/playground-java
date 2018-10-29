@@ -16,6 +16,8 @@ export default new Vuex.Store({
     [States.PRODUCT__FETCHED_ITEMS]: [],
     [States.PRODUCT__TOTAL_COUNT]: 0,
     [States.PRODUCT__CURRENT_PAGE]: 1,
+    [States.PRODUCT__FILTER_MIN_PRICE]: 0,
+    [States.PRODUCT__FILTER_MAX_PRICE]: null,
 
   },
   getters: {
