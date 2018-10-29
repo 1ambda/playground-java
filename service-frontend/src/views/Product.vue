@@ -90,7 +90,7 @@
     <!-- product grid -->
     <el-row type="flex" justify="center" v-if="toggleGridViewType">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <div style="margin-top: 40px;">
+        <div style="margin-top: 50px;">
           <ProductGrid></ProductGrid>
         </div>
       </el-col>
@@ -203,20 +203,34 @@
      */
 
     fetchAllProducts(currentPage) {
+      const page = currentPage - 1
+      const size = this.itemCountPerPage
+      const sort = []
+      const options = {credentials: "include"}
+
+      const categoryId = null
+      const search = ""
+
+      const minPrice = null
+      const maxPrice = null
+      const minRate = null
+      const tags = []
+      const minShippingDate = null
+
       CatalogAPI.findPaginatedProducts(
-        currentPage - 1,
-        this.itemCountPerPage,
-        {credentials: "include"}
-      ).then((response: any) => {
-        const pagination: Pagination = response.pagination
+        page, size, sort,
+        categoryId, search,
+        minPrice, maxPrice, minRate, tags, minShippingDate, options)
+        .then((response: any) => {
+          const pagination: Pagination = response.pagination
 
-        const totalItemCount = pagination.totalItemCount
-        this.updateProductTotalCount(totalItemCount)
+          const totalItemCount = pagination.totalItemCount
+          this.updateProductTotalCount(totalItemCount)
 
-        const products = response.products.map(p => p.item)
-        this.updateProductListStore(products)
+          const products = response.products.map(p => p.item)
+          this.updateProductListStore(products)
 
-      }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify))
     }
 
     handleCurrentPageChange(newPage) {

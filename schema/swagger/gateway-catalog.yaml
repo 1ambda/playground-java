@@ -9,14 +9,58 @@ api:
       produces:
       - application/json
       parameters:
+      # pagination and sorting
       - in: query
-        name: page
+        name: page # offset, starts from 0
         type: integer
         format: int64
+        minimum: 0
       - in: query
-        name: count
+        name: size
         type: integer
         format: int64
+        minimum: 8
+      - in: query
+        name: sort
+        type: array
+        items:
+          type: string
+
+      # category and search keyword
+      - in: query
+        name: categoryId
+        type: integer
+        format: int64
+        minimum: 1
+      - in: query
+        name: search # search string
+        type: string
+
+      # additional filters
+      - in: query
+        name: minPrice
+        type: integer
+        format: int64
+        minimum: 0
+      - in: query
+        name: maxPrice
+        type: integer
+        format: int64
+        minimum: 0
+      - in: query
+        name: minRate
+        type: integer
+        format: int64
+        minimum: 0
+      - in: query
+        name: tags
+        type: array
+        items:
+          type: string
+      - in: query
+        name: minShippingDate
+        type: string
+
       responses:
         200:
           description: OK

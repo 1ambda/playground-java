@@ -45,14 +45,22 @@ public interface CatalogControllerApi extends ApiClient.Api {
    * 
    * 
     * @param page  (optional)
-    * @param count  (optional)
+    * @param size  (optional)
+    * @param sort  (optional)
+    * @param categoryId  (optional)
+    * @param search  (optional)
+    * @param minPrice  (optional)
+    * @param maxPrice  (optional)
+    * @param minRate  (optional)
+    * @param tags  (optional)
+    * @param minShippingDate  (optional)
    * @return PaginatedProductDTO
    */
-  @RequestLine("GET /catalog/products?page={page}&count={count}")
+  @RequestLine("GET /catalog/products?page={page}&size={size}&sort={sort}&categoryId={categoryId}&search={search}&minPrice={minPrice}&maxPrice={maxPrice}&minRate={minRate}&tags={tags}&minShippingDate={minShippingDate}")
   @Headers({
     "Accept: application/json",
   })
-  PaginatedProductDTO findPaginatedProducts(@Param("page") Long page, @Param("count") Long count);
+  PaginatedProductDTO findPaginatedProducts(@Param("page") Long page, @Param("size") Long size, @Param("sort") List<String> sort, @Param("categoryId") Long categoryId, @Param("search") String search, @Param("minPrice") Long minPrice, @Param("maxPrice") Long maxPrice, @Param("minRate") Long minRate, @Param("tags") List<String> tags, @Param("minShippingDate") String minShippingDate);
 
   /**
    * 
@@ -66,11 +74,19 @@ public interface CatalogControllerApi extends ApiClient.Api {
    *   <p>The following elements may be specified in the query map:</p>
    *   <ul>
    *   <li>page -  (optional)</li>
-   *   <li>count -  (optional)</li>
+   *   <li>size -  (optional)</li>
+   *   <li>sort -  (optional)</li>
+   *   <li>categoryId -  (optional)</li>
+   *   <li>search -  (optional)</li>
+   *   <li>minPrice -  (optional)</li>
+   *   <li>maxPrice -  (optional)</li>
+   *   <li>minRate -  (optional)</li>
+   *   <li>tags -  (optional)</li>
+   *   <li>minShippingDate -  (optional)</li>
    *   </ul>
    * @return PaginatedProductDTO
    */
-  @RequestLine("GET /catalog/products?page={page}&count={count}")
+  @RequestLine("GET /catalog/products?page={page}&size={size}&sort={sort}&categoryId={categoryId}&search={search}&minPrice={minPrice}&maxPrice={maxPrice}&minRate={minRate}&tags={tags}&minShippingDate={minShippingDate}")
   @Headers({
   "Accept: application/json",
   })
@@ -85,8 +101,40 @@ public interface CatalogControllerApi extends ApiClient.Api {
       put("page", EncodingUtils.encode(value));
       return this;
     }
-    public FindPaginatedProductsQueryParams count(final Long value) {
-      put("count", EncodingUtils.encode(value));
+    public FindPaginatedProductsQueryParams size(final Long value) {
+      put("size", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams sort(final List<String> value) {
+      put("sort", EncodingUtils.encodeCollection(value, "multi"));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams categoryId(final Long value) {
+      put("categoryId", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams search(final String value) {
+      put("search", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams minPrice(final Long value) {
+      put("minPrice", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams maxPrice(final Long value) {
+      put("maxPrice", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams minRate(final Long value) {
+      put("minRate", EncodingUtils.encode(value));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams tags(final List<String> value) {
+      put("tags", EncodingUtils.encodeCollection(value, "multi"));
+      return this;
+    }
+    public FindPaginatedProductsQueryParams minShippingDate(final String value) {
+      put("minShippingDate", EncodingUtils.encode(value));
       return this;
     }
   }

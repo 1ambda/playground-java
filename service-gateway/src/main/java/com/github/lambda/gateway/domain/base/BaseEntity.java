@@ -17,7 +17,7 @@ public class BaseEntity {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @JsonProperty("_id")
+  @JsonProperty("id")
   @Column(name = "`id`")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;

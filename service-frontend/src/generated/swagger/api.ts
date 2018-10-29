@@ -1441,11 +1441,19 @@ export const CatalogControllerApiFetchParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} [page] 
-         * @param {number} [count] 
+         * @param {number} [size] 
+         * @param {Array&lt;string&gt;} [sort] 
+         * @param {number} [categoryId] 
+         * @param {string} [search] 
+         * @param {number} [minPrice] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minRate] 
+         * @param {Array&lt;string&gt;} [tags] 
+         * @param {string} [minShippingDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findPaginatedProducts(page?: number, count?: number, options: any = {}): FetchArgs {
+        findPaginatedProducts(page?: number, size?: number, sort?: Array<string>, categoryId?: number, search?: string, minPrice?: number, maxPrice?: number, minRate?: number, tags?: Array<string>, minShippingDate?: string, options: any = {}): FetchArgs {
             const localVarPath = `/catalog/products`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -1456,8 +1464,40 @@ export const CatalogControllerApiFetchParamCreator = function (configuration?: C
                 localVarQueryParameter['page'] = page;
             }
 
-            if (count !== undefined) {
-                localVarQueryParameter['count'] = count;
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (sort) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (categoryId !== undefined) {
+                localVarQueryParameter['categoryId'] = categoryId;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (minPrice !== undefined) {
+                localVarQueryParameter['minPrice'] = minPrice;
+            }
+
+            if (maxPrice !== undefined) {
+                localVarQueryParameter['maxPrice'] = maxPrice;
+            }
+
+            if (minRate !== undefined) {
+                localVarQueryParameter['minRate'] = minRate;
+            }
+
+            if (tags) {
+                localVarQueryParameter['tags'] = tags;
+            }
+
+            if (minShippingDate !== undefined) {
+                localVarQueryParameter['minShippingDate'] = minShippingDate;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -1517,12 +1557,20 @@ export const CatalogControllerApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} [page] 
-         * @param {number} [count] 
+         * @param {number} [size] 
+         * @param {Array&lt;string&gt;} [sort] 
+         * @param {number} [categoryId] 
+         * @param {string} [search] 
+         * @param {number} [minPrice] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minRate] 
+         * @param {Array&lt;string&gt;} [tags] 
+         * @param {string} [minShippingDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findPaginatedProducts(page?: number, count?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PaginatedProductDTO> {
-            const localVarFetchArgs = CatalogControllerApiFetchParamCreator(configuration).findPaginatedProducts(page, count, options);
+        findPaginatedProducts(page?: number, size?: number, sort?: Array<string>, categoryId?: number, search?: string, minPrice?: number, maxPrice?: number, minRate?: number, tags?: Array<string>, minShippingDate?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PaginatedProductDTO> {
+            const localVarFetchArgs = CatalogControllerApiFetchParamCreator(configuration).findPaginatedProducts(page, size, sort, categoryId, search, minPrice, maxPrice, minRate, tags, minShippingDate, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1562,12 +1610,20 @@ export const CatalogControllerApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} [page] 
-         * @param {number} [count] 
+         * @param {number} [size] 
+         * @param {Array&lt;string&gt;} [sort] 
+         * @param {number} [categoryId] 
+         * @param {string} [search] 
+         * @param {number} [minPrice] 
+         * @param {number} [maxPrice] 
+         * @param {number} [minRate] 
+         * @param {Array&lt;string&gt;} [tags] 
+         * @param {string} [minShippingDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findPaginatedProducts(page?: number, count?: number, options?: any) {
-            return CatalogControllerApiFp(configuration).findPaginatedProducts(page, count, options)(fetch, basePath);
+        findPaginatedProducts(page?: number, size?: number, sort?: Array<string>, categoryId?: number, search?: string, minPrice?: number, maxPrice?: number, minRate?: number, tags?: Array<string>, minShippingDate?: string, options?: any) {
+            return CatalogControllerApiFp(configuration).findPaginatedProducts(page, size, sort, categoryId, search, minPrice, maxPrice, minRate, tags, minShippingDate, options)(fetch, basePath);
         },
     };
 };
@@ -1603,13 +1659,21 @@ export class CatalogControllerApi extends BaseAPI {
     /**
      * 
      * @param {} [page] 
-     * @param {} [count] 
+     * @param {} [size] 
+     * @param {} [sort] 
+     * @param {} [categoryId] 
+     * @param {} [search] 
+     * @param {} [minPrice] 
+     * @param {} [maxPrice] 
+     * @param {} [minRate] 
+     * @param {} [tags] 
+     * @param {} [minShippingDate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CatalogControllerApi
      */
-    public findPaginatedProducts(page?: number, count?: number, options?: any) {
-        return CatalogControllerApiFp(this.configuration).findPaginatedProducts(page, count, options)(this.fetch, this.basePath);
+    public findPaginatedProducts(page?: number, size?: number, sort?: Array<string>, categoryId?: number, search?: string, minPrice?: number, maxPrice?: number, minRate?: number, tags?: Array<string>, minShippingDate?: string, options?: any) {
+        return CatalogControllerApiFp(this.configuration).findPaginatedProducts(page, size, sort, categoryId, search, minPrice, maxPrice, minRate, tags, minShippingDate, options)(this.fetch, this.basePath);
     }
 
 }

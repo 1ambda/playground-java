@@ -3,19 +3,27 @@ package com.github.lambda.gateway.domain.catalog.controller;
 import com.github.lambda.gateway.domain.catalog.CatalogService;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
+import com.github.lambda.gateway.swagger.model.Failure;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
 import com.github.lambda.gateway.swagger.model.ProductContainerDTO;
 import com.github.lambda.gateway.swagger.server.api.CatalogControllerApi;
 import com.google.common.base.Preconditions;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import springfox.documentation.annotations.ApiIgnore;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import javax.validation.Valid;
+import java.util.List;
+
 
 @Controller
 @RequestMapping("api")
@@ -33,8 +41,8 @@ public class CatalogController implements CatalogControllerApi {
 
   @Override
   @RequestMapping(value = "/catalog/categories",
-                  produces = {"application/json"},
-                  method = RequestMethod.GET)
+      produces = {"application/json"},
+      method = RequestMethod.GET)
   public ResponseEntity<CategoryListDTO> findAllCategories() {
     CategoryListDTO dto = catalogService.handleGetCategoryRequest();
 
@@ -43,8 +51,8 @@ public class CatalogController implements CatalogControllerApi {
 
   @Override
   @RequestMapping(value = "/catalog/product/{productId}",
-                  produces = {"application/json"},
-                  method = RequestMethod.GET)
+      produces = {"application/json"},
+      method = RequestMethod.GET)
   public ResponseEntity<ProductContainerDTO> findOneProduct(@PathVariable("productId") Long productId) {
     Preconditions.checkArgument(productId > 0L, "Invalid productId");
 
@@ -53,21 +61,65 @@ public class CatalogController implements CatalogControllerApi {
     return ResponseEntity.ok(dto);
   }
 
-  @Override
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "OK", response = PaginatedProductDTO.class),
+      @ApiResponse(code = 500, message = "error", response = Failure.class)})
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "page",
+          dataType = "long",
+          paramType = "query",
+          value = "Results page you want to retrieve (0..N)"),
+      @ApiImplicitParam(name = "size",
+          dataType = "long",
+          paramType = "query",
+          value = "Number of records per page."),
+      @ApiImplicitParam(name = "sort",
+          allowMultiple = true,
+          dataType = "string",
+          paramType = "query",
+          value = "Sorting criteria in the format: property(sort=name,asc&sort=numberOfHands,desc)")
+  })
   @RequestMapping(value = "/catalog/products",
-                  produces = {"application/json"},
-                  method = RequestMethod.GET)
-  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(@RequestParam(value = "page",
-                                                                                 required = false) Long page,
-                                                                   @RequestParam(value = "count",
-                                                                                 required = false) Long count) {
+      produces = {"application/json"},
+      method = RequestMethod.GET)
+  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(
+      @ApiIgnore Pageable pageable,
+      @ApiParam(value = "") @Valid @RequestParam( value = "categoryId", required = false) Long categoryId,
+      @ApiParam(value = "") @Valid @RequestParam( value = "search", required = false) String search,
+      @ApiParam(value = "") @Valid @RequestParam( value = "minPrice", required = false) Long minPrice,
+      @ApiParam(value = "") @Valid @RequestParam( value = "maxPrice", required = false) Long maxPrice,
+      @ApiParam(value = "") @Valid @RequestParam( value = "minRate", required = false) Long minRate,
+      @ApiParam(value = "") @Valid @RequestParam( value = "tags", required = false) List<String> tags,
+      @ApiParam(value = "") @Valid @RequestParam( value = "minShippingDate", required = false) String minShippingDate) {
 
-    Preconditions.checkArgument(page >= 0L, "invalid page value");
-    Preconditions.checkArgument(count > 0L, "invalid count value");
+    // TODO: build specification using root node
 
-    Pageable pageable = PageRequest.of(page.intValue(), count.intValue());
     PaginatedProductDTO dto = catalogService.handleGetPaginatedProductsRequest(pageable);
 
     return ResponseEntity.ok(dto);
+  }
+
+
+  /**
+   * overrided endpoints
+   */
+
+  @ApiIgnore
+  @RequestMapping(value = "/ignored/catalog/products",
+      produces = {"application/json"},
+      method = RequestMethod.GET)
+  @Override
+  public ResponseEntity<PaginatedProductDTO> findPaginatedProducts(Long page,
+                                                                   Long size,
+                                                                   List<String> sort,
+                                                                   Long categoryId,
+                                                                   String search,
+                                                                   Long minPrice,
+                                                                   Long maxPrice,
+                                                                   Long minRate,
+                                                                   List<String> tags,
+                                                                   String minShippingDate) {
+
+    throw new NotImplementedException();
   }
 }
