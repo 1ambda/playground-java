@@ -4,14 +4,15 @@ import Vuex from "vuex"
 import mutations from "@/store/mutation.ts"
 import actions from "@/store/action.ts"
 import * as States from "@/store/state_type"
+import * as Getters from "@/store/getter_type"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    username: "", // indicates user is logged in
-    flashMessage: "",
-    path: "",
+
+    [States.AUTH__USERNAME]: "", // indicates user is logged in if not empty
+    [States.AUTH__FLASH_MESSAGE]: "",
 
     [States.PRODUCT__FETCHED_ITEMS]: [],
     [States.PRODUCT__TOTAL_COUNT]: 0,
@@ -21,11 +22,8 @@ export default new Vuex.Store({
 
   },
   getters: {
-    authenticated: (state: any) => {
-      return state.username !== ""
-    },
-    username: (state: any) => {
-      return state.username
+    [Getters.AUTH__AUTHENTICATED]: (state: any) => {
+      return state[States.AUTH__USERNAME] !== ""
     },
   },
   mutations,

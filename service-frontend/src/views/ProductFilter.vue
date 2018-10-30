@@ -92,7 +92,8 @@
 
     get isPriceFilterApplied() {
       return this.filterMinPrice !== this.priceFilterSlideInitialMin ||
-        this.filterMaxPrice !== this.priceFilterSlideInitialMax
+        (this.filterMaxPrice !== null &&
+          this.filterMaxPrice !== this.priceFilterSlideInitialMax)
     }
 
     /**

@@ -119,18 +119,13 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
-  import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-  import {CartLineDTO, CartLineOptionDTO, ProductDTO as ProductItem, ProductOptionDTO,} from '@/generated/swagger'
-  import {CartAPI, CatalogAPI} from '@/common/product.service.ts'
-  import {handleFailure} from "../common/failure.util";
+  import {Component, Vue} from "vue-property-decorator"
+  import {CartLineDTO, CartLineOptionDTO, ProductDTO as ProductItem, ProductOptionDTO,} from "@/generated/swagger"
+  import {CartAPI, CatalogAPI} from "@/common/product.service.ts"
+  import {handleFailure} from "../common/failure.util"
 
   @Component({
     components: {},
-    computed: {
-      ...mapState(['username']),
-      ...mapGetters(['authenticated']),
-    },
   })
   export default class ProductDetail extends Vue {
     public $refs: any
@@ -158,7 +153,7 @@
 
     mounted() {
       this.productId = this.$route.params.productID
-      CatalogAPI.findOneProduct(this.productId, {credentials: 'include'})
+      CatalogAPI.findOneProduct(this.productId, {credentials: "include"})
         .then((response: any) => {
           this.productItem = response.item
           this.productOptions = response.options
@@ -174,7 +169,7 @@
           this.currentCategories = filtered
           // TODO: List all available categories for navigation
           this.optionsPerCategory = filtered.map(x => [{label: x, value: x}])
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
 
@@ -184,7 +179,7 @@
 
     handleAddToCartClick(event) {
       const selectedOptionIdList = this.selectedOptionIndexs.map(optionIndex => {
-        return this.productOptions[optionIndex].id;
+        return this.productOptions[optionIndex].id
       })
       this.addProductToCart(this.productId, selectedOptionIdList)
     }
@@ -200,7 +195,7 @@
 
     handleGoToCartButtonClick() {
       this.$router.push({
-        name: 'cart',
+        name: "cart",
         params: {}
       })
     }
@@ -237,14 +232,14 @@
         cartLineOptions: cartLineOptionRequestDTOs,
       }
 
-      CartAPI.addUserCartLine(request, {credentials: 'include'})
+      CartAPI.addUserCartLine(request, {credentials: "include"})
         .then(response => {
           this.cartItemAddedPopup = true
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     closeCartItemAddedPopup() {
-      this.cartItemAddedPopup = false;
+      this.cartItemAddedPopup = false
     }
 
     calculatePrice(selectedOptionIndexList) {

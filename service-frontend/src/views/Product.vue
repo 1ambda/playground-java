@@ -218,7 +218,7 @@
           const products = response.products.map(p => p.item)
           this.updateProductListStore(products)
 
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     handleCurrentPageChange(newPage) {

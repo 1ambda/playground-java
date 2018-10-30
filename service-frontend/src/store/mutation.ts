@@ -2,24 +2,20 @@ import * as Mutations from "@/store/mutation_type"
 import * as States from "@/store/state_type"
 
 export default {
-  cleanFlashMessage(state: any) {
-    state.flashMessage = ""
+  [Mutations.AUTH__CLEAR_FLASH_MESSAGE](state: any) {
+    state[States.AUTH__FLASH_MESSAGE] = ""
   },
 
-  setFlashMessage(state: any, message: string) {
-    state.flashMessage = message
+  [Mutations.AUTH__SET_FLASH_MESSAGE](state: any, message: string) {
+    state[States.AUTH__FLASH_MESSAGE] = message
   },
 
-  logout(state: any) {
-    state.username = ""
+  [Mutations.AUTH__LOGOUT](state: any) {
+    state[States.AUTH__USERNAME] = ""
   },
 
-  login(state: any, username: string) {
-    state.username = username
-  },
-
-  changePath(state: any, path: string) {
-    state.path = path
+  [Mutations.AUTH__LOGIN](state: any, username: string) {
+    state[States.AUTH__USERNAME] = username
   },
 
   [Mutations.PRODUCT__UPDATE_ITEMS](state: any, products) {

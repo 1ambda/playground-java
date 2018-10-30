@@ -107,7 +107,7 @@
         imageType: product.imageType,
         imagePath: product.imagePath,
         shippingFee: 0,
-        reviewRate: product.name.length % 5,
+        reviewRate: 4 + (product.name.length % 10) / 10,
         tags: tags[product.name.length % 4],
       }
     }

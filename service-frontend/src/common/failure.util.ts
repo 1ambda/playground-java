@@ -1,6 +1,8 @@
-import {Failure} from "@/generated/swagger";
+import {Failure} from "@/generated/swagger"
+import * as Mutations from "@/store/mutation_type"
+import * as States from "@/store/state_type"
 
-export const handleFailure = (notifier: any) => {
+export const handleFailure = (notifier: any, router: any, store: any) => {
   return (response: any) => {
 
     // client runtime error in promise
@@ -24,6 +26,8 @@ export const handleFailure = (notifier: any) => {
 
     // server returned non-json response
     if (!response.json) {
+      console.error(response)
+
       notifier.error({
         title: `Error (Connection)`,
         message: "Server is not available",
@@ -34,6 +38,8 @@ export const handleFailure = (notifier: any) => {
 
     // handle NotFound
     if (response.status === 404) {
+      console.error(response)
+
       notifier.error({
         title: `Error (Not Found)`,
         message: `${response.url}`,
@@ -43,8 +49,21 @@ export const handleFailure = (notifier: any) => {
 
     // formatted error returned from server
     response.json().then((parsed: Failure) => {
+      console.error(parsed)
+
       const splitted = parsed.type.split('.')
       const canonical = splitted[splitted.length - 1]
+
+      // session timed-out
+      if (canonical === 'InsufficientAuthenticationException') {
+        notifier.warning({
+          title: `Session Timeout`,
+          message: 'Please re-login.',
+        })
+
+        router.push({ path: 'login' })
+        return
+      }
 
       notifier.error({
         title: `Error (${canonical})`,

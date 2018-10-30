@@ -228,6 +228,7 @@
     public $refs: any
     public $notify: any
     public $router: any
+    public $store: any
 
     public allChecked = false
     public cartItemSelection = []
@@ -238,7 +239,7 @@
      */
 
     mounted() {
-      this.updateCartLines().catch(handleFailure(this.$notify))
+      this.updateCartLines().catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     updateCartLines(): Promise<CartDTO> {
@@ -295,7 +296,7 @@
       CartAPI.updateUserCartLine(cartLineId, request, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     handleCartItemOrder(index, row) {
@@ -307,7 +308,7 @@
       CartAPI.removeUserCartLine(cartLineId, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     handleSelectedCartItems() {
@@ -330,7 +331,7 @@
       CartAPI.removeUserCartLines(query, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
     }
 
     spanMethod({row, column, rowIndex, columnIndex}) {

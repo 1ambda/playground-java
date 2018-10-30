@@ -53,6 +53,7 @@
     public $refs: any
     public $notify: any
     public $router: any
+    public $store: any
 
     private ruleForm = {
       username: '',
@@ -117,7 +118,7 @@
             type: 'success',
           })
           this.$router.push('/login')
-        }).catch(handleFailure(this.$notify))
+        }).catch(handleFailure(this.$notify, this.$router, this.$store))
       })
     }
 
