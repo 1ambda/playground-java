@@ -24,8 +24,8 @@
 
         <!-- price filter popover button -->
         <div style="text-align: right; margin: 0">
-          <el-button type="text" size="mini" @click="handleFilterCancel">Cancel</el-button>
-          <el-button type="primary" size="mini" @click="handleFilterApply">Apply</el-button>
+          <el-button type="text" size="mini" @click="handlePriceFilterCancel">Cancel</el-button>
+          <el-button type="primary" size="mini" @click="handlePriceFilterApply">Apply</el-button>
         </div>
       </div>
 
@@ -34,7 +34,7 @@
         Price
       </el-button>
       <el-button v-if="isPriceFilterApplied" slot="reference" type="primary">
-        <span>{{ buildPriceRangeText() }}</span>
+        <span>{{ buildAppliedPriceRangeText() }}</span>
       </el-button>
     </el-popover>
 
@@ -64,6 +64,7 @@
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
   import {Action, Getter, Mutation, State,} from "vuex-class"
+  // Register the router hooks with their names
 
   @Component({
     name: "ProductFilter",
@@ -72,6 +73,7 @@
     public $refs: any
     public $notify: any
     public $router: any
+    public $route: any
 
     public priceFilterSliderValues = [0, 1000000]
     public priceFilterSlideInitialMin = 0
@@ -89,12 +91,52 @@
     @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
 
     get isPriceFilterApplied() {
-      return this.filterMinPrice !== this.priceFilterSlideInitialMin
+      return this.filterMinPrice !== this.priceFilterSlideInitialMin ||
+        this.filterMaxPrice !== this.priceFilterSlideInitialMax
     }
 
     /**
      * life-cycle methods
      */
+
+    created() {
+      // apply filter queries into state
+      // this should be done before drawing components (`created`)
+      this.initializePriceFilter()
+    }
+
+    mounted() {
+
+    }
+
+    initializePriceFilter() {
+      let minPrice = this.$route.query.minPrice
+      let maxPrice = this.$route.query.maxPrice
+
+      if (minPrice && Number(minPrice)) {
+        minPrice = Number(minPrice)
+
+        if (minPrice >= 0) {
+          this.priceFilterSliderValues[0] = minPrice
+        }
+      }
+
+      if (maxPrice && Number(maxPrice)) {
+        maxPrice = Number(maxPrice)
+
+        if (maxPrice >= 0) {
+
+          if (minPrice && maxPrice > minPrice) {
+            this.priceFilterSliderValues[1] = maxPrice
+          } else if (!minPrice) {
+            this.priceFilterSliderValues[1] = maxPrice
+          }
+        }
+      }
+
+      this.setPriceFilterState(minPrice, maxPrice)
+
+    }
 
     /**
      * event handlers
@@ -103,27 +145,59 @@
     handlePriceSliderChange(value) {
     }
 
-    handleFilterCancel() {
+    handlePriceFilterCancel() {
       this.resetSlideValues()
       this.resetProductFilterPrice()
       this.hidePriceFilterPopvoer()
+      this.setRouterQueryForPrice()
     }
 
-    handleFilterApply() {
+    handlePriceFilterApply() {
       const minValue = this.priceFilterSliderValues[0]
       let maxValue = this.priceFilterSliderValues[1]
 
-      if (maxValue === this.priceFilterSlideInitialMax) {
-        maxValue = null
-      }
-
-      this.updateProductFilterPrice({minPrice: minValue, maxPrice: maxValue})
+      this.setPriceFilterState(minValue, maxValue)
       this.hidePriceFilterPopvoer()
+      this.setRouterQueryForPrice()
     }
 
     /**
      * helpers
      */
+
+    setPriceFilterState(minValue, maxValue) {
+      if (!minValue) {
+        minValue = 0
+      }
+      if (!maxValue || maxValue === this.priceFilterSlideInitialMax) {
+        maxValue = null
+      }
+
+      this.updateProductFilterPrice({minPrice: minValue, maxPrice: maxValue})
+    }
+
+    setRouterQueryForPrice() {
+      const minValue = this.priceFilterSliderValues[0]
+      let maxValue = this.priceFilterSliderValues[1]
+
+      // build query
+      let modified = false
+      let query = Object.assign({}, this.$route.query)
+
+      if (minValue !== this.priceFilterSlideInitialMin) {
+        query["minPrice"] = minValue
+      } else {
+        delete query["minPrice"]
+      }
+
+      if (maxValue !== this.priceFilterSlideInitialMax) {
+        query ["maxPrice"] = maxValue
+      } else {
+        delete query["maxPrice"]
+      }
+
+      this.$router.push({query: query,})
+    }
 
     hidePriceFilterPopvoer() {
       this.priceFilterPopoverEnable = false
@@ -147,6 +221,23 @@
       let text = `₩${minPrice} - ₩${maxPrice}`
 
       if (this.isMaxPriceSet()) {
+        text += "+"
+      }
+
+      return text
+    }
+
+    buildAppliedPriceRangeText() {
+      const minPrice = this.filterMinPrice
+      let maxPrice = this.filterMaxPrice
+
+      if (maxPrice == null) {
+        maxPrice = this.priceFilterSlideInitialMax
+      }
+
+      let text = `₩${minPrice} - ₩${maxPrice}`
+
+      if (maxPrice === this.priceFilterSlideInitialMax) {
         text += "+"
       }
 

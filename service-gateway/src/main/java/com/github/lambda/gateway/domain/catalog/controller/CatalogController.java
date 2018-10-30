@@ -1,7 +1,6 @@
 package com.github.lambda.gateway.domain.catalog.controller;
 
 import com.github.lambda.gateway.domain.catalog.CatalogService;
-import com.github.lambda.gateway.domain.catalog.specification.ProductSpecificationBuilder;
 import com.github.lambda.gateway.domain.catalog.specification.ProductSpecificationRequest;
 import com.github.lambda.gateway.domain.user.UserService;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
@@ -13,7 +12,6 @@ import com.google.common.base.Preconditions;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
