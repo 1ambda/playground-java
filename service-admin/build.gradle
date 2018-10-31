@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.6.RELEASE'
+		springBootVersion = '2.1.0.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -25,7 +25,7 @@ repositories {
 
 
 ext {
-	springBootAdminVersion = '2.0.3'
+	springBootAdminVersion = '2.0.4'
 }
 
 dependencies {
@@ -49,4 +49,10 @@ dependencyManagement {
 	imports {
 		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
 	}
+}
+
+task wrapper(type: Wrapper) {
+    // gradle 4.9 w/ lombok 1.8 produces error
+    // https://github.com/rzwitserloot/lombok/issues/1716
+    gradleVersion = '4.8.1'
 }

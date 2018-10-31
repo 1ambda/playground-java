@@ -58,15 +58,19 @@ management:
 spring:
   application:
     name: Gateway
+
+  main:
+    allow-bean-definition-overriding: true
+
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the WAR file
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
     active: local
 
-#
-# spring.flyway
-#
+  #
+  # spring.flyway
+  #
   flyway:
     enabled: true
     check-location: true
@@ -74,9 +78,9 @@ spring:
     baseline-on-migrate: true
     table: FlywaySchema_Gateway
 
-#
-# spring.datasource
-#
+  #
+  # spring.datasource
+  #
   datasource:
     hikari:
       auto-commit: false
@@ -86,9 +90,9 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
 
-#
-# spring.jpa
-#
+  #
+  # spring.jpa
+  #
   jpa:
     open-in-view: false
     hibernate:
@@ -98,22 +102,22 @@ spring:
       hibernate.jdbc.time_zone: UTC
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
 
-#
-# spring.security
-#
+  #
+  # spring.security
+  #
   security:
     user:
       name: ${ACTUACTOR_USERNAME}
       password: ${ACTUACTOR_PASSWORD}
       roles: ACTUACTOR
 
-#
-# spring session and redis
-#
+  #
+  # spring session and redis
+  #
   session.redis.namespace: spring:session:gateway
   session.store-type: redis
   data.redis.repositories.enabled: true

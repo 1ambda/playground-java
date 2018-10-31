@@ -1,7 +1,6 @@
 buildscript {
     ext {
-        // springBootVersion = '2.1.0.RC1'
-        springBootVersion = '2.0.6.RELEASE'
+        springBootVersion = '2.1.0.RELEASE'
         gradleAptVersion = '0.18'
         owaspVersion = '3.3.1'
         queryDslPluginVersion = '1.0.10'
@@ -57,13 +56,13 @@ idea {
 
 ext {
     guavaVersion = '26.0-jre'
-    springBootAdminVersion = '2.0.3'
+    springBootAdminVersion = '2.0.4'
     micrometerVersion = '1.0.6'
     springfoxVersion = '2.9.2'
     logbookVersion = '1.9.1'
 
     // storage
-    mysqlConnectorVersion = '5.1.47'
+    mysqlConnectorVersion = '8.0.13'
 
     // test
     testcontainersVersion = '1.9.1'
@@ -75,7 +74,7 @@ ext {
     // code generation related
     lombokVersion = "1.18.2"
     queryDslVersion = '4.2.1'
-    hibernateModelGenVersion = '5.3.3.Final'
+    hibernateModelGenVersion = '5.3.7.Final'
 }
 
 dependencies {
