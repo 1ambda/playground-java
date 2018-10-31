@@ -43,6 +43,11 @@
                text-color="#fff"
                :default-active="$route.name"
                active-text-color="#ffd04b">
+        <!-- left aligned image menu -->
+        <el-menu-item index="home" :route="getRoute('home')">
+          <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
+        </el-menu-item>
+
         <el-menu-item index="register" :route="getRoute('register')">
           <span>Register</span>
         </el-menu-item>
@@ -74,9 +79,9 @@
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
   import * as Getters from "@/store/getter_type"
-  import * as Routes from "@/store/route_type"
+  import * as RouteType from "@/store/route_type"
 
-  import Router from "@/router.ts"
+  import {Routes,} from "@/router.ts"
   import {AuthAPI} from "@/common/auth.service.ts"
   import {Failure,} from "@/generated/swagger"
   import {handleFailure} from "../common/failure.util"
@@ -99,7 +104,7 @@
     },
   })
   export default class Navbar extends Vue {
-    public routes = Router
+    public routes = Routes
     public $notify: any
     public $route: any
     public $router: any
@@ -146,8 +151,8 @@
         })
 
         this.commitLogout()
-        this.$router.push(`/${Routes.LOGIN}`)
-      }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        this.$router.push(`/${RouteType.LOGIN}`)
+      }).catch(handleFailure)
     }
 
     /**

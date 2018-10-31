@@ -19,11 +19,14 @@ export default new Vuex.Store({
     [States.PRODUCT__CURRENT_PAGE]: 1,
     [States.PRODUCT__FILTER_MIN_PRICE]: 0,
     [States.PRODUCT__FILTER_MAX_PRICE]: null,
+    [States.PRODUCT__ITEM_COUNT]: 8,
 
   },
   getters: {
     [Getters.AUTH__AUTHENTICATED]: (state: any) => {
-      return state[States.AUTH__USERNAME] !== ""
+      return state[States.AUTH__USERNAME] !== "" &&
+        typeof state[States.AUTH__USERNAME] !== "undefined" &&
+        state[States.AUTH__USERNAME] !== null
     },
   },
   mutations,

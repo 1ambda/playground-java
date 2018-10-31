@@ -21,8 +21,12 @@ public class ProductSpecificationBuilder {
                                    CriteriaQuery<?> query,
                                    CriteriaBuilder criteriaBuilder) {
 
-        Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(
-            root.get(Product_.PRICE), minPrice);
+        Predicate predicate = null;
+
+        if (minPrice != null && minPrice > 0L) {
+          predicate = criteriaBuilder.greaterThanOrEqualTo(
+              root.get(Product_.PRICE), minPrice);
+        }
 
         if (maxPrice != null && maxPrice > 0L) {
           Predicate max = criteriaBuilder.lessThanOrEqualTo(root.get(Product_.PRICE), maxPrice);

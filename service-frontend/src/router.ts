@@ -11,7 +11,7 @@ import ProductDetail from "./views/ProductDetail.vue"
 
 Vue.use(VueRouter)
 
-export default [
+const routes = [
   {
     path: "/",
     name: "home",
@@ -62,3 +62,10 @@ export default [
   },
 ]
 
+export const Routes = routes
+
+const router = new VueRouter({
+  routes: Routes,
+})
+
+export const Router = router

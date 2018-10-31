@@ -1,5 +1,4 @@
 import Vue from "vue"
-import Router from "vue-router"
 
 import ElementUI from "element-ui"
 import "element-ui/lib/theme-chalk/index.css"
@@ -7,7 +6,7 @@ import locale from "element-ui/lib/locale/lang/en"
 import "vue-awesome/icons"
 
 import App from "@/App.vue"
-import routes from "@/router.ts"
+import {Router,} from "@/router.ts"
 import store from "@/store"
 import * as Mutations from "@/store/mutation_type"
 import * as RouteType from "@/store/route_type"
@@ -15,10 +14,10 @@ import * as RouteType from "@/store/route_type"
 import "@/registerServiceWorker"
 
 import {AuthAPI} from "@/common/auth.service.ts"
-import {Failure} from "@/generated/swagger"
 
 import Icon from "vue-awesome/components/Icon.vue"
 import BackToTop from "vue-backtotop"
+import {handleFailure} from "@/common/failure.util"
 
 /**
  * error handlers
@@ -39,13 +38,9 @@ Vue.use(ElementUI, {locale})
 Vue.component("v-icon", Icon)
 Vue.component("back-to-top", BackToTop)
 
-const router = new Router({
-  routes,
-})
-
 AuthAPI.whoiam({credentials: "include"})
   .then((response) => {
-    router.beforeEach((to: any, from: any, next: any) => {
+    Router.beforeEach((to: any, from: any, next: any) => {
       // if the page doesn't require authentication, move to the page
       if (!to.matched.some((record: any) => record.meta.requiresAuth)) {
         return next()
@@ -68,26 +63,16 @@ AuthAPI.whoiam({credentials: "include"})
 
     if (!response.username || response.username.trim() === "") {
       store.commit(Mutations.AUTH__LOGOUT)
-      router.push(`/${RouteType.LOGIN}`)
+      Router.push(`/${RouteType.LOGIN}`)
       return
     }
 
     store.commit(Mutations.AUTH__LOGIN, response.username)
   })
-  .catch((response) => {
-    if (!response.json) {
-      console.error("Unknown error occurred", response)
-
-      return
-    }
-    response.json().then((parsed: Failure) => {
-      console.error(parsed)
-      router.push(`/${RouteType.LOGIN}`)
-    })
-  })
+  .catch(handleFailure)
 
 new Vue({
-  router,
-  store,
+  router: Router,
+  store: store,
   render: (h) => h(App),
 }).$mount("#app")

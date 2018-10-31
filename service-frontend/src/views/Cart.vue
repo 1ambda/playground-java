@@ -239,7 +239,7 @@
      */
 
     mounted() {
-      this.updateCartLines().catch(handleFailure(this.$notify, this.$router, this.$store))
+      this.updateCartLines().catch(handleFailure)
     }
 
     updateCartLines(): Promise<CartDTO> {
@@ -296,7 +296,7 @@
       CartAPI.updateUserCartLine(cartLineId, request, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
 
     handleCartItemOrder(index, row) {
@@ -308,7 +308,7 @@
       CartAPI.removeUserCartLine(cartLineId, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
 
     handleSelectedCartItems() {
@@ -331,7 +331,7 @@
       CartAPI.removeUserCartLines(query, {credentials: 'include'})
         .then(response => {
           return this.updateCartLines()
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
 
     spanMethod({row, column, rowIndex, columnIndex}) {

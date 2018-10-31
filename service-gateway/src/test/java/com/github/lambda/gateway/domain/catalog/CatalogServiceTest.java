@@ -9,6 +9,7 @@ import com.github.lambda.gateway.domain.catalog.repository.CategoryRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ImageRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductOptionRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
+import com.github.lambda.gateway.domain.catalog.specification.ProductSpecificationRequest;
 import com.github.lambda.gateway.exception.type.BadRequestException;
 import com.github.lambda.gateway.swagger.model.CategoryListDTO;
 import com.github.lambda.gateway.swagger.model.PaginatedProductDTO;
@@ -80,10 +81,13 @@ public class CatalogServiceTest {
 
     PageRequest pagination1 = PageRequest.of(0, 10);
     PageRequest pagination2 = PageRequest.of(2, 10);
+    ProductSpecificationRequest specificationRequest = ProductSpecificationRequest.builder().build();
 
     // when
-    PaginatedProductDTO dto1 = catalogService.handleGetPaginatedProductsRequest(pagination1);
-    PaginatedProductDTO dto2 = catalogService.handleGetPaginatedProductsRequest(pagination2);
+    PaginatedProductDTO dto1 = catalogService.handleGetPaginatedProductsRequest(specificationRequest,
+                                                                                pagination1);
+    PaginatedProductDTO dto2 = catalogService.handleGetPaginatedProductsRequest(specificationRequest,
+                                                                                pagination2);
 
     // then
     assertThat(dto1.getProducts().size()).isEqualTo(10);

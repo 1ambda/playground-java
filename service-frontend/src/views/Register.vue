@@ -118,7 +118,7 @@
             type: 'success',
           })
           this.$router.push('/login')
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
       })
     }
 

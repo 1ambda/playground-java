@@ -39,4 +39,8 @@ export default {
     state[States.PRODUCT__FILTER_MIN_PRICE] = 0
     state[States.PRODUCT__FILTER_MAX_PRICE] = null
   },
+
+  [Mutations.PRODUCT__SET_ITEM_COUNT](state: any, itemCountPerPage) {
+    state[States.PRODUCT__ITEM_COUNT] = itemCountPerPage
+  },
 }

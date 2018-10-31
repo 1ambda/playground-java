@@ -99,7 +99,7 @@
 
           this.commitLogin(response.username)
           this.$router.push("/")
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
       })
     }
 

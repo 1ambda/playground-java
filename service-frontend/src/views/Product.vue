@@ -37,10 +37,10 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 30px; margin-left: 20px;">
           <span class="search-summary-text search-summary-pagination">
-            1-{{ paginationSize }} of
+            1-{{ products.length }} of
           </span>
           <span class="search-summary-text search-summary-total-count">
-             36
+             {{ totalItemCount }}
           </span>
           <span class="search-summary-text">
              results for
@@ -62,7 +62,8 @@
 
           <!-- pagination count control -->
           <span style="float: right; vertical-align: middle; margin-right: 15px; width: 70px;">
-              <el-select v-model="paginationSize" placeholder="Select" size="mini">
+              <el-select placeholder="Select" size="mini"
+                         :value="stateItemCountPerPage" @change="handlePaginationSizeChange">
                 <el-option v-for="(item, index) in availablePaginationSizeList"
                            :key="index"
                            :label="item.label"
@@ -94,8 +95,8 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <el-pagination background
                        layout="prev, pager, next"
-                       :page-size="itemCountPerPage"
-                       :current-page="currentPage"
+                       :page-size="stateItemCountPerPage"
+                       :current-page="stateCurrentPage"
                        @current-change="handleCurrentPageChange"
                        :total="totalItemCount">
         </el-pagination>
@@ -125,23 +126,11 @@
     public $router: any
     public $store: any
 
-    public itemCountPerPage = 8
-    public columns = [
-      {prop: "name", label: "Name",},
-      {prop: "categoryDisplayName", label: "Category",},
-      {prop: "description", label: "Description",},
-      {prop: "onSale", label: "On Sale",},
-      {prop: "price", label: "Price (KRW)",},
-      {prop: "createdAt", label: "Registered At",},
-    ]
-    public productList = []
-
-    public paginationSize = "8"
     public availablePaginationSizeList = [
-      {value: "8", label: "8"},
-      {value: "16", label: "16"},
-      {value: "32", label: "32"},
-      {value: "48", label: "48"},
+      {value: 8, label: "8"},
+      {value: 16, label: "16"},
+      {value: 32, label: "32"},
+      {value: 48, label: "48"},
     ]
 
     public searchSelectedCategory = "category1"
@@ -162,16 +151,18 @@
      * vuex mappers and computed properties
      */
 
-    @Mutation(Mutations.PRODUCT__UPDATE_ITEMS) updateProductListStore
-    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_COUNT) updateProductTotalCount
-    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) updateProductCurrentPage
+    @Mutation(Mutations.PRODUCT__UPDATE_ITEMS) commitUpdateItems
+    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_COUNT) commitUpdateTotalCount
+    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) commitUpdateCurrentPage
     @Mutation(Mutations.PRODUCT__UPDATE_FILTER_PRICE) updateProductFilterPrice
     @Mutation(Mutations.PRODUCT__RESET_FILTER_PRICE) resetProductFilterPrice
+    @Mutation(Mutations.PRODUCT__SET_ITEM_COUNT) commitSetItemCount
 
     @State(States.PRODUCT__FETCHED_ITEMS) products
     @State(States.PRODUCT__TOTAL_COUNT) totalItemCount
-    @State(States.PRODUCT__CURRENT_PAGE) currentPage // offset + 1
-    @State(States.PRODUCT__FILTER_MAX_PRICE) filterMinPrice
+    @State(States.PRODUCT__ITEM_COUNT) stateItemCountPerPage
+    @State(States.PRODUCT__CURRENT_PAGE) stateCurrentPage // offset + 1
+    @State(States.PRODUCT__FILTER_MIN_PRICE) filterMinPrice
     @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
 
     /**
@@ -179,28 +170,39 @@
      */
 
     mounted() {
-      this.fetchAllProducts(this.currentPage)
+      this.fetchAllProducts()
     }
 
     /**
      * event handlers
      */
+    handlePaginationSizeChange(value) {
+      this.commitSetItemCount(value)
+      this.fetchAllProducts()
+    }
+
+    handleCurrentPageChange(value) {
+      const newPage = value
+      this.commitUpdateCurrentPage(value)
+      this.fetchAllProducts()
+    }
 
     /**
      * helpers
      */
 
-    fetchAllProducts(currentPage) {
+    fetchAllProducts() {
+      const currentPage = this.stateCurrentPage
       const page = currentPage - 1
-      const size = this.itemCountPerPage
+      const size = this.stateItemCountPerPage
       const sort = []
       const options = {credentials: "include"}
 
       const categoryId = null
       const search = ""
 
-      const minPrice = 0
-      const maxPrice = 300000
+      const minPrice = this.filterMinPrice
+      const maxPrice = this.filterMaxPrice
       const minRate = null
       const tags = []
       const minShippingDate = null
@@ -213,31 +215,14 @@
           const pagination: Pagination = response.pagination
 
           const totalItemCount = pagination.totalItemCount
-          this.updateProductTotalCount(totalItemCount)
+          this.commitUpdateTotalCount(totalItemCount)
 
           const products = response.products.map(p => p.item)
-          this.updateProductListStore(products)
+          this.commitUpdateItems(products)
 
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
 
-    handleCurrentPageChange(newPage) {
-      this.updateProductCurrentPage(newPage)
-      this.fetchAllProducts(newPage)
-    }
-
-    handleCellClick(row, column, cell, event) {
-      const productID = row.id
-      const columnName = column.property
-      if (columnName === "name") {
-        this.$router.push({
-          name: "product.detail",
-          params: {
-            productID: productID,
-          }
-        })
-      }
-    }
   }
 </script>
 

@@ -169,9 +169,8 @@
           this.currentCategories = filtered
           // TODO: List all available categories for navigation
           this.optionsPerCategory = filtered.map(x => [{label: x, value: x}])
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
-
 
     /**
      * event handlers
@@ -235,7 +234,7 @@
       CartAPI.addUserCartLine(request, {credentials: "include"})
         .then(response => {
           this.cartItemAddedPopup = true
-        }).catch(handleFailure(this.$notify, this.$router, this.$store))
+        }).catch(handleFailure)
     }
 
     closeCartItemAddedPopup() {
