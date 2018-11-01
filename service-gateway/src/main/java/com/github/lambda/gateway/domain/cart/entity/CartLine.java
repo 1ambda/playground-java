@@ -44,28 +44,29 @@ public class CartLine extends BaseEntity {
   /**
    * relations
    */
-  @Column(name = "`cart_id`", nullable = true)
-  private Long cartId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "`cart_id`")
+  private Cart cart;
 
   @ToString.Exclude
   @Builder.Default
   @OneToMany(
       fetch = FetchType.EAGER,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+      mappedBy = "cartLine"
   )
-  @JoinColumn(name = "`cart_line_id`")
   private List<CartLineOption> cartLineOptions = new ArrayList<>();
 
   /**
    * functions
    */
   public void addCartLineOption(CartLineOption cartLineOption) {
-    cartLineOption.setCartLineId(this.getId());
+    cartLineOption.setCartLine(this);
     cartLineOptions.add(cartLineOption);
   }
 
   public void removeCartLineOption(CartLineOption cartLineOption) {
-    cartLineOption.setCartLineId(null);
+    cartLineOption.setCartLine(null);
     cartLineOptions.remove(cartLineOption);
   }
 }

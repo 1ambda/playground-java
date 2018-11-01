@@ -23,7 +23,7 @@ import java.util.List;
         @Index(name = "`idx_Cart_locked`", columnList = "`locked`", unique = false),
     },
     uniqueConstraints = {
-        @UniqueConstraint(name="`uniq_Cart_userId`", columnNames = {"`user_id`"}),
+        @UniqueConstraint(name = "`uniq_Cart_userId`", columnNames = {"`user_id`"}),
     }
 )
 public class Cart extends BaseEntity {
@@ -40,21 +40,21 @@ public class Cart extends BaseEntity {
   @Builder.Default
   @OneToMany(
       fetch = FetchType.EAGER,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+      mappedBy = "cart"
   )
-  @JoinColumn(name = "`cart_id`", referencedColumnName = "`id`")
   private List<CartLine> cartLines = new ArrayList<>();
 
   /**
    * functions
    */
   public void addCartLine(CartLine cartLine) {
-    cartLine.setCartId(this.getId());
+    cartLine.setCart(this);
     cartLines.add(cartLine);
   }
 
   public void removeCartLine(CartLine cartLine) {
-    cartLine.setCartId(null);
+    cartLine.setCart(null);
     cartLines.remove(cartLine);
   }
 }
