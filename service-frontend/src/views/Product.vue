@@ -49,11 +49,13 @@
              results for
           </span>
           <span style="padding-top: 2px;">
-            <el-tooltip content="Category" placement="top" style="margin-left: 5px;">
-              <el-tag type="warning" size="medium">{{ displayNameForSelectedCategory }}</el-tag>
+            <el-tooltip content="Category"
+                        placement="top" style="margin-left: 3px;">
+              <el-tag type="warning" size="medium">{{ displayNameForSelectedCategory === "All" ? "All Categories" : `${displayNameForSelectedCategory} Category` }}</el-tag>
             </el-tooltip>
-            <el-tooltip content="Search Keyword" placement="top" style="margin-left: 10px;">
-              <el-tag type="danger" size="medium">{{ stateSearchKeyword }}</el-tag>
+            <el-tooltip v-if="stateSearchKeyword && stateSearchKeyword.length > 0" content="Search Keyword"
+                        placement="top" style="margin-left: 10px;">
+              <el-tag type="danger" size="medium">"{{ stateSearchKeyword }}"</el-tag>
             </el-tooltip>
           </span>
 
@@ -134,7 +136,6 @@
     public $store: any
 
     public availablePaginationSizeList = [
-      {value: 4, label: "4"},
       {value: 8, label: "8"},
       {value: 16, label: "16"},
       {value: 32, label: "32"},

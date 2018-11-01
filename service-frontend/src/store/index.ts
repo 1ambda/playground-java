@@ -19,7 +19,7 @@ export default new Vuex.Store({
     [States.PRODUCT__CURRENT_PAGE]: 1,
     [States.PRODUCT__FILTER_MIN_PRICE]: 0,
     [States.PRODUCT__FILTER_MAX_PRICE]: null,
-    [States.PRODUCT__CURRENT_SIZE]: 4,
+    [States.PRODUCT__CURRENT_SIZE]: 8,
 
     [States.PRODUCT__SEARCH_KEYWORD]: "",
     [States.PRODUCT__SEARCH_CATEGORY]: "all",
