@@ -49,7 +49,12 @@
              results for
           </span>
           <span style="padding-top: 2px;">
-            <el-tag type="warning" size="medium">{{ displayNameForSelectedCategory }}</el-tag>
+            <el-tooltip content="Category" placement="top" style="margin-left: 5px;">
+              <el-tag type="warning" size="medium">{{ displayNameForSelectedCategory }}</el-tag>
+            </el-tooltip>
+            <el-tooltip content="Search Keyword" placement="top" style="margin-left: 10px;">
+              <el-tag type="danger" size="medium">{{ stateSearchKeyword }}</el-tag>
+            </el-tooltip>
           </span>
 
           <!-- grid view toggle -->
@@ -371,6 +376,7 @@
   }
 
   .search-summary-text {
+    vertical-align: middle;
     font-size: 17px;
     font-weight: 300;
   }
