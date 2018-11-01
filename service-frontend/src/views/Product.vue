@@ -7,17 +7,20 @@
         <div style="margin-top: 25px; width: 800px;">
           <el-input placeholder="Please input"
                     class="product-searchbox-input"
-                    v-model="searchInsertedKeyword">
+                    v-model="searchInsertedKeyword"
+                    @keyup.enter.native="handleSearchKeywordEnter">
             <el-select slot="prepend" placeholder="Select"
                        class="product-searchbox-select"
-                       v-model="searchSelectedCategory">
-              <el-option v-for="(item, index) in searchAvailableCategoryList"
+                       v-model="searchSelectedCategory"
+                       @change="handleSearchCategoryChange">
+              <el-option v-for="(item, index) in stateSearchAvailableCategories"
                          :key="index"
                          :label="item.label"
                          :value="item.value">
               </el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search"
+                       @click="handleSearchKeywordEnter"></el-button>
           </el-input>
         </div>
       </el-col>
@@ -46,7 +49,7 @@
              results for
           </span>
           <span style="padding-top: 2px;">
-            <el-tag type="warning" size="medium">Laptop</el-tag>
+            <el-tag type="warning" size="medium">{{ displayNameForSelectedCategory }}</el-tag>
           </span>
 
           <!-- grid view toggle -->
@@ -117,11 +120,6 @@
 
   @Component({
     components: {ProductGrid, ProductFilter},
-    watch: {
-      // stateCurrentPage (newPage, oldPage) {
-      //   this.currentPage = newPage
-      // },
-    },
   })
   export default class Product extends Vue {
     public $refs: any
@@ -138,12 +136,7 @@
       {value: 48, label: "48"},
     ]
 
-    public searchSelectedCategory = "category1"
-    public searchAvailableCategoryList = [
-      {value: "category1", label: "Category 1"},
-      {value: "category2", label: "Category 2"},
-      {value: "category3", label: "Category 3"},
-    ]
+    public searchSelectedCategory = "all"
     public searchInsertedKeyword = ""
     public toggleGridViewType = true
 
@@ -160,26 +153,53 @@
     @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_ITEM_COUNT) commitUpdateTotalCount
     @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) commitUpdateCurrentPage
 
+    @Mutation(Mutations.PRODUCT__SEARCH_UPDATE_KEYWORD) commitUpdateSearchKeyword
+    @Mutation(Mutations.PRODUCT__SEARCH_UPDATE_CATEGORY) commitUpdateSearchCategory
+
     @State(States.PRODUCT__FETCHED_ITEMS) stateProducts
-    @State(States.PRODUCT__TOTAL_ITEM_COUNT) stateTotalItemCount
-    @State(States.PRODUCT__ITEM_COUNT_PER_PAGE) stateItemCountPerPage
+    @State(States.PRODUCT__TOTAL_COUNT) stateTotalItemCount
+    @State(States.PRODUCT__CURRENT_SIZE) stateItemCountPerPage
     @State(States.PRODUCT__CURRENT_PAGE) stateCurrentPage
-    @State(States.PRODUCT__FILTER_MIN_PRICE) filterMinPrice
-    @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
+
+    @State(States.PRODUCT__SEARCH_KEYWORD) stateSearchKeyword
+    @State(States.PRODUCT__SEARCH_CATEGORY) stateSearchCategory
+    @State(States.PRODUCT__SEARCH_AVAILABLE_CATEGORIES) stateSearchAvailableCategories
 
     @Action(Actions.PRODUCT__FETCH_PAGINATED_ITEMS) actionFetchPaginatedItems
+    @Action(Actions.PRODUCT__FETCH_CATEGORY_LIST) actionFetchCategories
+
+    get displayNameForSelectedCategory() {
+      const selected = this.stateSearchCategory
+
+      if (selected === "all") {
+        return this.stateSearchAvailableCategories[0].label
+      }
+
+      const index = this.stateSearchAvailableCategories.findIndex(category => {
+        return category.value === selected
+      })
+
+      if (index === -1) {
+        return ""
+      }
+
+      return this.stateSearchAvailableCategories[index].label
+    }
 
     /**
      * life-cycle methods
      */
 
     created() {
-      this.initializePagination()
     }
 
     mounted() {
-      this.updateCurrentPage(this.stateCurrentPage)
-      this.actionFetchPaginatedItems()
+      this.actionFetchCategories()
+        .then(() => {
+          this.commitPaginationFromQuery()
+          this.commitSearchFromQuery()
+          this.actionFetchPaginatedItems()
+        })
     }
 
     public adjustPageSize(query) {
@@ -197,7 +217,7 @@
       return query
     }
 
-    private initializePagination() {
+    private commitPaginationFromQuery() {
       let size = this.$route.query.size
 
       if (size && Number(size)) {
@@ -217,6 +237,22 @@
       }
     }
 
+    private commitSearchFromQuery() {
+      let keyword = this.$route.query.search
+
+      if (keyword && keyword.trim().length > 0) {
+        this.commitUpdateSearchKeyword(keyword)
+        this.searchInsertedKeyword = keyword
+      }
+
+      let category = this.$route.query.categoryId
+
+      if (category && category.trim().length > 0 && category !== "all") {
+        this.commitUpdateSearchCategory(category)
+        this.searchSelectedCategory = category
+      }
+    }
+
     /**
      * event handlers
      */
@@ -230,6 +266,20 @@
       this.updateCurrentPage(value) // commit state
       this.actionFetchPaginatedItems()
       this.setRouterQueryForPagination()
+    }
+
+    handleSearchKeywordEnter() {
+      const keyword = this.searchInsertedKeyword
+      this.commitUpdateSearchKeyword(keyword)
+      this.actionFetchPaginatedItems()
+      this.setRouterQueryForSearch()
+    }
+
+    handleSearchCategoryChange() {
+      const category = this.searchSelectedCategory
+      this.commitUpdateSearchCategory(category)
+      this.actionFetchPaginatedItems()
+      this.setRouterQueryForSearch()
     }
 
     /**
@@ -254,6 +304,29 @@
 
       query["size"] = size
       query["page"] = page
+
+      this.$router.push({query: query,})
+    }
+
+    setRouterQueryForSearch() {
+      let query = Object.assign({}, this.$route.query)
+
+      const keyword = this.stateSearchKeyword
+      const category = this.stateSearchCategory
+
+      if (keyword && keyword.trim().length > 0) {
+        query["search"] = keyword
+      } else {
+        delete query["search"]
+      }
+
+      if (category && category !== "all" &&
+        Number(category) &&
+        this.displayNameForSelectedCategory.trim() !== "") {
+        query["categoryId"] = category
+      } else {
+        delete query["categoryId"]
+      }
 
       this.$router.push({query: query,})
     }

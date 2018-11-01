@@ -1,5 +1,6 @@
 import * as Mutations from "@/store/mutation_type"
 import * as States from "@/store/state_type"
+import {CategoryDTO} from "@/generated/swagger"
 
 export default {
   [Mutations.AUTH__CLEAR_FLASH_MESSAGE](state: any) {
@@ -23,7 +24,7 @@ export default {
   },
 
   [Mutations.PRODUCT__UPDATE_TOTAL_ITEM_COUNT](state: any, totalCount) {
-    state[States.PRODUCT__TOTAL_ITEM_COUNT] = totalCount
+    state[States.PRODUCT__TOTAL_COUNT] = totalCount
   },
 
   [Mutations.PRODUCT__UPDATE_CURRENT_PAGE](state: any, currentPage) {
@@ -31,7 +32,7 @@ export default {
   },
 
   [Mutations.PRODUCT__UPDATE_ITEM_COUNT_PER_PAGE](state: any, itemCountPerPage) {
-    state[States.PRODUCT__ITEM_COUNT_PER_PAGE] = itemCountPerPage
+    state[States.PRODUCT__CURRENT_SIZE] = itemCountPerPage
   },
 
   [Mutations.PRODUCT__UPDATE_FILTER_PRICE](state: any, {minPrice, maxPrice}) {
@@ -44,4 +45,25 @@ export default {
     state[States.PRODUCT__FILTER_MAX_PRICE] = null
   },
 
+  [Mutations.PRODUCT__SEARCH_UPDATE_KEYWORD](state: any, keyword: string) {
+    state[States.PRODUCT__SEARCH_KEYWORD] = keyword
+  },
+
+  [Mutations.PRODUCT__SEARCH_UPDATE_CATEGORY](state: any, categoryId: string) {
+    state[States.PRODUCT__SEARCH_CATEGORY] = categoryId
+  },
+
+  [Mutations.PRODUCT__SEARCH_UPDATE_CATEGORY_LIST](state: any, categories: Array<CategoryDTO>) {
+    const converted = categories.map(category => {
+      const value = `${category.id}`
+      const label = category.displayName
+      return {value: value, label: label,}
+    })
+
+    const withDefaultCategory = [{
+      value: "all", label: "All"
+    }, ...converted]
+
+    state[States.PRODUCT__SEARCH_AVAILABLE_CATEGORIES] = withDefaultCategory
+  },
 }
