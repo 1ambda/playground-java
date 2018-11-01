@@ -8,7 +8,9 @@
           <!-- grid item image -->
           <div class="grid-item-image-container">
             <div class="grid-item-image">
-              IMAGE
+              <router-link :to="`/product/${item.productId}`" class="grid-item-image-link">
+                IMAGE
+              </router-link>
             </div>
           </div>
 
@@ -18,7 +20,9 @@
 
             <!-- name -->
             <div class="grid-item-detail-name" style="">
-              {{ item.name }}
+              <router-link :to="`/product/${item.productId}`" class="grid-item-detail-name-link">
+                {{ item.name }}
+              </router-link>
             </div>
 
             <!-- review price -->
@@ -140,9 +144,29 @@
     line-height: normal;
   }
 
+  .grid-item-image-link {
+    text-decoration: none;
+    color: black;;
+  }
+
+  .grid-item-image-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   .grid-item-detail-name {
     font-size: 16px;
     font-weight: 400;
+  }
+
+  .grid-item-detail-name-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .grid-item-detail-name-link {
+    text-decoration: none;
+    color: black;;
   }
 
   .grid-item-detail-price {

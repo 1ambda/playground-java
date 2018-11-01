@@ -63,6 +63,7 @@
   import {Component, Vue} from "vue-property-decorator"
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
+  import * as Actions from "@/store/action_type"
   import {Action, Getter, Mutation, State,} from "vuex-class"
   // Register the router hooks with their names
 
@@ -89,6 +90,8 @@
 
     @State(States.PRODUCT__FILTER_MIN_PRICE) filterMinPrice
     @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
+
+    @Action(Actions.PRODUCT__FETCH_PAGINATED_ITEMS) actionFetchPaginatedItems
 
     get isPriceFilterApplied() {
       return this.filterMinPrice !== this.priceFilterSlideInitialMin ||
@@ -150,6 +153,8 @@
       this.resetSlideValues()
       this.resetProductFilterPrice()
       this.hidePriceFilterPopvoer()
+
+      this.actionFetchPaginatedItems()
       this.setRouterQueryForPrice()
     }
 
@@ -159,6 +164,8 @@
 
       this.setPriceFilterState(minValue, maxValue)
       this.hidePriceFilterPopvoer()
+
+      this.actionFetchPaginatedItems()
       this.setRouterQueryForPrice()
     }
 
