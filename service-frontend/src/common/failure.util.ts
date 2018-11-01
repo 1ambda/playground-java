@@ -10,7 +10,7 @@ export const handleFailure = (response: any) => {
 
     if (response.message.includes("Failed to fetch")) {
       Notification.error({
-        title: `Error (Network)`,
+        title: `Error (Unhandled Rejection)`,
         message: response.message,
       })
       return

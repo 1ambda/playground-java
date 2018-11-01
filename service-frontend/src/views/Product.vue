@@ -37,10 +37,10 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 30px; margin-left: 20px;">
           <span class="search-summary-text search-summary-pagination">
-            1-{{ products.length }} of
+            1-{{ stateProducts.length }} of
           </span>
           <span class="search-summary-text search-summary-total-count">
-             {{ totalItemCount }}
+             {{ stateTotalItemCount }}
           </span>
           <span class="search-summary-text">
              results for
@@ -93,12 +93,12 @@
     <el-row type="flex" justify="center"
             style="margin-top: 40px; text-align: center;">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
-        <el-pagination background
-                       layout="prev, pager, next"
+        <el-pagination ref="pagination"
+                       background layout="prev, pager, next"
                        :page-size="stateItemCountPerPage"
                        :current-page="stateCurrentPage"
-                       @current-change="handleCurrentPageChange"
-                       :total="totalItemCount">
+                       :total="stateTotalItemCount"
+                       @current-change="handleCurrentPageChange">
         </el-pagination>
       </el-col>
     </el-row>
@@ -110,23 +110,28 @@
   import {Component, Vue} from "vue-property-decorator"
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
-  import {Pagination} from "@/generated/swagger"
-  import {CatalogAPI,} from "@/common/product.service.ts"
-  import {handleFailure} from "@/common/failure.util"
+  import * as Actions from "@/store/action_type"
   import ProductGrid from "@/views/ProductGrid.vue"
   import ProductFilter from "@/views/ProductFilter.vue"
   import {Action, Getter, Mutation, State,} from "vuex-class"
 
   @Component({
     components: {ProductGrid, ProductFilter},
+    watch: {
+      // stateCurrentPage (newPage, oldPage) {
+      //   this.currentPage = newPage
+      // },
+    },
   })
   export default class Product extends Vue {
     public $refs: any
     public $notify: any
+    public $route: any
     public $router: any
     public $store: any
 
     public availablePaginationSizeList = [
+      {value: 4, label: "4"},
       {value: 8, label: "8"},
       {value: 16, label: "16"},
       {value: 32, label: "32"},
@@ -140,87 +145,117 @@
       {value: "category3", label: "Category 3"},
     ]
     public searchInsertedKeyword = ""
-
     public toggleGridViewType = true
 
-    public priceFilterSliderValues = [0, 100000]
-    public priceFilterSliderMin = 0
-    public priceFilterSliderMax = 100000
 
     /**
      * vuex mappers and computed properties
      */
 
     @Mutation(Mutations.PRODUCT__UPDATE_ITEMS) commitUpdateItems
-    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_COUNT) commitUpdateTotalCount
-    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) commitUpdateCurrentPage
     @Mutation(Mutations.PRODUCT__UPDATE_FILTER_PRICE) updateProductFilterPrice
     @Mutation(Mutations.PRODUCT__RESET_FILTER_PRICE) resetProductFilterPrice
-    @Mutation(Mutations.PRODUCT__SET_ITEM_COUNT) commitSetItemCount
 
-    @State(States.PRODUCT__FETCHED_ITEMS) products
-    @State(States.PRODUCT__TOTAL_COUNT) totalItemCount
-    @State(States.PRODUCT__ITEM_COUNT) stateItemCountPerPage
-    @State(States.PRODUCT__CURRENT_PAGE) stateCurrentPage // offset + 1
+    @Mutation(Mutations.PRODUCT__UPDATE_ITEM_COUNT_PER_PAGE) commitSetItemCountPerPage
+    @Mutation(Mutations.PRODUCT__UPDATE_TOTAL_ITEM_COUNT) commitUpdateTotalCount
+    @Mutation(Mutations.PRODUCT__UPDATE_CURRENT_PAGE) commitUpdateCurrentPage
+
+    @State(States.PRODUCT__FETCHED_ITEMS) stateProducts
+    @State(States.PRODUCT__TOTAL_ITEM_COUNT) stateTotalItemCount
+    @State(States.PRODUCT__ITEM_COUNT_PER_PAGE) stateItemCountPerPage
+    @State(States.PRODUCT__CURRENT_PAGE) stateCurrentPage
     @State(States.PRODUCT__FILTER_MIN_PRICE) filterMinPrice
     @State(States.PRODUCT__FILTER_MAX_PRICE) filterMaxPrice
+
+    @Action(Actions.PRODUCT__FETCH_PAGINATED_ITEMS) actionFetchPaginatedItems
 
     /**
      * life-cycle methods
      */
 
+    created() {
+      this.initializePagination()
+    }
+
     mounted() {
-      this.fetchAllProducts()
+      this.updateCurrentPage(this.stateCurrentPage)
+      this.actionFetchPaginatedItems()
+    }
+
+    public adjustPageSize(query) {
+      if (query < this.availablePaginationSizeList[0]) {
+        return this.availablePaginationSizeList[0]
+      }
+
+      for (let i = 0; i < this.availablePaginationSizeList.length; i++) {
+        const size = this.availablePaginationSizeList[i]
+        if (query > size) {
+          query = size
+        }
+      }
+
+      return query
+    }
+
+    private initializePagination() {
+      let size = this.$route.query.size
+
+      if (size && Number(size)) {
+        size = Number(size)
+        size = this.adjustPageSize(size)
+        this.commitSetItemCountPerPage(size)
+      }
+
+      let page = this.$route.query.page
+
+      if (page && Number(page)) {
+        page = Number(page)
+
+        if (page >= 0) {
+          this.updateCurrentPage(page)
+        }
+      }
     }
 
     /**
      * event handlers
      */
     handlePaginationSizeChange(value) {
-      this.commitSetItemCount(value)
-      this.fetchAllProducts()
+      this.commitSetItemCountPerPage(value)
+      this.actionFetchPaginatedItems()
+      this.setRouterQueryForPagination()
     }
 
     handleCurrentPageChange(value) {
-      const newPage = value
-      this.commitUpdateCurrentPage(value)
-      this.fetchAllProducts()
+      this.updateCurrentPage(value) // commit state
+      this.actionFetchPaginatedItems()
+      this.setRouterQueryForPagination()
     }
 
     /**
      * helpers
      */
 
-    fetchAllProducts() {
-      const currentPage = this.stateCurrentPage
-      const page = currentPage - 1
+    updateCurrentPage(page) {
+      this.commitUpdateCurrentPage(page)
+
+      if (this.$refs.pagination) {
+        // bug: https://qiita.com/hoshiaya/items/76cb4d0b00a502cb41e1
+        this.$refs.pagination.internalCurrentPage = page
+      }
+    }
+
+    setRouterQueryForPagination() {
+      // build query
+      let query = Object.assign({}, this.$route.query)
+
       const size = this.stateItemCountPerPage
-      const sort = []
-      const options = {credentials: "include"}
+      const page = this.stateCurrentPage
 
-      const categoryId = null
-      const search = ""
+      query["size"] = size
+      query["page"] = page
 
-      const minPrice = this.filterMinPrice
-      const maxPrice = this.filterMaxPrice
-      const minRate = null
-      const tags = []
-      const minShippingDate = null
-
-      CatalogAPI.findPaginatedProducts(
-        page, size, sort,
-        categoryId, search,
-        minPrice, maxPrice, minRate, tags, minShippingDate, options)
-        .then((response: any) => {
-          const pagination: Pagination = response.pagination
-
-          const totalItemCount = pagination.totalItemCount
-          this.commitUpdateTotalCount(totalItemCount)
-
-          const products = response.products.map(p => p.item)
-          this.commitUpdateItems(products)
-
-        }).catch(handleFailure)
+      this.$router.push({query: query,})
     }
 
   }

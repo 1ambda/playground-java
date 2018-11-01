@@ -182,7 +182,6 @@
       let maxValue = this.priceFilterSliderValues[1]
 
       // build query
-      let modified = false
       let query = Object.assign({}, this.$route.query)
 
       if (minValue !== this.priceFilterSlideInitialMin) {

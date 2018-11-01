@@ -22,12 +22,16 @@ export default {
     state[States.PRODUCT__FETCHED_ITEMS] = products
   },
 
-  [Mutations.PRODUCT__UPDATE_TOTAL_COUNT](state: any, totalCount) {
-    state[States.PRODUCT__TOTAL_COUNT] = totalCount
+  [Mutations.PRODUCT__UPDATE_TOTAL_ITEM_COUNT](state: any, totalCount) {
+    state[States.PRODUCT__TOTAL_ITEM_COUNT] = totalCount
   },
 
   [Mutations.PRODUCT__UPDATE_CURRENT_PAGE](state: any, currentPage) {
     state[States.PRODUCT__CURRENT_PAGE] = currentPage
+  },
+
+  [Mutations.PRODUCT__UPDATE_ITEM_COUNT_PER_PAGE](state: any, itemCountPerPage) {
+    state[States.PRODUCT__ITEM_COUNT_PER_PAGE] = itemCountPerPage
   },
 
   [Mutations.PRODUCT__UPDATE_FILTER_PRICE](state: any, {minPrice, maxPrice}) {
@@ -40,7 +44,4 @@ export default {
     state[States.PRODUCT__FILTER_MAX_PRICE] = null
   },
 
-  [Mutations.PRODUCT__SET_ITEM_COUNT](state: any, itemCountPerPage) {
-    state[States.PRODUCT__ITEM_COUNT] = itemCountPerPage
-  },
 }

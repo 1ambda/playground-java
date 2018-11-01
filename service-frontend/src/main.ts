@@ -22,15 +22,16 @@ import {handleFailure} from "@/common/failure.util"
 /**
  * error handlers
  */
-Vue.config.errorHandler = (err, vm, info) => {
-  console.log(`Captured in Vue.config.errorHandler : ${info}`, err,)
+Vue.config.errorHandler = (error, vm, info) => {
+  console.error(`Vue.config.errorHandler: ${info}`)
+  handleFailure(error)
 }
-window.addEventListener("error", event => {
-  console.log("Captured in error EventListener", event.error)
+window.addEventListener("error", error => {
+  handleFailure(error)
 })
 
-window.addEventListener("unhandledrejection", event => {
-  console.log("Captured in unhandledrejection EventListener", event.reason)
+window.addEventListener("unhandledrejection", response => {
+  handleFailure(response)
 })
 
 Vue.config.productionTip = false

@@ -15,11 +15,11 @@ export default new Vuex.Store({
     [States.AUTH__FLASH_MESSAGE]: "",
 
     [States.PRODUCT__FETCHED_ITEMS]: [],
-    [States.PRODUCT__TOTAL_COUNT]: 0,
+    [States.PRODUCT__TOTAL_ITEM_COUNT]: 0,
     [States.PRODUCT__CURRENT_PAGE]: 1,
     [States.PRODUCT__FILTER_MIN_PRICE]: 0,
     [States.PRODUCT__FILTER_MAX_PRICE]: null,
-    [States.PRODUCT__ITEM_COUNT]: 8,
+    [States.PRODUCT__ITEM_COUNT_PER_PAGE]: 4,
 
   },
   getters: {

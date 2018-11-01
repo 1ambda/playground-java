@@ -33,7 +33,7 @@ public class CatalogController implements CatalogControllerApi {
   private CatalogService catalogService;
   private UserService userService;
 
-  private static final int DefaultPageSize = 8;
+  private static final int DefaultPageSize = 4;
   private static final int MaxPageSize = 48;
 
   @Autowired
@@ -90,9 +90,10 @@ public class CatalogController implements CatalogControllerApi {
       @ApiIgnore @PageableDefault(size = DefaultPageSize, direction = Sort.Direction.DESC) Pageable pageable,
       @ApiParam ProductSpecificationRequest query) {
 
-    if (pageable.getPageSize() > MaxPageSize) {
-      pageable = PageRequest.of(pageable.getPageNumber(), MaxPageSize, pageable.getSort());
-    }
+    // frontend page count starts from 1, adjust the page offset here.
+    int pageOffset = pageable.getPageNumber() - 1;
+    int pageSize = pageable.getPageSize() > MaxPageSize ? MaxPageSize : pageable.getPageSize();
+    pageable = PageRequest.of(pageOffset, pageSize, pageable.getSort());
 
     PaginatedProductDTO dto = catalogService.handleGetPaginatedProductsRequest(query, pageable);
 
