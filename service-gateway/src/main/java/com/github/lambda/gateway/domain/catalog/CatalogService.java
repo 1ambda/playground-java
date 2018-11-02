@@ -63,11 +63,20 @@ public class CatalogService {
   }
 
   @Transactional
-  public PaginatedProductDTO handleGetPaginatedProductsRequest(ProductSpecificationRequest request, Pageable pageable) {
+  public PaginatedProductDTO handleGetPaginatedProductsRequest(ProductSpecificationRequest request,
+                                                               Pageable pageable) {
 
     Specification<Product> rangePrice = ProductSpecificationBuilder.rangePrice(
         request.getMinPrice(), request.getMaxPrice());
-    Specification<Product> spec = Specification.where(rangePrice); // TODO: and, ...
+    Specification<Product> category = ProductSpecificationBuilder.category(
+        request.getCategoryId());
+    Specification<Product> keyword = ProductSpecificationBuilder.keyword(
+        request.getSearch());
+
+    Specification<Product> spec = Specification
+        .where(rangePrice)
+        .and(category)
+        .and(keyword);
 
     Page<Product> paginated = productQueryFacade.getPaginatedAvailableProducts(spec, pageable);
     PaginatedProductDTO dto = catalogConverter.convertToPaginatedProductDTO(paginated);

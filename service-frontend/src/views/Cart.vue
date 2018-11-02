@@ -44,8 +44,10 @@
                       <!-- `Product` description -->
                       <div v-if="isProduct(scope.row)"
                            style="margin-left: 15px;">
-                        <div style="font-weight: 700;">
-                          {{ scope.row.name }}
+                        <div style="">
+                          <router-link :to="`/product/${scope.row.productId}`" class="cart-line-name">
+                            {{ scope.row.name }}
+                          </router-link>
                         </div>
                         <div style="margin-top: 2px;">
                           {{ scope.row.description }}
@@ -498,5 +500,16 @@
     &.hover {
       opacity: 1;
     }
+  }
+
+  .cart-line-name {
+    text-decoration: none;
+    font-weight: 700;
+    color: #606266;
+  }
+
+  .cart-line-name:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

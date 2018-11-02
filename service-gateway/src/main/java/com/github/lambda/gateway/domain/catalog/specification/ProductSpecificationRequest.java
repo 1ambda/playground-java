@@ -2,6 +2,7 @@ package com.github.lambda.gateway.domain.catalog.specification;
 
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
+import sun.security.util.Length;
 
 import javax.validation.constraints.Min;
 import java.util.ArrayList;

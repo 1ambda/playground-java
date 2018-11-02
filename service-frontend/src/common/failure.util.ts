@@ -4,6 +4,13 @@ import {Notification} from "element-ui"
 import {Router,} from "@/router.ts"
 
 export const handleFailure = (response: any) => {
+  if (response.type === "cors" && response.status === 401) {
+    Notification.error({
+      title: `Error (Unauthorized)`,
+      message: "Not authorized, Please login.",
+    })
+  }
+
   // client runtime error in promise
   if (response.stack && response.message) {
     console.error(response)

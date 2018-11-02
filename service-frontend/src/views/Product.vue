@@ -40,7 +40,7 @@
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 30px; margin-left: 20px;">
           <span class="search-summary-text search-summary-pagination">
-            1-{{ stateProducts.length }} of
+            {{ stateProducts.length === 0 ? `0` : `1-${stateProducts.length}`}} of
           </span>
           <span class="search-summary-text search-summary-total-count">
              {{ stateTotalItemCount }}
@@ -276,16 +276,17 @@
 
     handleSearchKeywordEnter() {
       const keyword = this.searchInsertedKeyword
+      const category = this.searchSelectedCategory
+
       this.commitUpdateSearchKeyword(keyword)
+      this.commitUpdateSearchCategory(category)
+
       this.actionFetchPaginatedItems()
-      this.setRouterQueryForSearch()
+      this.setRouterQueryForSearch(keyword, category)
     }
 
     handleSearchCategoryChange() {
-      const category = this.searchSelectedCategory
-      this.commitUpdateSearchCategory(category)
-      this.actionFetchPaginatedItems()
-      this.setRouterQueryForSearch()
+      // routers, items will be fetched when keyup:enter happens
     }
 
     /**
@@ -314,11 +315,8 @@
       this.$router.push({query: query,})
     }
 
-    setRouterQueryForSearch() {
+    setRouterQueryForSearch(keyword: string, category: string) {
       let query = Object.assign({}, this.$route.query)
-
-      const keyword = this.stateSearchKeyword
-      const category = this.stateSearchCategory
 
       if (keyword && keyword.trim().length > 0) {
         query["search"] = keyword
