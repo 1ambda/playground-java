@@ -113,6 +113,9 @@
       </el-col>
     </el-row>
 
+    <!-- page level component: back-to-top -->
+    <GoToTop :visibleoffset="100"></GoToTop>
+
   </div>
 </template>
 
@@ -124,9 +127,10 @@
   import ProductGrid from "@/views/ProductGrid.vue"
   import ProductFilter from "@/views/ProductFilter.vue"
   import {Action, Getter, Mutation, State,} from "vuex-class"
+  import GoToTop from "@/components/GoToTop.vue"
 
   @Component({
-    components: {ProductGrid, ProductFilter},
+    components: {ProductGrid, ProductFilter, GoToTop,},
   })
   export default class Product extends Vue {
     public $refs: any

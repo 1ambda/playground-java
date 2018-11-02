@@ -205,27 +205,26 @@
     </el-row>
 
     <!-- page level component: back-to-top -->
-    <back-to-top visibleoffset="300">
-      <div class="backToTop">
-        <i class="el-icon-caret-top"></i>
-      </div>
-    </back-to-top>
+    <GoToTop :visibleoffset="100"></GoToTop>
   </div>
 </template>
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator'
   import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-  import {CartAPI} from "../common/product.service"
-  import {CartDTO, CartLineDTO, CartLineOptionDTO} from "../generated/swagger"
-  import {handleFailure} from "../common/failure.util";
+  import {CartAPI} from "@/common/product.service"
+  import {CartDTO, CartLineDTO, CartLineOptionDTO} from "@/generated/swagger"
+  import {handleFailure} from "@/common/failure.util"
+  import GoToTop from "@/components/GoToTop.vue"
 
   const CartItemType = {
     Product: 'PRODUCT',
     OPTION: 'OPTION',
   }
 
-  @Component
+  @Component({
+    components: {GoToTop},
+  })
   export default class Cart extends Vue {
     public $refs: any
     public $notify: any
