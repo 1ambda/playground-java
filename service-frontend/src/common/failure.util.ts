@@ -3,12 +3,25 @@ import {Failure} from "@/generated/swagger"
 import {Notification} from "element-ui"
 import {Router,} from "@/router.ts"
 
+function isPromise(response: any) {
+  return response.promise
+}
+
+function isUnhandledPromise(response: any) {
+  return isPromise(response) && response.type === "unhandledrejection"
+}
+
 export const handleFailure = (response: any) => {
+  if (isUnhandledPromise(response)) {
+    response = response.reason
+  }
+
   if (response.type === "cors" && response.status === 401) {
     Notification.error({
       title: `Error (Unauthorized)`,
       message: "Not authorized, Please login.",
     })
+    return
   }
 
   // client runtime error in promise
@@ -44,8 +57,6 @@ export const handleFailure = (response: any) => {
 
   // handle NotFound
   if (response.status === 404) {
-    console.error(response)
-
     Notification.error({
       title: `Error (Not Found)`,
       message: `${response.url}`,
@@ -55,8 +66,6 @@ export const handleFailure = (response: any) => {
 
   // formatted error returned from server
   response.json().then((parsed: Failure) => {
-    console.error(parsed)
-
     const splitted = parsed.type.split(".")
     const canonical = splitted[splitted.length - 1]
 
