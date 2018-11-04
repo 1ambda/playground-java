@@ -58,6 +58,7 @@
 <script lang="ts">
   import {Component, Vue, Watch} from "vue-property-decorator"
   import * as States from "@/store/state_type"
+  import * as Actions from "@/store/action_type"
   import {Action, Getter, Mutation, State,} from "vuex-class"
   import {ProductDTO} from "../generated/swagger"
 

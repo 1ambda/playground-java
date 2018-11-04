@@ -1,8 +1,11 @@
 import * as Mutations from "@/store/mutation_type"
 import * as States from "@/store/state_type"
-import {CategoryDTO} from "@/generated/swagger"
+import {CartLineDTO, CategoryDTO, ProductDTO, ProductOptionDTO} from "@/generated/swagger"
 
 export default {
+  /**
+   * AUTH
+   */
   [Mutations.AUTH__CLEAR_FLASH_MESSAGE](state: any) {
     state[States.AUTH__FLASH_MESSAGE] = ""
   },
@@ -19,6 +22,9 @@ export default {
     state[States.AUTH__USERNAME] = username
   },
 
+  /**
+   * PRODUCT
+   */
   [Mutations.PRODUCT__UPDATE_ITEMS](state: any, products) {
     state[States.PRODUCT__FETCHED_ITEMS] = products
   },
@@ -35,6 +41,9 @@ export default {
     state[States.PRODUCT__CURRENT_SIZE] = itemCountPerPage
   },
 
+  /**
+   * PRODUCT.FILTER
+   */
   [Mutations.PRODUCT__UPDATE_FILTER_PRICE](state: any, {minPrice, maxPrice}) {
     state[States.PRODUCT__FILTER_MIN_PRICE] = minPrice
     state[States.PRODUCT__FILTER_MAX_PRICE] = maxPrice
@@ -45,6 +54,9 @@ export default {
     state[States.PRODUCT__FILTER_MAX_PRICE] = null
   },
 
+  /**
+   * PRODUCT.SEARCH
+   */
   [Mutations.PRODUCT__SEARCH_UPDATE_KEYWORD](state: any, keyword: string) {
     state[States.PRODUCT__SEARCH_KEYWORD] = keyword
   },
@@ -65,5 +77,27 @@ export default {
     }, ...converted]
 
     state[States.PRODUCT__SEARCH_AVAILABLE_CATEGORIES] = withDefaultCategory
+  },
+
+  /**
+   * DETAIL
+   */
+  [Mutations.DETAIL__SET_PRODUCT_ITEM](state: any, productItem: ProductDTO) {
+    state[States.DETAIL__PRODUCT_ITEM] = productItem
+  },
+
+  [Mutations.DETAIL__SET_PRODUCT_OPTION_LIST](state: any, productOptionList: Array<ProductOptionDTO>) {
+    state[States.DETAIL__PRODUCT_OPTION_LIST] = productOptionList
+  },
+
+  [Mutations.DETAIL__SET_QUANTITY](state: any, quantity: number) {
+    state[States.DETAIL__PRODUCT_QUANTITY] = quantity
+  },
+
+  /**
+   * CART
+   */
+  [Mutations.CART__SET_CART_LINE_LIST](state: any, cartLineList: Array<CartLineDTO>) {
+    state[States.CART__LINE_LIST] = cartLineList
   },
 }

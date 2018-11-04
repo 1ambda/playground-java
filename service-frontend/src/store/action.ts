@@ -1,8 +1,17 @@
 import * as Actions from "@/store/action_type"
 import * as States from "@/store/state_type"
 import * as Mutations from "@/store/mutation_type"
-import {CatalogAPI} from "@/common/product.service"
-import {CategoryListDTO, Pagination} from "@/generated/swagger"
+import {CartAPI, CatalogAPI} from "@/common/product.service"
+import {
+  CartDTO,
+  CartLineDTO,
+  CartLineOptionDTO,
+  CategoryListDTO,
+  Pagination,
+  ProductContainerDTO,
+  ProductDTO,
+  ProductOptionDTO
+} from "@/generated/swagger"
 
 const Product_FetchPaginatedItems = async ({state, getters, commit, dispatch}) => {
   const options = {credentials: "include"}
@@ -56,7 +65,97 @@ const Product_FetchCategoryList = async ({state, getters, commit, dispatch}) => 
   commit(Mutations.PRODUCT__SEARCH_UPDATE_CATEGORY_LIST, dto.items)
 }
 
+const Detail_FetchProductItem = async (
+  {state, getters, commit, dispatch},
+  productId) => {
+
+  const response: ProductContainerDTO = await CatalogAPI.findOneProduct(productId, {credentials: "include"})
+
+  const productItem: ProductDTO = response.item
+  const productOptions: Array<ProductOptionDTO> = response.options
+
+  commit(Mutations.DETAIL__SET_PRODUCT_ITEM, productItem)
+  commit(Mutations.DETAIL__SET_PRODUCT_OPTION_LIST, productOptions)
+}
+
+const Detail_AddToCart = async (
+  {state, getters, commit, dispatch},
+  {productId, productOptionIdList}) => {
+
+  const quantity = state[States.DETAIL__PRODUCT_QUANTITY]
+  const optionQuantity = 1 // support only 1 quantity for option
+
+  const cartLineOptionRequestDTOs = productOptionIdList.map(productOptionId => {
+    const optionRequestDTO: CartLineOptionDTO = {
+      productOptionId: productOptionId,
+      quantity: optionQuantity,
+    }
+
+    return optionRequestDTO
+  })
+
+  const request: CartLineDTO = {
+    quantity: quantity,
+    productId: productId,
+    cartLineOptions: cartLineOptionRequestDTOs,
+  }
+
+  await CartAPI.addUserCartLine(request, {credentials: "include"})
+}
+
+const Cart_FetchCartLineList = async (
+  {state, getters, commit, dispatch}) => {
+
+  const fetched: CartDTO = await CartAPI.getUserCartLines({credentials: "include"})
+
+  commit(Mutations.CART__SET_CART_LINE_LIST, fetched.cartLines)
+}
+
+const Cart_UpdateCartLine = async (
+  {state, getters, commit, dispatch},
+  {cartLineId, quantity}) => {
+
+  const request = {quantity: quantity,}
+
+  // TODO: rollback quantity in frontend in case of failure
+  await CartAPI.updateUserCartLine(cartLineId, request, {credentials: "include"})
+}
+
+const Cart_RemoveCartLine = async (
+  {state, getters, commit, dispatch},
+  cartLineId) => {
+
+  await CartAPI.removeUserCartLine(cartLineId, {credentials: "include"})
+}
+
+const Cart_RemoveCartLineList = async (
+  {state, getters, commit, dispatch},
+  cartLineIdList) => {
+
+  cartLineIdList.sort() // for sequential disk access in server side :)
+  const query = cartLineIdList.toString()
+
+  await CartAPI.removeUserCartLines(query, {credentials: "include"})
+}
+
 export default {
+  /**
+   * PRODUCT
+   */
   [Actions.PRODUCT__FETCH_PAGINATED_ITEMS]: Product_FetchPaginatedItems,
   [Actions.PRODUCT__FETCH_CATEGORY_LIST]: Product_FetchCategoryList,
+
+  /**
+   * DETAIL
+   */
+  [Actions.DETAIL__FETCH_PRODUCT_ITEM]: Detail_FetchProductItem,
+  [Actions.DETAIL__ADD_TO_CART]: Detail_AddToCart,
+
+  /**
+   * CART
+   */
+  [Actions.CART__FETCH_CART_LINE_LIST]: Cart_FetchCartLineList,
+  [Actions.CART__UPDATE_CART_LINE]: Cart_UpdateCartLine,
+  [Actions.CART__REMOVE_CART_LINE]: Cart_RemoveCartLine,
+  [Actions.CART__REMOVE_CART_LINE_LIST]: Cart_RemoveCartLineList,
 }

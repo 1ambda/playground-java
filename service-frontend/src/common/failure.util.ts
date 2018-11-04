@@ -17,6 +17,8 @@ export const handleFailure = (response: any) => {
   }
 
   if (response.type === "cors" && response.status === 401) {
+    Router.push({path: "login"})
+
     Notification.error({
       title: `Error (Unauthorized)`,
       message: "Not authorized, Please login.",

@@ -10,16 +10,16 @@
              </el-button>
            </router-link>
          </span>
-        <template v-for="(category, index) in currentCategories">
+        <template v-for="(category, index) in computedCurrentCategories">
            <span style="margin-left: 8px; margin-right: 8px;">
              <i class="el-icon-arrow-right"></i>
            </span>
-          <el-select v-model="currentCategories[index]"
+          <el-select v-model="computedCurrentCategories[index]"
                      placeholder="Select">
             <el-option
-              :key="optionsPerCategory[index][0].value"
-              :label="optionsPerCategory[index][0].label"
-              :value="optionsPerCategory[index][0].value">
+              :key="computedOptionsPerCategory[index][0].value"
+              :label="computedOptionsPerCategory[index][0].label"
+              :value="computedOptionsPerCategory[index][0].value">
             </el-option>
           </el-select>
         </template>
@@ -30,10 +30,10 @@
     <el-row type="flex" justify="center">
       <el-col :xs="20" :sm="20" :md="20" :lg="20">
         <div class="title-container">
-          <span class="title-name">{{ productItem.name }}</span>
+          <span class="title-name">{{ stateProductItem.name }}</span>
           <el-rate v-model="reviewRate" class="title-review-rank"></el-rate>
           <p class="title-description">
-            {{ productItem.description }}
+            {{ stateProductItem.description }}
           </p>
         </div>
       </el-col>
@@ -62,7 +62,7 @@
             </el-col>
 
             <!-- option selectbox + operations -->
-            <el-col :xs="20" :sm="20" :md="14" :lg="14" v-if="productItem">
+            <el-col :xs="20" :sm="20" :md="14" :lg="14" v-if="stateProductItem">
               <div class="price-and-option-container">
                 <div class="price-container">
                   <p class="total-price-text"> Price: {{ totalPrice }} KRW </p>
@@ -77,7 +77,7 @@
                       @right-check-change="handleOptionTransferRightChange"
                       :titles="['Options', 'Selected']"
                       v-model="selectedOptionIndexs"
-                      :data="availableOptionIndexs">
+                      :data="computedAvailableOptionIndices">
                     </el-transfer>
                   </template>
                 </div>
@@ -120,76 +120,112 @@
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator"
-  import {CartLineDTO, CartLineOptionDTO, ProductDTO as ProductItem, ProductOptionDTO,} from "@/generated/swagger"
-  import {CartAPI, CatalogAPI} from "@/common/product.service.ts"
-  import {handleFailure} from "../common/failure.util"
+  import * as States from "@/store/state_type"
+  import * as Mutations from "@/store/mutation_type"
+  import * as Actions from "@/store/action_type"
+  import {Action, Getter, Mutation, State,} from "vuex-class"
 
   @Component({
     components: {},
+    props: {},
   })
   export default class ProductDetail extends Vue {
     public $refs: any
     public $router: any
     public $route: any
-    public $store: any
-    public $notify: any
 
     public cartItemAddedPopup = false
-
     public productId: number = 0
-    public productItem: ProductItem = {}
-    public productOptions: Array<ProductOptionDTO> = []
-    public currentCategories = []
-    public optionsPerCategory = []
-    public quantity: number = 1 // TODO
-    public reviewRate: number = 5 // TODO
+    public quantity: number = 1
     public totalPrice: number = 0
     public selectedOptionIndexs = []
-    public availableOptionIndexs = []
+    public reviewRate: number = 5 // TODO
+
+    /**
+     * vuex mappers and computed properties
+     */
+
+    @State(States.DETAIL__PRODUCT_ITEM) stateProductItem
+    @State(States.DETAIL__PRODUCT_OPTION_LIST) stateProductOptionList
+    @State(States.DETAIL__PRODUCT_QUANTITY) stateProductQuantity
+
+    @Mutation(Mutations.DETAIL__SET_QUANTITY) commitProductQuantity
+
+    @Action(Actions.DETAIL__FETCH_PRODUCT_ITEM) actionFetchDetailItem
+    @Action(Actions.DETAIL__ADD_TO_CART) actionAddToCart
+
+    get computedAvailableOptionIndices() {
+      const availableOptionIndices = this.stateProductOptionList.map((option, index) => {
+        return {
+          key: index,
+          label: `${option.name} (${option.price})`,
+          disabled: false,
+        }
+      })
+
+      return availableOptionIndices
+    }
+
+    get computedCurrentCategories() {
+      if (!this.stateProductItem.categoryPath) {
+        return []
+      }
+
+      const filtered = this.stateProductItem.categoryPath
+        .split("/")
+        .filter(x => x.trim() !== "")
+
+      return filtered
+    }
+
+    get computedOptionsPerCategory() {
+      if (!this.stateProductItem.categoryPath) {
+        return []
+      }
+
+      const filtered = this.stateProductItem.categoryPath
+        .split("/")
+        .filter(x => x.trim() !== "")
+
+      const optionsPerCategory = filtered.map(x => [{label: x, value: x}])
+
+      return optionsPerCategory
+    }
 
     /**
      * life-cycle methods
      */
 
-    mounted() {
-      this.productId = this.$route.params.productID
-      CatalogAPI.findOneProduct(this.productId, {credentials: "include"})
-        .then((response: any) => {
-          this.productItem = response.item
-          this.productOptions = response.options
-          this.totalPrice = response.item.price
-          this.availableOptionIndexs = response.options.map((option, index) => {
-            return {
-              key: index,
-              label: `${option.name} (${option.price})`,
-              disabled: false,
-            }
-          })
-          const filtered = response.item.categoryPath.split("/").filter(x => x.trim() !== "")
-          this.currentCategories = filtered
-          // TODO: List all available categories for navigation
-          this.optionsPerCategory = filtered.map(x => [{label: x, value: x}])
-        }).catch(handleFailure)
+    created() {
+      const productId = this.$route.params.productID
+      this.productId = productId
+      this.actionFetchDetailItem(productId)
+        .then(() => {
+          this.calculatePrice()
+        })
+
     }
 
     /**
      * event handlers
      */
 
-    handleAddToCartClick(event) {
+    handleAddToCartClick() {
       const selectedOptionIdList = this.selectedOptionIndexs.map(optionIndex => {
-        return this.productOptions[optionIndex].id
+        return this.stateProductOptionList[optionIndex].id
       })
+
       this.addProductToCart(this.productId, selectedOptionIdList)
     }
 
-    handleOptionTransferSelectedItemChange(selectedOptionIndexList) {
-      this.calculatePrice(selectedOptionIndexList)
+    handleOptionTransferSelectedItemChange() {
+      this.calculatePrice()
       this.closeCartItemAddedPopup()
     }
 
     handleQuantityChange(quantity) {
-      this.calculatePrice(this.selectedOptionIndexs)
+      this.commitProductQuantity(quantity)
+      this.calculatePrice()
     }
 
     handleGoToCartButtonClick() {
@@ -215,39 +251,36 @@
      * helpers
      */
 
-    addProductToCart(productId, selectedOptions) {
-      const cartLineOptionRequestDTOs = selectedOptions.map(productOptionId => {
-        const optionRequestDTO: CartLineOptionDTO = {
-          productOptionId: productOptionId,
-          quantity: 1,
-        }
-
-        return optionRequestDTO
-      })
-
-      const request: CartLineDTO = {
-        quantity: this.quantity,
+    addProductToCart(productId, selectedOptionIdList) {
+      this.actionAddToCart({
         productId: productId,
-        cartLineOptions: cartLineOptionRequestDTOs,
-      }
-
-      CartAPI.addUserCartLine(request, {credentials: "include"})
-        .then(response => {
-          this.cartItemAddedPopup = true
-        }).catch(handleFailure)
+        productOptionIdList: selectedOptionIdList,
+      }).then(() => {
+        this.openCartItemAddedPopup()
+      })
     }
 
     closeCartItemAddedPopup() {
       this.cartItemAddedPopup = false
     }
 
-    calculatePrice(selectedOptionIndexList) {
-      let pricePerItem = this.productItem.price
+    openCartItemAddedPopup() {
+      this.cartItemAddedPopup = true
+    }
+
+    calculatePrice() {
+      const selectedOptionIndexList = this.selectedOptionIndexs
+      let pricePerItem = this.stateProductItem.price
+
+      if (!selectedOptionIndexList || selectedOptionIndexList.length === 0) {
+        this.totalPrice = pricePerItem
+      }
+
       selectedOptionIndexList.map(optionIndex => {
-        const optionPrice = this.productOptions[optionIndex].price
+        const optionPrice = this.stateProductOptionList[optionIndex].price
         pricePerItem += optionPrice
       })
-      this.totalPrice = pricePerItem * this.quantity
+      this.totalPrice = pricePerItem * this.stateProductQuantity
     }
   }
 </script>

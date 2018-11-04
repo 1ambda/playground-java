@@ -90,7 +90,7 @@
                                      v-model="scope.row.quantity"></el-input-number>
                   </div>
                   <div style="margin-top: 15px; text-align: center;">
-                  <span class="productPriceSum">
+                  <span class="product-price-sum">
                     {{ scope.row.quantity * (scope.row.price + scope.row.optionPriceSum) }}
                   </span>
                   </div>
@@ -148,12 +148,23 @@
           <el-checkbox v-model="allChecked"
                        :disabled="!cartItemList || cartItemList.length === 0"
                        @change="handleCartAllItemToggle"></el-checkbox>
-          <el-button type="warning" size="mini" plain
-                     icon="el-icon-delete" style="margin-left: 20px;"
-                     :disabled="!cartItemSelection || cartItemSelection.length === 0"
-                     @click="handleSelectedCartItems">
-            Deleted Selected (max: 100)
-          </el-button>
+          <el-popover
+            placement="bottom-start"
+            title="Title"
+            width="200"
+            trigger="manual"
+            v-model="multipleDeletePopoverEnable"
+            v-on-clickaway="closeMultipleItemDeletePopover"
+            content="this is content, this is content, this is content">
+            <el-button type="warning" size="mini" plain
+                       slot="reference"
+                       @click="test"
+                       @blur="closeMultipleItemDeletePopover"
+                       icon="el-icon-delete" style="margin-left: 20px;"
+            >
+              Deleted Selected (max: 100)
+            </el-button>
+          </el-popover>
         </div>
 
         <!-- cart summary -->
@@ -162,7 +173,7 @@
             <div>
               <!-- total price -->
               <span style="margin-left: 20px;">
-              <el-tag class="priceTag">Total Price</el-tag>
+              <el-tag class="price-tag">Total Price</el-tag>
             </span>
               <span class="price" style="margin-left: 10px;">
               {{ getProductPriceSum() }}
@@ -175,7 +186,7 @@
             </span>
               <!-- shipping fee  -->
               <span style="margin-left: 20px;">
-              <el-tag class="priceTag" type="primary">Shipping Fee</el-tag>
+              <el-tag class="price-tag" type="primary">Shipping Fee</el-tag>
             </span>
               <span class="price" style="margin-left: 10px;">
               {{ getShippingPriceSum() }}
@@ -187,7 +198,7 @@
               </el-tag>
             </span>
               <!-- sum -->
-              <span class="price totalPrice" style="margin-left: 20px;">
+              <span class="price total-price" style="margin-left: 20px;">
               {{ getTotalPrice() }}
             </span>
             </div>
@@ -210,20 +221,23 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
-  import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-  import {CartAPI} from "@/common/product.service"
-  import {CartDTO, CartLineDTO, CartLineOptionDTO} from "@/generated/swagger"
-  import {handleFailure} from "@/common/failure.util"
+  import {Component, Vue} from "vue-property-decorator"
+  import * as Mutations from "@/store/mutation_type"
+  import * as States from "@/store/state_type"
+  import * as Actions from "@/store/action_type"
+  import {Action, Getter, Mutation, State,} from "vuex-class"
+  import {directive as onClickaway} from "vue-clickaway"
+  import {CartLineDTO, CartLineOptionDTO} from "@/generated/swagger"
   import GoToTop from "@/components/GoToTop.vue"
 
   const CartItemType = {
-    Product: 'PRODUCT',
-    OPTION: 'OPTION',
+    Product: "PRODUCT",
+    Option: "OPTION",
   }
 
   @Component({
     components: {GoToTop},
+    directives: {onClickaway: onClickaway,},
   })
   export default class Cart extends Vue {
     public $refs: any
@@ -232,37 +246,35 @@
     public $store: any
 
     public allChecked = false
+    public multipleDeletePopoverEnable = false
     public cartItemSelection = []
     public cartItemList = []
+
+    public lastDeleteItemCount = 0
+
+    /**
+     * vuex mappers and computed properties
+     */
+
+    @State(States.CART__LINE_LIST) stateCartLineList
+
+    @Mutation(Mutations.CART__SET_CART_LINE_LIST) commitSetCartLineList
+
+    @Action(Actions.CART__FETCH_CART_LINE_LIST) actionFetchCartLineList
+    @Action(Actions.CART__UPDATE_CART_LINE) actionUpdateCartLine
+    @Action(Actions.CART__REMOVE_CART_LINE) actionRemoveCartLine
+    @Action(Actions.CART__REMOVE_CART_LINE_LIST) actionRemoveCartLineList
 
     /**
      * life-cycle methods
      */
 
-    mounted() {
-      this.updateCartLines().catch(handleFailure)
+    test() {
+      this.openMultipleItemDeletePopover()
     }
 
-    updateCartLines(): Promise<CartDTO> {
-      const fetched: Promise<CartDTO> =
-        CartAPI.getUserCartLines({credentials: 'include'})
-
-      // fetch and fill table data
-      return fetched.then(cartDTO => {
-        const cartLines = cartDTO.cartLines
-
-        let rows = []
-
-        for (let i = 0; i < cartLines.length; i++) {
-          const cartLine = cartLines[i]
-          const convertedRows = this.convertCartLine(cartLine)
-          rows = rows.concat(convertedRows)
-        }
-
-        this.cartItemList = rows
-
-        return cartDTO
-      })
+    mounted() {
+      this.updateCartItemList()
     }
 
     /**
@@ -291,25 +303,22 @@
       const cartLineId = row.cartLineId
       const quantity = row.quantity
 
-      const request = {quantity: quantity,}
-
       // TODO: rollback quantity in frontend in case of failure
-      CartAPI.updateUserCartLine(cartLineId, request, {credentials: 'include'})
-        .then(response => {
-          return this.updateCartLines()
-        }).catch(handleFailure)
+      this.actionUpdateCartLine({cartLineId: cartLineId, quantity: quantity})
+        .then(() => {
+          this.updateCartItemList()
+        })
     }
 
     handleCartItemOrder(index, row) {
-      console.log('ordered', row)
     }
 
     handleCartItemDelete(index, row) {
       const cartLineId = row.cartLineId
-      CartAPI.removeUserCartLine(cartLineId, {credentials: 'include'})
-        .then(response => {
-          return this.updateCartLines()
-        }).catch(handleFailure)
+      this.actionRemoveCartLine(cartLineId)
+        .then(() => {
+          this.updateCartItemList()
+        })
     }
 
     handleSelectedCartItems() {
@@ -326,13 +335,13 @@
         cartLineIdList.push(row.cartLineId)
       }
 
-      cartLineIdList.sort() // for sequential disk access in server side :)
-      const query = cartLineIdList.toString();
+      this.lastDeleteItemCount = cartLineIdList.length
 
-      CartAPI.removeUserCartLines(query, {credentials: 'include'})
-        .then(response => {
-          return this.updateCartLines()
-        }).catch(handleFailure)
+      this.actionRemoveCartLineList(cartLineIdList)
+        .then(() => {
+          this.updateCartItemList()
+          this.openMultipleItemDeletePopover()
+        })
     }
 
     spanMethod({row, column, rowIndex, columnIndex}) {
@@ -369,12 +378,42 @@
      * helpers
      */
 
+    openMultipleItemDeletePopover() {
+      this.multipleDeletePopoverEnable = true
+    }
+
+    closeMultipleItemDeletePopover() {
+      this.multipleDeletePopoverEnable = false
+    }
+
+    updateCartItemList() {
+      this.actionFetchCartLineList()
+        .then(() => {
+          const cartLines = this.stateCartLineList
+          const rows = this.convertToCartTableItems(cartLines)
+          this.cartItemList = rows
+        })
+    }
+
+    convertToCartTableItems(cartLineList: Array<CartLineDTO>) {
+      const cartLines = cartLineList
+      let rows = []
+
+      for (let i = 0; i < cartLines.length; i++) {
+        const cartLine = cartLines[i]
+        const convertedRows = this.convertCartLine(cartLine)
+        rows = rows.concat(convertedRows)
+      }
+
+      return rows
+    }
+
     isProduct(row) {
       return row.type === CartItemType.Product
     }
 
     isOption(row) {
-      return row.type === CartItemType.OPTION
+      return row.type === CartItemType.Option
     }
 
     getProductPriceSum() {
@@ -428,7 +467,7 @@
         .cartLineOptions
         .reduce((total, o) => total + o.productOptionPrice, 0)
 
-      const expectedShippingDate = '2018. 10. 24'
+      const expectedShippingDate = "2018. 10. 24"
       const shippingFee = 0
 
       return {
@@ -447,7 +486,7 @@
 
     convertCartLineOptionToRow(cartLineOption: CartLineOptionDTO): any {
       return {
-        type: CartItemType.OPTION,
+        type: CartItemType.Option,
         cartLineOptionId: cartLineOption.cartLineOptionId,
         quantity: cartLineOption.quantity,
         price: cartLineOption.productOptionPrice,
@@ -460,7 +499,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .priceTag {
+  .price-tag {
     font-size: 14px;
   }
 
@@ -469,36 +508,13 @@
     vertical-align: middle;
   }
 
-  .totalPrice {
+  .total-price {
     font-weight: bold;
   }
 
-  .productPriceSum {
+  .product-price-sum {
     font-size: 17px;
     color: #303133;
-  }
-
-  .backToTop {
-    background-color: #fff;
-    position: fixed;
-    right: 120px;
-    bottom: 215px;
-    width: 40px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: .3s;
-    box-shadow: 0 0 6px rgba(0, 0, 0, .12);
-    z-index: 5;
-    i {
-      color: #409EFF;
-      display: block;
-      line-height: 40px;
-      text-align: center;
-      font-size: 18px;
-    }
-    &.hover {
-      opacity: 1;
-    }
   }
 
   .cart-line-name {

@@ -9,6 +9,7 @@
 
   @Component({
     components: {},
+    props: {}
   })
   export default class Template extends Vue {
     public $refs: any

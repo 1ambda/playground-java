@@ -5,11 +5,14 @@
     <el-row type="flex" justify="center">
       <el-col :xs="20" :sm="20" :md="18" :lg="18">
         <div style="margin-top: 25px; width: 800px;">
-          <el-input placeholder="Please input"
+          <el-input ref="inputbox"
+                    autofocus
+                    placeholder="Please input"
                     class="product-searchbox-input"
                     v-model="searchInsertedKeyword"
                     @keyup.enter.native="handleSearchKeywordEnter">
-            <el-select slot="prepend" placeholder="Select"
+            <el-select ref="selectbox"
+                       slot="prepend" placeholder="Select"
                        class="product-searchbox-select"
                        v-model="searchSelectedCategory"
                        @change="handleSearchCategoryChange">
@@ -124,9 +127,9 @@
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
   import * as Actions from "@/store/action_type"
+  import {Action, Getter, Mutation, State,} from "vuex-class"
   import ProductGrid from "@/views/ProductGrid.vue"
   import ProductFilter from "@/views/ProductFilter.vue"
-  import {Action, Getter, Mutation, State,} from "vuex-class"
   import GoToTop from "@/components/GoToTop.vue"
 
   @Component({
@@ -290,7 +293,10 @@
     }
 
     handleSearchCategoryChange() {
-      // routers, items will be fetched when keyup:enter happens
+      const self = this;
+      Vue.nextTick(() => {
+        self.$refs.inputbox.focus();
+      });
     }
 
     /**

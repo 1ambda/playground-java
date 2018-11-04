@@ -1,4 +1,4 @@
-import {AuthControllerApi, CartControllerApi, CatalogControllerApi} from '@/generated/swagger'
+import {AuthControllerApi, CartControllerApi, CatalogControllerApi} from "@/generated/swagger"
 
 const endpoint = process.env.VUE_APP_GATEWAY_ENDPOINT
 
@@ -8,4 +8,5 @@ const authAPI = new AuthControllerApi(undefined, endpoint)
 
 export const CatalogAPI = catalogAPI
 export const CartAPI = cartAPI
+export const AuthAPI = authAPI
 
