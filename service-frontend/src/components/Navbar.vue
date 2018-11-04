@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator"
+  import {Component, Mixins, Vue} from "vue-property-decorator"
   import {mapActions, mapGetters, mapMutations, mapState} from "vuex"
   import {Action, Getter, Mutation, State,} from "vuex-class"
   import * as Mutations from "@/store/mutation_type"
@@ -83,6 +83,7 @@
 
   import {Routes,} from "@/router.ts"
   import {AuthAPI} from "@/common/auth.service.ts"
+  import Alert from "@/components/Alert.vue"
   import {Failure,} from "@/generated/swagger"
   import {handleFailure} from "../common/failure.util"
 
@@ -94,18 +95,13 @@
           return
         }
 
-        this.$notify.error({
-          title: `Error`,
-          message: newMessage,
-        })
-
         this.commitClearFlashMessage()
+        this.displayErrorAlert(newMessage)
       },
     },
   })
-  export default class Navbar extends Vue {
+  export default class Navbar extends Mixins(Alert) {
     public routes = Routes
-    public $notify: any
     public $route: any
     public $router: any
     public $store: any
@@ -144,11 +140,7 @@
 
     public handleLogoutClick() {
       AuthAPI.logout({credentials: "include"}).then((response) => {
-        this.$notify({
-          title: "Logout",
-          message: "Successfully Logged-out.",
-          type: "success",
-        })
+        this.displaySuccessAlert("Successfully Logged-out.")
 
         this.commitLogout()
         this.$router.push(`/${RouteType.LOGIN}`)

@@ -11,7 +11,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">Login</el-button>
+          <el-button type="primary" @click="handleSubmitForm('ruleForm')">Login</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -19,20 +19,18 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator"
-  import {mapActions, mapGetters, mapMutations, mapState} from "vuex"
+  import {Component, Mixins, Vue} from "vue-property-decorator"
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
   import {Action, Getter, Mutation, State,} from "vuex-class"
   import {AuthAPI} from "@/common/auth.service.ts"
-  import {handleFailure} from "../common/failure.util"
+  import Alert from "@/components/Alert.vue"
 
   @Component({
     components: {},
   })
-  export default class Login extends Vue {
+  export default class Login extends Mixins(Alert) {
     public $refs: any
-    public $notify: any
     public $router: any
     public $store: any
 
@@ -72,13 +70,11 @@
      * event handlers
      */
 
-    public submitForm(formName: string) {
+    public handleSubmitForm(formName: string) {
       this.$refs[formName].validate((valid: any) => {
         if (!valid) {
-          this.$notify.warn({
-            title: `Validation Failed`,
-            message: "Please insert required values",
-          })
+
+          this.displayErrorAlert("Validation failed. Please insert required values.")
           return
         }
 
@@ -90,16 +86,13 @@
           headers: {"Authorization": `Basic ` + btoa(`${username}:${password}`),}
         }).then((response) => {
           if (!response || !response.username) {
-            this.$notify.warn({
-              title: `Invalid Response`,
-              message: "Can't login",
-            })
+            this.displayErrorAlert("Can't proceed. Please re-try.")
             return
           }
 
           this.commitLogin(response.username)
           this.$router.push("/")
-        }).catch(handleFailure)
+        })
       })
     }
 

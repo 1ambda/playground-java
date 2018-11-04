@@ -70,7 +70,6 @@ AuthAPI.whoiam({credentials: "include"})
 
     store.commit(Mutations.AUTH__LOGIN, response.username)
   })
-  .catch(handleFailure)
 
 new Vue({
   router: Router,

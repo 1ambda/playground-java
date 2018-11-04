@@ -67,7 +67,6 @@
   })
   export default class ProductGrid extends Vue {
     public $refs: any
-    public $notify: any
     public $router: any
 
     /**

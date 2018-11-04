@@ -8,10 +8,12 @@
     public $notify: any
     public $createElement: any
 
+    commonStyle = "font-size: 15px; text-align: start;"
+
     displaySuccessAlert(message: string) {
       const h = this.$createElement
 
-      const format = h("div", {style: "font-size: 15px;"}, message)
+      const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
         message: format,
@@ -24,7 +26,7 @@
     displayInfoAlert(message: string) {
       const h = this.$createElement
 
-      const format = h("div", {style: "font-size: 15px;"}, message)
+      const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
         message: format,
@@ -36,7 +38,7 @@
     displayWarningAlert(message: string) {
       const h = this.$createElement
 
-      const format = h("div", {style: "font-size: 15px;"}, message)
+      const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
         message: format,
@@ -48,7 +50,7 @@
     displayErrorAlert(message: string) {
       const h = this.$createElement
 
-      const format = h("div", {style: "font-size: 15px;"}, message)
+      const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
         message: format,
@@ -61,6 +63,11 @@
 </script>
 
 <style>
+  .el-notification__closeBtn {
+    top: 12px;
+    right: 8px;
+  }
+
   .global-alert-success {
     border-left: 3px solid #67C23A;
     border-bottom-left-radius: 3px;

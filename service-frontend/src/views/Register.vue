@@ -43,59 +43,55 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
-  import {AuthAPI} from '@/common/auth.service.ts'
-  import {UserDTO} from '../generated/swagger'
-  import {handleFailure} from "../common/failure.util";
+  import {Component, Mixins, Vue} from "vue-property-decorator"
+  import {AuthAPI} from "@/common/auth.service.ts"
+  import {UserDTO} from "../generated/swagger"
+  import Alert from "@/components/Alert.vue"
 
   @Component({components: {}})
-  export default class Register extends Vue {
+  export default class Register extends Mixins(Alert) {
     public $refs: any
-    public $notify: any
     public $router: any
     public $store: any
 
     private ruleForm = {
-      username: '',
-      name: '',
-      address: '',
-      email: '',
-      password: '',
+      username: "",
+      name: "",
+      address: "",
+      email: "",
+      password: "",
     }
 
     private rules = {
       username: [
-        {required: true, message: 'Please insert id', trigger: 'blur'},
-        {min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur'},
-        {pattern: /^([a-zA-Z0-9]+)$/, message: 'Please use alpha numeric only', trigger: 'blur'}],
+        {required: true, message: "Please insert id", trigger: "blur"},
+        {min: 4, max: 30, message: "Length should be 4 to 30", trigger: "blur"},
+        {pattern: /^([a-zA-Z0-9]+)$/, message: "Please use alpha numeric only", trigger: "blur"}],
       email: [
-        {required: true, message: 'Please insert email address', trigger: 'blur'},
-        {type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change']},
-        {min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur'},
+        {required: true, message: "Please insert email address", trigger: "blur"},
+        {type: "email", message: "Please input correct email address", trigger: ["blur", "change"]},
+        {min: 4, max: 30, message: "Length should be 4 to 30", trigger: "blur"},
       ],
       password: [
-        {required: true, message: 'Please insert password', trigger: 'blur'},
+        {required: true, message: "Please insert password", trigger: "blur"},
       ],
       name: [
-        {required: true, message: 'Please insert name', trigger: 'blur'},
-        {min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur'},
-        {pattern: /^([a-zA-Z]+)$/, message: 'Please use alphabet only', trigger: 'blur'},
+        {required: true, message: "Please insert name", trigger: "blur"},
+        {min: 4, max: 30, message: "Length should be 4 to 30", trigger: "blur"},
+        {pattern: /^([a-zA-Z]+)$/, message: "Please use alphabet only", trigger: "blur"},
       ],
       address: [
-        {required: true, message: 'Please insert address', trigger: 'blur'},
-        {min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur'},
-        {pattern: /^([a-zA-Z]+)$/, message: 'Please use alphabet only', trigger: 'blur'},
+        {required: true, message: "Please insert address", trigger: "blur"},
+        {min: 4, max: 30, message: "Length should be 4 to 30", trigger: "blur"},
+        {pattern: /^([a-zA-Z]+)$/, message: "Please use alphabet only", trigger: "blur"},
       ],
     }
 
     public submitForm(formName: string) {
       this.$refs[formName].validate((valid: any) => {
         if (!valid) {
-          this.$notify({
-            title: `Validation Failed`,
-            message: 'Please insert required values',
-            type: 'warning',
-          })
+          this.displayErrorAlert("Validation failed. insert required values.")
+
           return
         }
 
@@ -108,17 +104,11 @@
           address: this.ruleForm.address,
         }
 
-        AuthAPI.register(
-          request,
-          {credentials: 'include'}
-        ).then((response) => {
-          this.$notify({
-            title: 'Success',
-            message: `Created ${response.username}`,
-            type: 'success',
+        AuthAPI.register(request, {credentials: "include"})
+          .then((response) => {
+            this.displaySuccessAlert(`Created your account "${response.username}". Please login.`)
+            this.$router.push("/login")
           })
-          this.$router.push('/login')
-        }).catch(handleFailure)
       })
     }
 

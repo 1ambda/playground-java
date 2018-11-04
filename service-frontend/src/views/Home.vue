@@ -102,16 +102,12 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
+  import {Component, Vue} from "vue-property-decorator"
 
   @Component({
     components: {},
   })
   export default class Home extends Vue {
-    public $refs: any
-    public $notify: any
-    public $router: any
-    public $store: any
   }
 </script>
 
