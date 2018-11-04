@@ -17,8 +17,7 @@
 
       this.$notify({
         message: format,
-        iconClass: "el-icon-success",
-        type: "info",
+        type: "success",
         customClass: "global-alert-success",
       })
     }
@@ -84,6 +83,21 @@
     margin-left: 5px;
   }
 
+  .global-title-alert-success {
+    border-left: 3px solid #67C23A;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-title-alert-success > i.el-icon-success {
+    font-size: 18px;
+    color: #67C23A;
+  }
+
+  .global-title-alert-success > div.el-notification__group {
+    margin-left: 5px;
+  }
+
   .global-alert-info {
     border-left: 3px solid #409EFF;
     border-bottom-left-radius: 3px;
@@ -99,6 +113,22 @@
   .global-alert-info > div.el-notification__group {
     margin-left: 5px;
   }
+
+  .global-title-alert-info {
+    border-left: 3px solid #409EFF;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-title-alert-info > i.el-icon-info {
+    font-size: 18px;
+    color: #409EFF;
+  }
+
+  .global-title-alert-info > div.el-notification__group {
+    margin-left: 5px;
+  }
+
 
   .global-alert-warning {
     border-left: 3px solid #E6A23C;
@@ -116,6 +146,21 @@
     margin-left: 5px;
   }
 
+  .global-title-alert-warning {
+    border-left: 3px solid #E6A23C;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-title-alert-warning > i.el-icon-warning {
+    font-size: 18px;
+    color: #E6A23C;
+  }
+
+  .global-title-alert-warning > div.el-notification__group {
+    margin-left: 5px;
+  }
+
   .global-alert-error {
     border-left: 3px solid #F56C6C;
     border-bottom-left-radius: 3px;
@@ -129,6 +174,21 @@
   }
 
   .global-alert-error > div.el-notification__group {
+    margin-left: 5px;
+  }
+
+  .global-title-alert-error {
+    border-left: 3px solid #F56C6C;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-title-alert-error > i.el-icon-error {
+    font-size: 18px;
+    color: #F56C6C;
+  }
+
+  .global-title-alert-error > div.el-notification__group {
     margin-left: 5px;
   }
 </style>

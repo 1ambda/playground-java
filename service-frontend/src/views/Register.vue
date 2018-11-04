@@ -90,7 +90,7 @@
     public submitForm(formName: string) {
       this.$refs[formName].validate((valid: any) => {
         if (!valid) {
-          this.displayErrorAlert("Validation failed. insert required values.")
+          this.displayErrorAlert("Validation failed. Please insert required values.")
 
           return
         }

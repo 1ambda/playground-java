@@ -1,6 +1,7 @@
 import * as Mutations from "@/store/mutation_type"
 import * as States from "@/store/state_type"
 import {CartLineDTO, CategoryDTO, ProductDTO, ProductOptionDTO} from "@/generated/swagger"
+import {getDefaultState} from "@/store/state_default"
 
 export default {
   /**
@@ -15,7 +16,8 @@ export default {
   },
 
   [Mutations.AUTH__LOGOUT](state: any) {
-    state[States.AUTH__USERNAME] = ""
+    const initialState = getDefaultState()
+    state = Object.assign(state, initialState)
   },
 
   [Mutations.AUTH__LOGIN](state: any, username: string) {

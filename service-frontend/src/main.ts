@@ -8,6 +8,7 @@ import "vue-awesome/icons"
 import App from "@/App.vue"
 import {Router,} from "@/router.ts"
 import store from "@/store"
+import * as States from "@/store/state_type"
 import * as Mutations from "@/store/mutation_type"
 import * as RouteType from "@/store/route_type"
 
@@ -48,7 +49,7 @@ AuthAPI.whoiam({credentials: "include"})
       }
 
       // check user is authenticated
-      const username = store.state.username
+      const username = store.state[States.AUTH__USERNAME]
       if (!username) {
         if (to.name === RouteType.LOGIN) {
           return next(RouteType.LOGIN)
@@ -69,6 +70,7 @@ AuthAPI.whoiam({credentials: "include"})
     }
 
     store.commit(Mutations.AUTH__LOGIN, response.username)
+    // Router.push("/")
   })
 
 new Vue({

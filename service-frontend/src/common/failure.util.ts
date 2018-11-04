@@ -11,15 +11,65 @@ function isUnhandledPromise(response: any) {
   return isPromise(response) && response.type === "unhandledrejection"
 }
 
+const NotificationTextStyle = "font-size: 15px; text-align: start;"
+
+const displayError = ({title, message}) => {
+  Notification.error({
+    title: title,
+    message: message,
+    type: "error",
+    customClass: "global-title-alert-error",
+  })
+}
+
+const displayWarning = ({title, message}) => {
+  Notification.error({
+    title: title,
+    message: message,
+    type: "warning",
+    customClass: "global-title-alert-warning",
+  })
+}
+
+const displayInfo = ({title, message}) => {
+  Notification.error({
+    title: title,
+    message: message,
+    type: "info",
+    customClass: "global-title-alert-info",
+  })
+}
+
+
+const displaySuccess = ({title, message}) => {
+  Notification.error({
+    title: title,
+    message: message,
+    type: "success",
+    customClass: "global-title-alert-success",
+  })
+}
+
+
 export const handleFailure = (response: any) => {
   if (isUnhandledPromise(response)) {
     response = response.reason
   }
 
   if (response.type === "cors" && response.status === 401) {
+
+    if (response.url && response.url.includes("/api/auth/login")) {
+      displayError({
+        title: `Error (Unauthorized)`,
+        message: "Username or password is invalid. Please check it.",
+      })
+
+      return
+    }
+
     Router.push({path: "login"})
 
-    Notification.error({
+    displayError({
       title: `Error (Unauthorized)`,
       message: "Not authorized, Please login.",
     })
@@ -39,7 +89,7 @@ export const handleFailure = (response: any) => {
     }
 
     Notification.error({
-      title: `Error (Client)`,
+      title: `Error (Client Runtime)`,
       message: response.message,
     })
     return
@@ -50,7 +100,7 @@ export const handleFailure = (response: any) => {
     console.error(response)
 
     Notification.error({
-      title: `Error (Connection)`,
+      title: `Error (Server Connection)`,
       message: "Server is not available",
     })
 
@@ -82,7 +132,7 @@ export const handleFailure = (response: any) => {
       return
     }
 
-    Notification.error({
+    displayError({
       title: `Error (${canonical})`,
       message: parsed.message,
     })

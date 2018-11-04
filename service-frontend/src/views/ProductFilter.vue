@@ -117,10 +117,14 @@
       let minPrice = this.$route.query.minPrice
       let maxPrice = this.$route.query.maxPrice
 
+      let validMinPrice = false
+      let validMaxPrice = false
+
       if (minPrice && Number(minPrice)) {
         minPrice = Number(minPrice)
 
         if (minPrice >= 0) {
+          validMinPrice = true
           this.priceFilterSliderValues[0] = minPrice
         }
       }
@@ -131,14 +135,16 @@
         if (maxPrice >= 0) {
 
           if (minPrice && maxPrice > minPrice) {
+            validMaxPrice = true
             this.priceFilterSliderValues[1] = maxPrice
           } else if (!minPrice) {
+            validMaxPrice = true
             this.priceFilterSliderValues[1] = maxPrice
           }
         }
       }
 
-      this.setPriceFilterState(minPrice, maxPrice)
+      this.setPriceFilterState(minPrice, maxPrice, validMinPrice, validMaxPrice)
 
     }
 
@@ -161,8 +167,10 @@
     handlePriceFilterApply() {
       const minValue = this.priceFilterSliderValues[0]
       let maxValue = this.priceFilterSliderValues[1]
+      const validMinPrice = true
+      const validMaxPrice = true
 
-      this.setPriceFilterState(minValue, maxValue)
+      this.setPriceFilterState(minValue, maxValue, validMinPrice, validMaxPrice)
       this.hidePriceFilterPopvoer()
 
       this.actionFetchPaginatedItems()
@@ -173,11 +181,11 @@
      * helpers
      */
 
-    setPriceFilterState(minValue, maxValue) {
-      if (!minValue) {
+    setPriceFilterState(minValue, maxValue, validMinValue, validMaxValue) {
+      if (!minValue || !validMinValue) {
         minValue = 0
       }
-      if (!maxValue || maxValue === this.priceFilterSlideInitialMax) {
+      if (!maxValue || !validMaxValue || maxValue === this.priceFilterSlideInitialMax) {
         maxValue = null
       }
 

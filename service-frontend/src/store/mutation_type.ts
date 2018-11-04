@@ -2,7 +2,7 @@
  * AUTH
  */
 export const AUTH__LOGOUT = "AUTH/LOGOUT"
-export const AUTH__LOGIN = "AUTH/LOGOUT"
+export const AUTH__LOGIN = "AUTH/LOGIN"
 export const AUTH__SET_FLASH_MESSAGE = "AUTH/SET_FLASH_MESSAGE"
 export const AUTH__CLEAR_FLASH_MESSAGE = "AUTH/CLEAR_FLASH_MESSAGE"
 

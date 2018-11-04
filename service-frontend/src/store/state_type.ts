@@ -1,8 +1,12 @@
 /**
+ * DEFAULT STATE
+ */
+
+/**
  * AUTH
  */
-export const AUTH__USERNAME = "username"
-export const AUTH__FLASH_MESSAGE = "flashMessage"
+export const AUTH__USERNAME = "AUTH/USERNAME"
+export const AUTH__FLASH_MESSAGE = "AUTH.FLASH_MESSAGE"
 
 /**
  * PRODUCT

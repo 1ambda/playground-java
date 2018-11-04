@@ -142,6 +142,12 @@
     public $router: any
     public $store: any
 
+    // TODO: default state
+    public defaultPaginationSize = 8
+    public defaultPaginationPage = 1
+    public defaultSearchKeyword = ""
+    public defaultSearchCategory = "all"
+
     public availablePaginationSizeList = [
       {value: 8, label: "8"},
       {value: 16, label: "16"},
@@ -231,22 +237,19 @@
     }
 
     private commitPaginationFromQuery() {
+      // set size
       let size = this.$route.query.size
-
-      if (size && Number(size)) {
-        size = Number(size)
-        size = this.adjustPageSize(size)
-        this.commitSetItemCountPerPage(size)
+      let convertedSize = Number(size)
+      if (size && !isNaN(convertedSize) && convertedSize && convertedSize >= 0) {
+        const adjustedSize = this.adjustPageSize(convertedSize)
+        this.commitSetItemCountPerPage(adjustedSize)
       }
 
+      // set page
       let page = this.$route.query.page
-
-      if (page && Number(page)) {
-        page = Number(page)
-
-        if (page >= 0) {
-          this.updateCurrentPage(page)
-        }
+      const convertedPage = Number(page)
+      if (page && !isNaN(convertedPage) && convertedPage && convertedPage >= 0) {
+        this.setCurrentPage(convertedPage)
       }
     }
 
@@ -276,7 +279,7 @@
     }
 
     handleCurrentPageChange(value) {
-      this.updateCurrentPage(value) // commit state
+      this.setCurrentPage(value) // commit state
       this.actionFetchPaginatedItems()
       this.setRouterQueryForPagination()
     }
@@ -293,17 +296,17 @@
     }
 
     handleSearchCategoryChange() {
-      const self = this;
+      const self = this
       Vue.nextTick(() => {
-        self.$refs.inputbox.focus();
-      });
+        self.$refs.inputbox.focus()
+      })
     }
 
     /**
      * helpers
      */
 
-    updateCurrentPage(page) {
+    setCurrentPage(page) {
       this.commitUpdateCurrentPage(page)
 
       if (this.$refs.pagination) {
