@@ -148,23 +148,14 @@
           <el-checkbox v-model="allChecked"
                        :disabled="!cartItemList || cartItemList.length === 0"
                        @change="handleCartAllItemToggle"></el-checkbox>
-          <el-popover
-            placement="bottom-start"
-            title="Title"
-            width="200"
-            trigger="manual"
-            v-model="multipleDeletePopoverEnable"
-            v-on-clickaway="closeMultipleItemDeletePopover"
-            content="this is content, this is content, this is content">
-            <el-button type="warning" size="mini" plain
-                       slot="reference"
-                       @click="test"
-                       @blur="closeMultipleItemDeletePopover"
-                       icon="el-icon-delete" style="margin-left: 20px;"
-            >
-              Deleted Selected (max: 100)
-            </el-button>
-          </el-popover>
+
+          <el-button type="warning" size="mini" plain
+                     slot="reference"
+                     :disabled="!cartItemSelection || cartItemSelection.length === 0"
+                     @click="handleSelectedCartItems"
+                     icon="el-icon-delete" style="margin-left: 20px;">
+            Deleted Selected (max: 100)
+          </el-button>
         </div>
 
         <!-- cart summary -->
@@ -221,7 +212,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from "vue-property-decorator"
+  import {Component, Mixins, Vue} from "vue-property-decorator"
   import * as Mutations from "@/store/mutation_type"
   import * as States from "@/store/state_type"
   import * as Actions from "@/store/action_type"
@@ -229,6 +220,7 @@
   import {directive as onClickaway} from "vue-clickaway"
   import {CartLineDTO, CartLineOptionDTO} from "@/generated/swagger"
   import GoToTop from "@/components/GoToTop.vue"
+  import Alert from "@/components/Alert.vue"
 
   const CartItemType = {
     Product: "PRODUCT",
@@ -239,18 +231,14 @@
     components: {GoToTop},
     directives: {onClickaway: onClickaway,},
   })
-  export default class Cart extends Vue {
+  export default class Cart extends Mixins(Alert) {
     public $refs: any
-    public $notify: any
     public $router: any
     public $store: any
 
     public allChecked = false
-    public multipleDeletePopoverEnable = false
     public cartItemSelection = []
     public cartItemList = []
-
-    public lastDeleteItemCount = 0
 
     /**
      * vuex mappers and computed properties
@@ -268,10 +256,6 @@
     /**
      * life-cycle methods
      */
-
-    test() {
-      this.openMultipleItemDeletePopover()
-    }
 
     mounted() {
       this.updateCartItemList()
@@ -318,6 +302,7 @@
       this.actionRemoveCartLine(cartLineId)
         .then(() => {
           this.updateCartItemList()
+          this.displayInfoAlertForSingleItemDeletion(row.name)
         })
     }
 
@@ -335,12 +320,11 @@
         cartLineIdList.push(row.cartLineId)
       }
 
-      this.lastDeleteItemCount = cartLineIdList.length
-
+      const deletedItemCount = cartLineIdList.length
       this.actionRemoveCartLineList(cartLineIdList)
         .then(() => {
           this.updateCartItemList()
-          this.openMultipleItemDeletePopover()
+          this.displayInfoAlertForMultipleItemDeletion(deletedItemCount)
         })
     }
 
@@ -377,14 +361,6 @@
     /**
      * helpers
      */
-
-    openMultipleItemDeletePopover() {
-      this.multipleDeletePopoverEnable = true
-    }
-
-    closeMultipleItemDeletePopover() {
-      this.multipleDeletePopoverEnable = false
-    }
 
     updateCartItemList() {
       this.actionFetchCartLineList()
@@ -495,10 +471,24 @@
         productOptionId: cartLineOption.productOptionId,
       }
     }
+
+    displayInfoAlertForMultipleItemDeletion(deletedItemCount) {
+      let alertFormat = `Deleted ${deletedItemCount} item`
+      if (deletedItemCount > 1) {
+        alertFormat += "s"
+      }
+
+      this.displayInfoAlert(alertFormat)
+    }
+
+    displayInfoAlertForSingleItemDeletion(productName) {
+      let alertFormat = `Deleted "${productName}"`
+      this.displayInfoAlert(alertFormat)
+    }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .price-tag {
     font-size: 14px;
   }
@@ -526,5 +516,11 @@
   .cart-line-name:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .multiple-delete-popover {
+    border-left: 2px solid #409EFF;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
   }
 </style>

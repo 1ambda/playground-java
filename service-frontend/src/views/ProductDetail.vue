@@ -114,7 +114,10 @@
           </el-row>
         </el-col>
       </el-row>
+
+      <el-row style="margin-bottom: 60px;">&nbsp;</el-row>
     </el-row>
+
   </div>
 </template>
 
@@ -252,12 +255,16 @@
      */
 
     addProductToCart(productId, selectedOptionIdList) {
-      this.actionAddToCart({
-        productId: productId,
-        productOptionIdList: selectedOptionIdList,
-      }).then(() => {
-        this.openCartItemAddedPopup()
-      })
+      this.closeCartItemAddedPopup()
+
+      setTimeout(() => {
+        this.actionAddToCart({
+          productId: productId,
+          productOptionIdList: selectedOptionIdList,
+        }).then(() => {
+          this.openCartItemAddedPopup()
+        })
+      }, 300);
     }
 
     closeCartItemAddedPopup() {
@@ -300,8 +307,8 @@
   }
 
   .title-container {
-    margin-top: 40px;
-    margin-bottom: 35px;
+    margin-top: 30px;
+    margin-bottom: 15px;
     padding-left: 15px;
     padding-right: 15px;
   }
