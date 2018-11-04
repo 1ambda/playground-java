@@ -140,7 +140,10 @@
 
     public handleLogoutClick() {
       AuthAPI.logout({credentials: "include"}).then((response) => {
-        this.displaySuccessAlert("Successfully Logged-out.")
+        setTimeout(() => {
+          const alertOffsetFromTop = 20
+          this.displaySuccessAlert("Successfully Logged-out.", alertOffsetFromTop)
+        }, 500)
 
         this.commitLogout()
         this.$router.push(`/${RouteType.LOGIN}`)

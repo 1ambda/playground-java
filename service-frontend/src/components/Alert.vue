@@ -8,50 +8,72 @@
     public $notify: any
     public $createElement: any
 
+    defaultOffset = 20
+
     commonStyle = "font-size: 15px; text-align: start;"
 
-    displaySuccessAlert(message: string) {
+    displaySuccessAlert(message: string, offset?: number) {
+      if (!offset) {
+        offset = this.defaultOffset
+      }
+
       const h = this.$createElement
 
       const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
+        offset: offset,
         message: format,
         type: "success",
         customClass: "global-alert-success",
       })
     }
 
-    displayInfoAlert(message: string) {
+    displayInfoAlert(message: string, offset?: number) {
+      if (!offset) {
+        offset = this.defaultOffset
+      }
+
       const h = this.$createElement
 
       const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
+        offset: offset,
         message: format,
         type: "info",
         customClass: "global-alert-info",
       })
     }
 
-    displayWarningAlert(message: string) {
+    displayWarningAlert(message: string, offset?: number) {
+      if (!offset) {
+        offset = this.defaultOffset
+      }
+
       const h = this.$createElement
 
       const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
+        offset: offset,
         message: format,
         type: "warning",
         customClass: "global-alert-warning",
       })
     }
 
-    displayErrorAlert(message: string) {
+    displayErrorAlert(message: string, offset?: number) {
+      if (!offset) {
+        offset = this.defaultOffset
+      }
+
       const h = this.$createElement
 
       const format = h("div", {style: this.commonStyle}, message)
 
       this.$notify({
+        offset: offset,
         message: format,
         type: "error",
         customClass: "global-alert-error",

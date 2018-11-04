@@ -13,8 +13,11 @@ function isUnhandledPromise(response: any) {
 
 const NotificationTextStyle = "font-size: 15px; text-align: start;"
 
-const displayError = ({title, message}) => {
+const defaultOffset = 20
+
+const displayError = ({title, message, offset}) => {
   Notification.error({
+    offset: offset,
     title: title,
     message: message,
     type: "error",
@@ -22,8 +25,9 @@ const displayError = ({title, message}) => {
   })
 }
 
-const displayWarning = ({title, message}) => {
+const displayWarning = ({title, message, offset}) => {
   Notification.error({
+    offset: offset,
     title: title,
     message: message,
     type: "warning",
@@ -31,8 +35,9 @@ const displayWarning = ({title, message}) => {
   })
 }
 
-const displayInfo = ({title, message}) => {
+const displayInfo = ({title, message, offset}) => {
   Notification.error({
+    offset: offset,
     title: title,
     message: message,
     type: "info",
@@ -41,8 +46,9 @@ const displayInfo = ({title, message}) => {
 }
 
 
-const displaySuccess = ({title, message}) => {
+const displaySuccess = ({title, message, offset}) => {
   Notification.error({
+    offset: offset,
     title: title,
     message: message,
     type: "success",
@@ -60,6 +66,7 @@ export const handleFailure = (response: any) => {
 
     if (response.url && response.url.includes("/api/auth/login")) {
       displayError({
+        offset: defaultOffset,
         title: `Error (Unauthorized)`,
         message: "Username or password is invalid. Please check it.",
       })
@@ -70,6 +77,7 @@ export const handleFailure = (response: any) => {
     Router.push({path: "login"})
 
     displayError({
+      offset: defaultOffset,
       title: `Error (Unauthorized)`,
       message: "Not authorized, Please login.",
     })
@@ -81,14 +89,16 @@ export const handleFailure = (response: any) => {
     console.error(response)
 
     if (response.message.includes("Failed to fetch")) {
-      Notification.error({
+      displayError({
+        offset: defaultOffset,
         title: `Error (Unhandled Rejection)`,
         message: response.message,
       })
       return
     }
 
-    Notification.error({
+    displayError({
+      offset: defaultOffset,
       title: `Error (Client Runtime)`,
       message: response.message,
     })
@@ -99,7 +109,8 @@ export const handleFailure = (response: any) => {
   if (!response.json) {
     console.error(response)
 
-    Notification.error({
+    displayError({
+      offset: defaultOffset,
       title: `Error (Server Connection)`,
       message: "Server is not available",
     })
@@ -109,7 +120,8 @@ export const handleFailure = (response: any) => {
 
   // handle NotFound
   if (response.status === 404) {
-    Notification.error({
+    displayError({
+      offset: defaultOffset,
       title: `Error (Not Found)`,
       message: `${response.url}`,
     })
@@ -123,7 +135,8 @@ export const handleFailure = (response: any) => {
 
     // session timed-out
     if (canonical === "InsufficientAuthenticationException") {
-      Notification.warning({
+      displayWarning({
+        offset: defaultOffset,
         title: `Session Expired`,
         message: "Please re-login.",
       })
@@ -133,6 +146,7 @@ export const handleFailure = (response: any) => {
     }
 
     displayError({
+      offset: defaultOffset,
       title: `Error (${canonical})`,
       message: parsed.message,
     })
