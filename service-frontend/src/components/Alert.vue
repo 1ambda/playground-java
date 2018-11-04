@@ -8,6 +8,19 @@
     public $notify: any
     public $createElement: any
 
+    displaySuccessAlert(message: string) {
+      const h = this.$createElement
+
+      const format = h("div", {style: "font-size: 15px;"}, message)
+
+      this.$notify({
+        message: format,
+        iconClass: "el-icon-success",
+        type: "info",
+        customClass: "global-alert-success",
+      })
+    }
+
     displayInfoAlert(message: string) {
       const h = this.$createElement
 
@@ -19,13 +32,53 @@
         customClass: "global-alert-info",
       })
     }
+
+    displayWarningAlert(message: string) {
+      const h = this.$createElement
+
+      const format = h("div", {style: "font-size: 15px;"}, message)
+
+      this.$notify({
+        message: format,
+        type: "warning",
+        customClass: "global-alert-warning",
+      })
+    }
+
+    displayErrorAlert(message: string) {
+      const h = this.$createElement
+
+      const format = h("div", {style: "font-size: 15px;"}, message)
+
+      this.$notify({
+        message: format,
+        type: "error",
+        customClass: "global-alert-error",
+      })
+    }
   }
 
 </script>
 
 <style>
+  .global-alert-success {
+    border-left: 3px solid #67C23A;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-alert-success > i.el-icon-success {
+    font-size: 18px;
+    margin-top: 7px;
+    color: #67C23A;
+  }
+
+  .global-alert-success > div.el-notification__group {
+    margin-left: 5px;
+  }
+
   .global-alert-info {
-    border-left: 2px solid #409EFF;
+    border-left: 3px solid #409EFF;
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
   }
@@ -40,4 +93,35 @@
     margin-left: 5px;
   }
 
+  .global-alert-warning {
+    border-left: 3px solid #E6A23C;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-alert-warning > i.el-icon-warning {
+    font-size: 18px;
+    margin-top: 7px;
+    color: #E6A23C;
+  }
+
+  .global-alert-warning > div.el-notification__group {
+    margin-left: 5px;
+  }
+
+  .global-alert-error {
+    border-left: 3px solid #F56C6C;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+
+  .global-alert-error > i.el-icon-error {
+    font-size: 18px;
+    margin-top: 7px;
+    color: #F56C6C;
+  }
+
+  .global-alert-error > div.el-notification__group {
+    margin-left: 5px;
+  }
 </style>
