@@ -10,9 +10,10 @@ import {
   Pagination,
   ProductContainerDTO,
   ProductDTO,
-  ProductOptionDTO
+  ProductOptionDTO, UserDTO
 } from "@/generated/swagger"
 import {AuthAPI} from "@/common/auth.service"
+import {REGISTER} from "@/store/route_type"
 
 const Product_FetchPaginatedItems = async ({state, getters, commit, dispatch}) => {
   const options = {credentials: "include"}
@@ -151,11 +152,31 @@ const Auth_Login = async (
   return response
 }
 
+const Auth_Register = async (
+  {state, getters, commit, dispatch},
+  {username, password, email, name, address}) => {
+
+  const provider = "PASSWORD"
+
+  const request: UserDTO = {
+    provider: provider,
+    username: username,
+    password: password,
+    email: email,
+    name: name,
+    address: address,
+  }
+
+  const response =  await AuthAPI.register(request, {credentials: "include"})
+  return response
+}
+
 export default {
   /**
    * AUTH
    */
   [Actions.AUTH__LOGIN]: Auth_Login,
+  [Actions.AUTH__REGISTER]: Auth_Register,
 
   /**
    * PRODUCT

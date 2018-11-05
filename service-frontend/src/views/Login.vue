@@ -1,5 +1,5 @@
 <template>
-  <div class="login-form-container">
+  <div class="login-card-container">
     <el-card class="login-card">
 
       <!-- oauth login -->
@@ -32,13 +32,13 @@
                  :hide-required-asterisk="true"
                  label-width="100px"
                  :model="modelForm" ref="loginForm">
-          <el-form-item prop="username">
+          <el-form-item class="login-form-item" prop="username">
             <span>
               <label class="login-label">Username</label>
             </span>
             <el-input v-model="modelForm.username"></el-input>
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item class="login-form-item" prop="password">
             <span>
               <label class="login-label">Password</label>
               <el-button type="text" class="login-button-forget-password"
@@ -47,13 +47,15 @@
             <el-input type="password" v-model="modelForm.password" auto-complete="off"></el-input>
           </el-form-item>
 
-          <div style="margin-top: 5px;">
-          <span style="margin-left: 2px;">
-            <el-button type="text" @click="handleClickRegister">Sign-up</el-button>
-          </span>
-            <span style="float: right;">
-            <el-button type="primary" @click="handleSubmitForm('loginForm')">Login</el-button>
-          </span>
+          <div class="login-form-action"
+               style="margin-top: 5px; text-align: left">
+            <el-button type="text"
+                       @click="handleClickRegister">Create Account
+            </el-button>
+            <el-button type="primary" style="float: right;"
+                       @click="handleSubmitForm('loginForm')">Login
+            </el-button>
+            <div class="clearfix"></div>
           </div>
         </el-form>
       </div>
@@ -152,7 +154,8 @@
 </script>
 
 <style lang="scss">
-  .login-form-container {
+
+  .login-card-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,14 +168,8 @@
     width: 400px;
   }
 
-  .el-form-item.is-success .el-input__inner {
-    border-color: #409EFF;
-    outline: 0;
-  }
-
-  .el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus {
-    border-color: #409EFF;
-    outline: 0;
+  .login-form-item {
+    text-align: left;
   }
 
   .login-label {

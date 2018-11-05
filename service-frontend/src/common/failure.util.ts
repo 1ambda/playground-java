@@ -91,8 +91,8 @@ export const handleFailure = (response: any) => {
     if (response.message.includes("Failed to fetch")) {
       displayError({
         offset: defaultOffset,
-        title: `Error (Unhandled Rejection)`,
-        message: response.message,
+        title: `Error (Server Connection)`,
+        message: "Server is not available",
       })
       return
     }
@@ -111,8 +111,8 @@ export const handleFailure = (response: any) => {
 
     displayError({
       offset: defaultOffset,
-      title: `Error (Server Connection)`,
-      message: "Server is not available",
+      title: `Error (Unknown Response)`,
+      message: response,
     })
 
     return

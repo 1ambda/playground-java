@@ -18,7 +18,25 @@ body {
   width: 100%;
 }
 
+/* utilities */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* global style for element-ui */
+
 .el-header {
   padding: 0px;
 }
 
+.el-form-item.is-success .el-input__inner {
+  border-color: #409EFF;
+  outline: 0;
+}
+
+.el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus {
+  border-color: #409EFF;
+  outline: 0;
+}

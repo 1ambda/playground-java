@@ -3,6 +3,7 @@
  */
 
 export const AUTH__LOGIN = "AUTH/LOGIN"
+export const AUTH__REGISTER = "AUTH/REGISTER"
 
 /**
  * PRODUCT

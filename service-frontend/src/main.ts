@@ -1,12 +1,14 @@
 import Vue from "vue"
+import {sync} from "vuex-router-sync"
 
 import ElementUI from "element-ui"
 import "element-ui/lib/theme-chalk/index.css"
+import 'element-ui/lib/theme-chalk/display.css'
 import locale from "element-ui/lib/locale/lang/en"
 import "vue-awesome/icons"
 
 import App from "@/App.vue"
-import {Router,} from "@/router.ts"
+import {Router, Routes,} from "@/router.ts"
 import store from "@/store"
 import * as States from "@/store/state_type"
 import * as Mutations from "@/store/mutation_type"
@@ -40,12 +42,17 @@ Vue.use(ElementUI, {locale})
 Vue.component("v-icon", Icon)
 Vue.component("back-to-top", BackToTop)
 
+sync(store, Router)
+
 AuthAPI.whoiam({credentials: "include"})
   .then((response) => {
+    // set router hook after fetching whoiam response
     Router.beforeEach((to: any, from: any, next: any) => {
+
       // if the page doesn't require authentication, move to the page
       if (!to.matched.some((record: any) => record.meta.requiresAuth)) {
-        return next()
+        next()
+        return
       }
 
       // check user is authenticated
@@ -65,12 +72,23 @@ AuthAPI.whoiam({credentials: "include"})
 
     if (!response.username || response.username.trim() === "") {
       store.commit(Mutations.AUTH__LOGOUT)
-      Router.push(`/${RouteType.LOGIN}`)
       return
     }
 
     store.commit(Mutations.AUTH__LOGIN, response.username)
-    // Router.push("/")
+
+    const currentPath = store.state.route.path
+    const index = Routes.findIndex(r => currentPath === r.path)
+
+    // user already logged-in but if page doesn't require auth, then move to `/`
+    if (index === -1 || index >= Routes.length) {
+      console.error(`current path is ${currentPath} but it doesn't exist in available routes`)
+      Router.push(`/${RouteType.HOME}`)
+      return
+    }
+
+    const route = Routes[index]
+    Router.push(route.path)
   })
 
 new Vue({
