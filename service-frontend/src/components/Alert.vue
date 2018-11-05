@@ -79,6 +79,10 @@
         customClass: "global-alert-error",
       })
     }
+
+    closeAllAlerts() {
+      this.$notify.closeAll()
+    }
   }
 
 </script>
@@ -150,7 +154,6 @@
   .global-title-alert-info > div.el-notification__group {
     margin-left: 5px;
   }
-
 
   .global-alert-warning {
     border-left: 3px solid #E6A23C;

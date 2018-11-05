@@ -1,4 +1,10 @@
 /**
+ * AUTH
+ */
+
+export const AUTH__LOGIN = "AUTH/LOGIN"
+
+/**
  * PRODUCT
  */
 export const PRODUCT__FETCH_PAGINATED_ITEMS = "PRODUCT/FETCH_PAGINATED_ITEMS"

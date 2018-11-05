@@ -228,6 +228,10 @@
     font-size: 18px;
   }
 
+  .el-menu-item:not(.is-active):hover > .navbar-menu-item-text:hover {
+    box-shadow: 0 1px 0 #303133;
+  }
+
   .navbar-submenu-item {
   }
 

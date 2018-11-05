@@ -12,6 +12,7 @@ import {
   ProductDTO,
   ProductOptionDTO
 } from "@/generated/swagger"
+import {AuthAPI} from "@/common/auth.service"
 
 const Product_FetchPaginatedItems = async ({state, getters, commit, dispatch}) => {
   const options = {credentials: "include"}
@@ -138,7 +139,24 @@ const Cart_RemoveCartLineList = async (
   await CartAPI.removeUserCartLines(query, {credentials: "include"})
 }
 
+const Auth_Login = async (
+  {state, getters, commit, dispatch},
+  {username, password}) => {
+
+  const response = await AuthAPI.login({
+    credentials: "include",
+    headers: {"Authorization": `Basic ` + btoa(`${username}:${password}`),}
+  })
+
+  return response
+}
+
 export default {
+  /**
+   * AUTH
+   */
+  [Actions.AUTH__LOGIN]: Auth_Login,
+
   /**
    * PRODUCT
    */
