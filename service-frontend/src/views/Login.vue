@@ -1,14 +1,14 @@
 <template>
   <div class="login-card-container">
-    <el-card class="login-card">
+    <el-card class="login-card" style="padding-bottom: 5px;">
 
       <!-- oauth login -->
       <div slot="header">
-        <div style="text-align: center; vertical-align: middle;">
+        <div style="text-align: center; vertical-align: middle; margin-top: 8px;">
           <img src="../assets/gopher_sail.png"
                height="80" width="80" class="login-image">
         </div>
-        <div style="text-align: center; vertical-align: middle; margin-top: 12px;">
+        <div style="text-align: center; vertical-align: middle; margin-top: 18px;">
           <el-button type="primary" disabled plain class="login-button-facebook">
             Facebook Login
           </el-button>
@@ -184,7 +184,7 @@
     font-weight: 400;
   }
 
-  .login-button-forget-password:hover {
+  .login-button-forget-password:hover, .login-button-forget-password:visited{
     color: #eab35f;
   }
 
