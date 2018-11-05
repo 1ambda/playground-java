@@ -2,70 +2,85 @@
   <div>
     <div v-show="getterIsAuthenticated">
       <el-menu :router="true"
-               mode="horizontal"
-               background-color="#545c64"
-               text-color="#fff"
                :default-active="$route.name"
-               active-text-color="#ffd04b">
+               mode="horizontal" menu-trigger="click"
+               text-color="#303133" class="navbar-menu">
 
         <!-- left aligned image menu -->
-        <el-menu-item index="home" :route="getRoute('home')">
-          <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
+        <el-menu-item index="home" :route="getRoute('home')"
+                      class="navbar-menu-item">
+          <img src="../assets/gopher-front.svg"
+               height="28" width="28" style="margin-right: 3px;">
         </el-menu-item>
 
-        <el-menu-item index="product" :route="getRoute('product')">
-          <span>Product</span>
+        <el-menu-item index="product" :route="getRoute('product')"
+                      class="navbar-menu-item">
+          <span class="navbar-menu-item-text">Product</span>
         </el-menu-item>
 
         <!-- right aligned dropdown menu -->
-        <el-submenu index="nav-dropdown" style="float: right;">
-          <template slot="title"><i class="el-icon-menu"></i><span>{{ stateUsername }}</span></template>
-          <el-menu-item index="nav-dropdown-setting">
+        <el-submenu index="nav-dropdown"
+                    class="navbar-username"
+                    style="float: right;">
+          <template slot="title">
+            <img src="../assets/anonymous_avatar.png" height="25" width="25"
+                 class="navbar-username-avatar">
+            <span class="navbar-username-text">{{ stateUsername }}</span>
+          </template>
+          <el-menu-item index="nav-dropdown-setting"
+                        class="navbar-menu-item">
             <i class="el-icon-setting"></i>
             <span>Settings</span>
           </el-menu-item>
-          <el-menu-item index="nav-dropdown-logout" v-on:click="handleLogoutClick">
+          <el-menu-item index="nav-dropdown-logout" v-on:click="handleLogoutClick"
+                        class="navbar-menu-item">
             <i class="el-icon-circle-close"></i>
             <span>Logout</span>
           </el-menu-item>
         </el-submenu>
 
-        <el-menu-item index="cart" :route="getRoute('cart')" style="float: right;">
-          <span>Cart</span>
+        <el-menu-item index="cart" :route="getRoute('cart')" style="float: right;"
+                      class="navbar-menu-item navbar-menu-item-last">
+          <span class="navbar-menu-item-text ">
+            Cart
+          </span>
         </el-menu-item>
       </el-menu>
     </div>
 
     <div v-show="!getterIsAuthenticated">
       <el-menu :router="true"
-               mode="horizontal"
-               background-color="#545c65"
-               text-color="#fff"
                :default-active="$route.name"
-               active-text-color="#ffd04b">
+               mode="horizontal" menu-trigger="click"
+               text-color="#303133" class="navbar-menu">
         <!-- left aligned image menu -->
-        <el-menu-item index="home" :route="getRoute('home')">
+        <el-menu-item index="home" :route="getRoute('home')"
+                      class="navbar-menu-item">
           <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
         </el-menu-item>
 
-        <el-menu-item index="register" :route="getRoute('register')">
-          <span>Register</span>
+        <el-menu-item index="register" :route="getRoute('register')"
+                      class="navbar-menu-item">
+          <span class="navbar-menu-item-text">Register</span>
         </el-menu-item>
 
-        <el-menu-item index="login" :route="getRoute('login')">
-          <span>Login</span>
+        <el-menu-item index="login" :route="getRoute('login')"
+                      class="navbar-menu-item">
+          <span class="navbar-menu-item-text">Login</span>
         </el-menu-item>
 
-        <el-menu-item index="github" style="float: right;">
+        <el-menu-item index="github" style="float: right;"
+                      class="navbar-menu-item">
           <a href="https://github.com/1ambda" target="_blank" style="display: block; text-decoration: none;">
             <img src="../assets/github.svg" class="github-icon" height="24" width="24"
-                 style="margin-bottom: 2px; margin-right: 5px;">
-            <span>Github</span>
+                 style="margin-bottom: 4px; margin-right: 10px;">
+            <span class="navbar-menu-item-text">Github</span>
           </a>
         </el-menu-item>
 
-        <el-menu-item index="about" :route="getRoute('about')" style="float: right;">
-          <span>About</span>
+        <el-menu-item index="about" :route="getRoute('about')" style="float: right;"
+                      class="navbar-menu-item">
+          <span class="navbar-menu-item-text">About</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -183,4 +198,45 @@
   .github-icon {
     fill: white;
   }
+
+  .navbar-menu {
+    height: 74px;
+  }
+
+  .navbar-menu-item {
+    height: 74px;
+    line-height: 74px;
+  }
+
+  .navbar-menu-item-last {
+    border-right: solid 1px #e6e6e6;
+    padding-right: 40px;
+  }
+
+  .navbar-menu-item-text {
+    font-size: 18px;
+  }
+
+  .navbar-username {
+    height: 74px;
+    line-height: 74px;
+    padding-top: 7px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .navbar-username-text {
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  .navbar-username-avatar {
+    margin-right: 12px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(242, 242, 242) !important;
+    box-shadow: rgb(235, 235, 235) 0px 0px 0px 2px !important;
+  }
+
 </style>
