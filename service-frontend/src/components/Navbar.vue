@@ -9,8 +9,8 @@
         <!-- left aligned image menu -->
         <el-menu-item index="home" :route="getRoute('home')"
                       class="navbar-menu-item">
-          <img src="../assets/gopher-front.svg"
-               height="28" width="28" style="margin-right: 3px;">
+          <img src="../assets/gopher_inclusion_small.png"
+               height="50" width="50" style="padding-left: 7px; padding-right: 2px;">
         </el-menu-item>
 
         <el-menu-item index="product" :route="getRoute('product')"
@@ -56,7 +56,8 @@
         <!-- left aligned image menu -->
         <el-menu-item index="home" :route="getRoute('home')"
                       class="navbar-menu-item">
-          <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
+          <img src="../assets/gopher_inclusion_small.png"
+               height="50" width="50" style="padding-left: 7px; padding-right: 2px;">
         </el-menu-item>
 
         <el-menu-item index="register" :route="getRoute('register')"
