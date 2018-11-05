@@ -21,6 +21,7 @@
         <!-- right aligned dropdown menu -->
         <el-submenu index="nav-dropdown"
                     class="navbar-username"
+                    popper-class="navbar-username-popper"
                     style="float: right;">
           <template slot="title">
             <img src="../assets/anonymous_avatar.png" height="25" width="25"
@@ -28,14 +29,14 @@
             <span class="navbar-username-text">{{ stateUsername }}</span>
           </template>
           <el-menu-item index="nav-dropdown-setting"
-                        class="navbar-menu-item">
-            <i class="el-icon-setting"></i>
-            <span>Settings</span>
+                        class="navbar-submenu-item">
+            <i class="el-icon-menu navbar-submenu-item-icon"></i>
+            <span class="navbar-submenu-item-text">Settings</span>
           </el-menu-item>
           <el-menu-item index="nav-dropdown-logout" v-on:click="handleLogoutClick"
-                        class="navbar-menu-item">
-            <i class="el-icon-circle-close"></i>
-            <span>Logout</span>
+                        class="navbar-submenu-item">
+            <i class="el-icon-circle-close navbar-submenu-item-icon"></i>
+            <span class="navbar-submenu-item-text">Logout</span>
           </el-menu-item>
         </el-submenu>
 
@@ -70,14 +71,19 @@
           <span class="navbar-menu-item-text">Login</span>
         </el-menu-item>
 
-        <el-menu-item index="github" style="float: right;"
-                      class="navbar-menu-item">
-          <a href="https://github.com/1ambda" target="_blank" style="display: block; text-decoration: none;">
+        <span style="float: right; margin-left: 30px; margin-right: 30px;"
+              class="navbar-menu-item">
+          <a href="https://github.com/1ambda" target="_blank"
+             class="github-link"
+             style="display: block; text-decoration: none;">
             <img src="../assets/github.svg" class="github-icon" height="24" width="24"
-                 style="margin-bottom: 4px; margin-right: 10px;">
-            <span class="navbar-menu-item-text">Github</span>
+                 style="margin-bottom: -6px; margin-right: 4px;">
+            <span class="navbar-menu-item-text"
+                  style="vertical-align: middle;">
+              Github
+            </span>
           </a>
-        </el-menu-item>
+        </span>
 
         <el-menu-item index="about" :route="getRoute('about')" style="float: right;"
                       class="navbar-menu-item">
@@ -157,7 +163,7 @@
     public handleLogoutClick() {
       AuthAPI.logout({credentials: "include"}).then((response) => {
         setTimeout(() => {
-          const alertOffsetFromTop = 20
+          const alertOffsetFromTop = 70
           this.displaySuccessAlert("Successfully Logged-out.", alertOffsetFromTop)
         }, 500)
 
@@ -196,6 +202,10 @@
 </script>
 
 <style scoped>
+  .github-link:visited {
+    color: #303133;
+  }
+
   .github-icon {
     fill: white;
   }
@@ -216,6 +226,17 @@
 
   .navbar-menu-item-text {
     font-size: 18px;
+  }
+
+  .navbar-submenu-item {
+  }
+
+  .navbar-submenu-item-icon {
+    padding-left: 10px;
+  }
+
+  .navbar-submenu-item-text {
+    padding-left: 5px;
   }
 
   .navbar-username {

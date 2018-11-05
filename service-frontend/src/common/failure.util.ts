@@ -13,7 +13,7 @@ function isUnhandledPromise(response: any) {
 
 const NotificationTextStyle = "font-size: 15px; text-align: start;"
 
-const defaultOffset = 20
+const defaultOffset = 70
 
 const displayError = ({title, message, offset}) => {
   Notification.error({

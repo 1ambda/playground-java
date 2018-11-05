@@ -17,7 +17,7 @@ const routes = [
     name: "home",
     displayName: "G Street",
     component: Home,
-    meta: {requiresAuth: true, common: true, left: true,},
+    meta: {requiresAuth: false, common: true, left: true,},
   },
   {
     path: "/register",

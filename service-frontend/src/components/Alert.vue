@@ -8,7 +8,7 @@
     public $notify: any
     public $createElement: any
 
-    defaultOffset = 20
+    defaultOffset = 70
 
     commonStyle = "font-size: 15px; text-align: start;"
 
