@@ -13,8 +13,8 @@
           <el-col :xs="24" :sm="24" :md="14">
 
             <!-- title area -->
-            <div class="form-title" style="margin-bottom: 20px;">
-              <span class="form-title-text">Create your G-street Account</span>
+            <div class="form-title" style="margin-bottom: 15px;">
+              <h1 class="form-title-text">Create your G-street Account</h1>
             </div>
 
             <!-- form: id -->
@@ -276,7 +276,7 @@
             this.displaySuccessAlert(`Created your account "${response.username}". Please login.`)
             this.$router.push("/login")
           })
-       
+
       }).catch(() => {
         // handle form validation failure
         this.displayErrorAlert("Validation failed. Please insert required values.")
@@ -332,7 +332,7 @@
     justify-content: center;
     text-align: center;
     width: 100%;
-    height: 88vh; /* need to define an explicit height! */
+    height: 85vh; /* need to define an explicit height! */
   }
 
   .register-card {
@@ -386,8 +386,9 @@
   }
 
   .form-title-text {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
+    margin-top: 5px;
   }
 
   .register-form-item.el-form-item {
