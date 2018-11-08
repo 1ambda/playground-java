@@ -8,8 +8,7 @@ import com.github.lambda.gateway.domain.user.repository.*;
 import com.github.lambda.gateway.swagger.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

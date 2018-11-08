@@ -4,7 +4,6 @@ import com.github.lambda.gateway.domain.catalog.entity.Category;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository

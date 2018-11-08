@@ -6,8 +6,9 @@ import com.github.lambda.gateway.domain.catalog.entity.ProductOption;
 import com.github.lambda.gateway.domain.catalog.repository.CategoryRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductOptionRepository;
 import com.github.lambda.gateway.domain.catalog.repository.ProductRepository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -81,7 +82,7 @@ public interface CatalogFixture {
     return product;
   }
 
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   default Long prepareProductInTransaction() {
     // given: prepare Product
     Category category = prepareCategory();

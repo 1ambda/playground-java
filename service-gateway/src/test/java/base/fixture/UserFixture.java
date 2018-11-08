@@ -6,8 +6,8 @@ import com.github.lambda.gateway.domain.user.entity.Role;
 import com.github.lambda.gateway.domain.user.entity.User;
 import com.github.lambda.gateway.domain.user.repository.RoleRepository;
 import com.github.lambda.gateway.swagger.model.UserDTO;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.mockito.Mockito.doReturn;
 
@@ -41,7 +41,7 @@ public interface UserFixture {
     return user;
   }
 
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   default Long prepareUserInTransaction() {
     User user = prepareUser();
     Long userId = user.getId();

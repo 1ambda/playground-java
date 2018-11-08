@@ -5,8 +5,9 @@ import com.github.lambda.gateway.domain.cart.entity.Cart;
 import com.github.lambda.gateway.domain.cart.entity.CartLine;
 import com.github.lambda.gateway.domain.cart.repository.CartLineRepository;
 import com.github.lambda.gateway.swagger.model.CartLineDTO;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface CartFixture {
     return cartService.addCartLine(userId, request);
   }
 
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   default List<Long> prepareCartLinesInTransaction(Long userId, Long productId, int cartLineCount) {
     List<Long> cartLineIdList = new ArrayList<>();
 
@@ -44,7 +45,7 @@ public interface CartFixture {
     return cartLineIdList;
   }
 
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   default boolean isCartLineDeleted(Long cartLineId) {
     CartLineRepository cartLineRepository = getCartLineRepository();
     CartLine cartLine = cartLineRepository.findById(cartLineId).get();

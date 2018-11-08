@@ -8,9 +8,8 @@ import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import javax.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -49,7 +48,7 @@ public class UserService {
     return dto;
   }
 
-  @Transactional(rollbackOn = Exception.class)
+  @Transactional(rollbackFor = Exception.class)
   public UserDTO handleAddNewCustomerRequest(UserDTO userDTO) {
 
     AuthIdentity.Provider provider = AuthIdentity.Provider.valueOf(userDTO.getProvider());

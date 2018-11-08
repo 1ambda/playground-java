@@ -13,9 +13,9 @@ import com.github.lambda.gateway.swagger.model.CartLineDTO;
 import com.github.lambda.gateway.swagger.model.CartLineOptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +158,7 @@ public class CartService {
     return dto;
   }
 
-  @Transactional(rollbackOn = Exception.class)
+  @Transactional(rollbackFor = Exception.class)
   public void removeCartLines(Long userId, List<Long> cartLineIdList) {
     cartLineIdList.forEach(cartLineId -> {
       cartActionFacade.removeCartLine(userId, cartLineId);
