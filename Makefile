@@ -4,6 +4,7 @@ DOCKER = docker
 MYSQLCLIENT = mycli
 PIP = pip
 GOCMD = go
+INSTALLER = brew install
 DOCKER_HOST_IP := $(shell ipconfig getifaddr en0)
 
 VCS = github.com
@@ -15,6 +16,7 @@ prepare:
 	@ $(PIP) install -U mycli
 	@ $(GOCMD) get -u -v github.com/holys/redis-cli
 	@ $(GOCMD) get -u -v github.com/fgeller/kt
+	@ @(INSTALLER) kafkacat
 
 .PHONY: compose.prepare
 compose.prepare:
