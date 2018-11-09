@@ -43,6 +43,7 @@ compose.clean:
 	@ docker rm -f `docker ps -a -q` || true
 	@ docker rmi -f `docker images --quiet --filter "dangling=true"` || true
 	@ docker volume rm `docker volume ls -f dangling=true -q` || true
+	@ rm -rf ./docker-volumes
 	@ docker network rm `docker network ls -q` || true
 	@ echo ""
 	@ echo "\n-----------------------------------------"
