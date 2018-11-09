@@ -4,6 +4,7 @@ DOCKER = docker
 MYSQLCLIENT = mycli
 PIP = pip
 GOCMD = go
+DOCKER_HOST_IP := $(shell ipconfig getifaddr en0)
 
 VCS = github.com
 REPOSITORY = "1ambda/domain-driven-design-spring"
@@ -13,15 +14,24 @@ prepare:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 	@ $(PIP) install -U mycli
 	@ $(GOCMD) get -u -v github.com/holys/redis-cli
+	@ $(GOCMD) get -u -v github.com/fgeller/kt
+
+.PHONY: compose.prepare
+compose.prepare:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Preparing docker-compose"
+	@ echo "-----------------------------------------\n"
+	@ echo "export DOCKER_HOST_IP=$(DOCKER_HOST_IP)"
+	@ echo "\n-----------------------------------------"
+	@ echo ""
 
 .PHONY: compose
-compose:
+compose: compose.prepare
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Running docker-compose"
 	@ docker stop $(docker ps -a -q) || true
 	@ docker rm -f $(docker ps -a -q) || true
 	@ docker volume rm $(docker volume ls -f dangling=true -q) || true
 	@ docker-compose -f docker-compose.storage.yml rm -fsv || true
-	@ docker-compose -f docker-compose.storage.yml up
+	@ DOCKER_HOST_IP=$(DOCKER_HOST_IP) docker-compose -f docker-compose.storage.yml up
 
 .PHONY: compose.clean
 compose.clean:

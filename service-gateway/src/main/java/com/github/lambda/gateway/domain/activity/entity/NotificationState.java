@@ -3,6 +3,7 @@ package com.github.lambda.gateway.domain.activity.entity;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum NotificationState {
+  PREPARED("PREPARED"),
   SENT("SENT"),
   SEEN("SEEN"),
   DISMISSED("DISMISSED");

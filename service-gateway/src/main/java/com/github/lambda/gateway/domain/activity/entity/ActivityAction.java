@@ -3,8 +3,7 @@ package com.github.lambda.gateway.domain.activity.entity;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ActivityAction {
-  LOGIN("LOGIN"),
-  LOGOUT("LOGOUT"),
+  // TODO: Add more action types
   TEST("TEST");
 
   private String value;

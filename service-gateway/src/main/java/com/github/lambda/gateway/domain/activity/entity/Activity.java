@@ -57,9 +57,20 @@ public class Activity extends BaseEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
       mappedBy = "activity"
   )
-  private List<Notification> notification = new ArrayList<>();
+  private List<Notification> notifications = new ArrayList<>();
 
   /**
    * functions
    */
+
+  public void addNotification(Notification notification) {
+    notification.setActivity(this);
+    this.notifications.add(notification);
+  }
+
+  public void removeNotification(Notification notification) {
+    notification.setActivity(null);
+    this.notifications.remove(notification);
+  }
+
 }
