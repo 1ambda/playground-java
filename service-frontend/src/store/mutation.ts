@@ -16,6 +16,10 @@ export default {
   },
 
   [Mutations.AUTH__LOGOUT](state: any) {
+    state[States.AUTH__USERNAME] = ""
+  },
+
+  [Mutations.AUTH__RESET](state: any) {
     const initialState = getDefaultState()
     state = Object.assign(state, initialState)
   },

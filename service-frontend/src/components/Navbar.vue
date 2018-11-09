@@ -98,7 +98,7 @@
   import {Component, Mixins, Vue} from "vue-property-decorator"
   import {mapActions, mapGetters, mapMutations, mapState} from "vuex"
   import {Action, Getter, Mutation, State,} from "vuex-class"
-  import * as Mutations from "@/store/mutation_type"
+  import * as Mutations from "@/store/mutation_type.ts"
   import * as States from "@/store/state_type"
   import * as Getters from "@/store/getter_type"
   import * as RouteType from "@/store/route_type"
@@ -135,6 +135,7 @@
      * vuex mappers and computed properties
      */
     @Mutation(Mutations.AUTH__LOGOUT) commitLogout
+    @Mutation(Mutations.AUTH__RESET) commitResetAllStates
     @Mutation(Mutations.AUTH__CLEAR_FLASH_MESSAGE) commitClearFlashMessage
 
     @State(States.AUTH__USERNAME) stateUsername
@@ -169,7 +170,12 @@
 
         this.commitLogout()
         this.$router.push(`/${RouteType.LOGIN}`)
-      }).catch(handleFailure)
+
+        // resetting state makes rendering slower, so make some delay
+        setTimeout(() => {
+          this.commitResetAllStates()
+        }, 1000)
+      })
     }
 
     /**
