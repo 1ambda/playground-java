@@ -1,0 +1,37 @@
+api:
+  # pseudo controller, to generate `WebsocketMessage`
+  connection:
+    post:
+      tags:
+      - websocket-controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      operationId: Connection
+      parameters:
+      - name: body
+        in: body
+        schema:
+          $ref: "./gateway-auth.yaml#/definitions/UserDTO"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessage"
+
+definitions:
+  WebsocketMessageType:
+    type: string
+    enum:
+    - Error
+    - Notification
+
+  WebsocketMessage:
+    type: object
+    properties:
+      failure:
+        $ref: "./common.yaml#/definitions/Failure"
+      type:
+        $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageType"
+
