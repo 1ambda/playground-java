@@ -1,3 +1,4 @@
+import {WebsocketMessageType} from "../generated/swagger";
 <template>
   <div class="home">
     <img src="../assets/main.png"
@@ -97,17 +98,42 @@
       <li>
         <a href="https://grpc.io/" target="_blank">gRPC</a>
       </li>
+
+      <el-button type="info" plain @click="test">Info</el-button>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator"
+  import * as Websocket from "@/common/websocket.service.ts"
+  import {
+    NotificationWebsocketMessage,
+    NotificationWebsocketMessageBody,
+    WebsocketMessageHeader,
+    WebsocketMessageType
+  } from "../generated/swagger"
 
   @Component({
     components: {},
   })
   export default class Home extends Vue {
+
+    test() {
+      const header: WebsocketMessageHeader = {
+        type: WebsocketMessageType.Notification,
+      }
+
+      const body: NotificationWebsocketMessageBody = {
+        message: "Hello",
+      }
+
+      const message: NotificationWebsocketMessage = {
+        header: header,
+        body: body,
+      }
+      Websocket.send(message)
+    }
   }
 </script>
 

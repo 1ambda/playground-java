@@ -1,7 +1,7 @@
 api:
   # pseudo controller, to generate `WebsocketMessage`
   connection:
-    post:
+    get:
       tags:
       - websocket-controller
       consumes:
@@ -13,12 +13,12 @@ api:
       - name: body
         in: body
         schema:
-          $ref: "./gateway-auth.yaml#/definitions/UserDTO"
+          $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageBase"
       responses:
         200:
           description: OK
           schema:
-            $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessage"
+            $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageInclusive"
 
 definitions:
   WebsocketMessageType:
@@ -27,11 +27,38 @@ definitions:
     - Error
     - Notification
 
-  WebsocketMessage:
+  # add all websocket messages here to generate models
+  WebsocketMessageInclusive:
+    type: object
+    properties:
+      notification:
+        $ref: "./gateway-websocket.yaml#/definitions/NotificationWebsocketMessage"
+
+  WebsocketMessageBase:
+    type: object
+    properties:
+      header:
+        $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageHeader"
+      body:
+        type: object
+        properties:
+
+  WebsocketMessageHeader:
     type: object
     properties:
       failure:
         $ref: "./common.yaml#/definitions/Failure"
       type:
         $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageType"
+
+  NotificationWebsocketMessage:
+    type: object
+    properties:
+      header:
+        $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageHeader"
+      body:
+        properties:
+          message:
+            type: string
+
 

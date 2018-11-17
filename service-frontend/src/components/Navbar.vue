@@ -107,7 +107,9 @@
   import {AuthAPI} from "@/common/auth.service.ts"
   import Alert from "@/components/Alert.vue"
   import {Failure,} from "@/generated/swagger"
-  import {handleFailure} from "../common/failure.util"
+  import * as WebsocketService from "@/common/websocket.service.ts"
+  import * as AlertService from "@/common/alert.service.ts"
+  import {WebsocketMessageBase} from "../generated/swagger"
 
   @Component({
     components: {},
@@ -130,6 +132,8 @@
 
     public defaultRouteIndex = ""
     public routeIndexMap = {}
+
+    wsErrorWatcher = null
 
     /**
      * vuex mappers and computed properties
@@ -155,6 +159,12 @@
         result[name] = route
         return result
       }, {})
+
+      this.subscribeWebsocketErrorMessage()
+    }
+
+    destroyed() {
+      this.unsubscribeWebsocketErrorMessage()
     }
 
     /**
@@ -164,12 +174,12 @@
     public handleLogoutClick() {
       AuthAPI.logout({credentials: "include"}).then((response) => {
         setTimeout(() => {
-          const alertOffsetFromTop = 70
-          this.displaySuccessAlert("Successfully Logged-out.", alertOffsetFromTop)
+          this.displaySuccessAlert("Successfully Logged-out.")
         }, 500)
 
         this.commitLogout()
         this.$router.push(`/${RouteType.LOGIN}`)
+        WebsocketService.disconnect()
 
         // resetting state makes rendering slower, so make some delay
         setTimeout(() => {
@@ -204,6 +214,28 @@
       return false
     }
 
+    subscribeWebsocketErrorMessage() {
+      this.wsErrorWatcher = WebsocketService.Watchers.Error().subscribe((wsErrorMessage: WebsocketMessageBase) => {
+        try {
+          const failure = wsErrorMessage.header.failure
+          const splitted = failure.type.split(".")
+          const canonical = splitted[splitted.length - 1]
+          const errorType = canonical.replace(/Exception/g, "")
+
+          AlertService.displayError({
+            title: `[WS] (${errorType})`,
+            message: failure.message,
+          })
+
+        } catch (e) {
+          console.log("Failed to display websocket error message", wsErrorMessage, e)
+        }
+      })
+    }
+
+    unsubscribeWebsocketErrorMessage() {
+      this.wsErrorWatcher.unsubscribe()
+    }
   }
 </script>
 

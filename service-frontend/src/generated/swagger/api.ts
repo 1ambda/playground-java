@@ -351,6 +351,40 @@ export interface Failure {
 /**
  * 
  * @export
+ * @interface NotificationWebsocketMessage
+ */
+export interface NotificationWebsocketMessage {
+    /**
+     * 
+     * @type {WebsocketMessageHeader}
+     * @memberof NotificationWebsocketMessage
+     */
+    header?: WebsocketMessageHeader;
+    /**
+     * 
+     * @type {NotificationWebsocketMessageBody}
+     * @memberof NotificationWebsocketMessage
+     */
+    body?: NotificationWebsocketMessageBody;
+}
+
+/**
+ * 
+ * @export
+ * @interface NotificationWebsocketMessageBody
+ */
+export interface NotificationWebsocketMessageBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof NotificationWebsocketMessageBody
+     */
+    message?: string;
+}
+
+/**
+ * 
+ * @export
  * @interface PaginatedProductDTO
  */
 export interface PaginatedProductDTO {
@@ -586,6 +620,70 @@ export interface UserDTO {
      * @memberof UserDTO
      */
     roles?: Array<string>;
+}
+
+/**
+ * 
+ * @export
+ * @interface WebsocketMessageBase
+ */
+export interface WebsocketMessageBase {
+    /**
+     * 
+     * @type {WebsocketMessageHeader}
+     * @memberof WebsocketMessageBase
+     */
+    header?: WebsocketMessageHeader;
+    /**
+     * 
+     * @type {any}
+     * @memberof WebsocketMessageBase
+     */
+    body?: any;
+}
+
+/**
+ * 
+ * @export
+ * @interface WebsocketMessageHeader
+ */
+export interface WebsocketMessageHeader {
+    /**
+     * 
+     * @type {Failure}
+     * @memberof WebsocketMessageHeader
+     */
+    failure?: Failure;
+    /**
+     * 
+     * @type {WebsocketMessageType}
+     * @memberof WebsocketMessageHeader
+     */
+    type?: WebsocketMessageType;
+}
+
+/**
+ * 
+ * @export
+ * @interface WebsocketMessageInclusive
+ */
+export interface WebsocketMessageInclusive {
+    /**
+     * 
+     * @type {NotificationWebsocketMessage}
+     * @memberof WebsocketMessageInclusive
+     */
+    notification?: NotificationWebsocketMessage;
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum WebsocketMessageType {
+    Error = <any> 'Error',
+    Notification = <any> 'Notification'
 }
 
 
@@ -1674,6 +1772,107 @@ export class CatalogControllerApi extends BaseAPI {
      */
     public findPaginatedProducts(page?: number, size?: number, sort?: Array<string>, categoryId?: number, search?: string, minPrice?: number, maxPrice?: number, minRate?: number, tags?: Array<string>, minShippingDate?: string, options?: any) {
         return CatalogControllerApiFp(this.configuration).findPaginatedProducts(page, size, sort, categoryId, search, minPrice, maxPrice, minRate, tags, minShippingDate, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * WebsocketControllerApi - fetch parameter creator
+ * @export
+ */
+export const WebsocketControllerApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {WebsocketMessageBase} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        connection(body?: WebsocketMessageBase, options: any = {}): FetchArgs {
+            const localVarPath = `/pseudo/controller/websocket`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"WebsocketMessageBase" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * WebsocketControllerApi - functional programming interface
+ * @export
+ */
+export const WebsocketControllerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {WebsocketMessageBase} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        connection(body?: WebsocketMessageBase, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebsocketMessageInclusive> {
+            const localVarFetchArgs = WebsocketControllerApiFetchParamCreator(configuration).connection(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * WebsocketControllerApi - factory interface
+ * @export
+ */
+export const WebsocketControllerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {WebsocketMessageBase} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        connection(body?: WebsocketMessageBase, options?: any) {
+            return WebsocketControllerApiFp(configuration).connection(body, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * WebsocketControllerApi - object-oriented interface
+ * @export
+ * @class WebsocketControllerApi
+ * @extends {BaseAPI}
+ */
+export class WebsocketControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebsocketControllerApi
+     */
+    public connection(body?: WebsocketMessageBase, options?: any) {
+        return WebsocketControllerApiFp(this.configuration).connection(body, options)(this.fetch, this.basePath);
     }
 
 }

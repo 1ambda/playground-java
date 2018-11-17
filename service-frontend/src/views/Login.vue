@@ -72,6 +72,7 @@
   import {Action, Getter, Mutation, State,} from "vuex-class"
   import Alert from "@/components/Alert.vue"
   import {Notification} from "element-ui"
+  import * as Websocket from "@/common/websocket.service.ts"
 
   @Component({
     components: {},
@@ -138,6 +139,7 @@
 
             this.commitLogin(response.username)
             this.$router.push(`/${RouteType.HOME}`)
+            Websocket.connect()
             this.closeAllAlerts()
           })
       })

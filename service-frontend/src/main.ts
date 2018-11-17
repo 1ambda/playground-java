@@ -7,6 +7,9 @@ import 'element-ui/lib/theme-chalk/display.css'
 import locale from "element-ui/lib/locale/lang/en"
 import "vue-awesome/icons"
 
+import "rxjs/add/operator/filter"
+import "rxjs/add/operator/map"
+
 import App from "@/App.vue"
 import {Router, Routes,} from "@/router.ts"
 import store from "@/store"
@@ -15,12 +18,12 @@ import * as Mutations from "@/store/mutation_type"
 import * as RouteType from "@/store/route_type"
 
 import "@/registerServiceWorker"
-
 import {AuthAPI} from "@/common/auth.service.ts"
 
 import Icon from "vue-awesome/components/Icon.vue"
 import BackToTop from "vue-backtotop"
 import {handleFailure} from "@/common/failure.util"
+import * as Websocket from "@/common/websocket.service.ts"
 
 /**
  * error handlers
@@ -76,6 +79,7 @@ AuthAPI.whoiam({credentials: "include"})
     }
 
     store.commit(Mutations.AUTH__LOGIN, response.username)
+    Websocket.connect()
 
     const currentPath = store.state.route.path
     const index = Routes.findIndex(r => currentPath === r.path)
@@ -84,6 +88,7 @@ AuthAPI.whoiam({credentials: "include"})
     if (index === -1 || index >= Routes.length) {
       console.error(`current path is ${currentPath} but it doesn't exist in available routes`)
       Router.push(`/${RouteType.HOME}`)
+
       return
     }
 

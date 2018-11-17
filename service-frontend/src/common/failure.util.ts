@@ -1,7 +1,7 @@
 import {Failure} from "@/generated/swagger"
 
-import {Notification} from "element-ui"
 import {Router,} from "@/router.ts"
+import * as Alerts from "@/common/alert.service.ts"
 
 function isPromise(response: any) {
   return response.promise
@@ -11,52 +11,6 @@ function isUnhandledPromise(response: any) {
   return isPromise(response) && response.type === "unhandledrejection"
 }
 
-const NotificationTextStyle = "font-size: 15px; text-align: start;"
-
-const defaultOffset = 70
-
-const displayError = ({title, message, offset}) => {
-  Notification.error({
-    offset: offset,
-    title: title,
-    message: message,
-    type: "error",
-    customClass: "global-title-alert-error",
-  })
-}
-
-const displayWarning = ({title, message, offset}) => {
-  Notification.error({
-    offset: offset,
-    title: title,
-    message: message,
-    type: "warning",
-    customClass: "global-title-alert-warning",
-  })
-}
-
-const displayInfo = ({title, message, offset}) => {
-  Notification.error({
-    offset: offset,
-    title: title,
-    message: message,
-    type: "info",
-    customClass: "global-title-alert-info",
-  })
-}
-
-
-const displaySuccess = ({title, message, offset}) => {
-  Notification.error({
-    offset: offset,
-    title: title,
-    message: message,
-    type: "success",
-    customClass: "global-title-alert-success",
-  })
-}
-
-
 export const handleFailure = (response: any) => {
   if (isUnhandledPromise(response)) {
     response = response.reason
@@ -65,8 +19,7 @@ export const handleFailure = (response: any) => {
   if (response.type === "cors" && response.status === 401) {
 
     if (response.url && response.url.includes("/api/auth/login")) {
-      displayError({
-        offset: defaultOffset,
+      Alerts.displayError({
         title: `Error (Unauthorized)`,
         message: "Username or password is invalid. Please check it.",
       })
@@ -76,8 +29,7 @@ export const handleFailure = (response: any) => {
 
     Router.push({path: "login"})
 
-    displayError({
-      offset: defaultOffset,
+    Alerts.displayError({
       title: `Error (Unauthorized)`,
       message: "Not authorized, Please login.",
     })
@@ -89,16 +41,14 @@ export const handleFailure = (response: any) => {
     console.error(response)
 
     if (response.message.includes("Failed to fetch")) {
-      displayError({
-        offset: defaultOffset,
+      Alerts.displayError({
         title: `Error (Server Connection)`,
         message: "Server is not available",
       })
       return
     }
 
-    displayError({
-      offset: defaultOffset,
+    Alerts.displayError({
       title: `Error (Client Runtime)`,
       message: response.message,
     })
@@ -109,8 +59,7 @@ export const handleFailure = (response: any) => {
   if (!response.json) {
     console.error(response)
 
-    displayError({
-      offset: defaultOffset,
+    Alerts.displayError({
       title: `Error (Unknown Response)`,
       message: response,
     })
@@ -120,8 +69,7 @@ export const handleFailure = (response: any) => {
 
   // handle NotFound
   if (response.status === 404) {
-    displayError({
-      offset: defaultOffset,
+    Alerts.displayError({
       title: `Error (Not Found)`,
       message: `${response.url}`,
     })
@@ -132,11 +80,11 @@ export const handleFailure = (response: any) => {
   response.json().then((parsed: Failure) => {
     const splitted = parsed.type.split(".")
     const canonical = splitted[splitted.length - 1]
+    const errorType = canonical.replace(/Exception/g, "")
 
     // session timed-out
     if (canonical === "InsufficientAuthenticationException") {
-      displayWarning({
-        offset: defaultOffset,
+      Alerts.displayWarning({
         title: `Session Expired`,
         message: "Please re-login.",
       })
@@ -145,9 +93,8 @@ export const handleFailure = (response: any) => {
       return
     }
 
-    displayError({
-      offset: defaultOffset,
-      title: `Error (${canonical})`,
+    Alerts.displayError({
+      title: `Error (${errorType})`,
       message: parsed.message,
     })
   })

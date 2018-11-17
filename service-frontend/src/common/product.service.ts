@@ -1,6 +1,7 @@
 import {AuthControllerApi, CartControllerApi, CatalogControllerApi} from "@/generated/swagger"
+import * as Endpoint from "@/common/endpoint.service.ts"
 
-const endpoint = process.env.VUE_APP_GATEWAY_ENDPOINT
+const endpoint = Endpoint.REST
 
 const catalogAPI = new CatalogControllerApi(undefined, endpoint)
 const cartAPI = new CartControllerApi(undefined, endpoint)

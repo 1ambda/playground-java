@@ -37,7 +37,7 @@ paths:
     $ref: "./gateway-cart.yaml#/api/CartLineOptionOperation"
 
   # pseudo controller, to generate `WebsocketMessage`
-  /websocket/connection:
+  /pseudo/controller/websocket:
     $ref: "./gateway-websocket.yaml#/api/connection"
 
 

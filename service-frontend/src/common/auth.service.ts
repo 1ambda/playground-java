@@ -1,8 +1,7 @@
 import {AuthControllerApi as AuthSwaggerApi, Configuration, ConfigurationParameters} from '@/generated/swagger'
+import * as Endpoint from "@/common/endpoint.service.ts"
 
-const endpoint = process.env.VUE_APP_GATEWAY_ENDPOINT
-
-console.log(endpoint)
+const endpoint = Endpoint.REST
 
 const authAPI = new AuthSwaggerApi(undefined, endpoint)
 
