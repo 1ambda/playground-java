@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 /**
  * SecurityService returns user principal (UserDetails).
@@ -70,15 +71,10 @@ public class SecurityService {
 
     Object raw = auth.getPrincipal();
     if (!(raw instanceof UserPrincipal)) {
-      return null;
+        return null;
     }
 
-    UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-
-    if (StringUtils.isEmpty(principal.getUsername())) {
-      return null;
-    }
-
+    UserPrincipal principal = (UserPrincipal) raw;
     return principal;
   }
 

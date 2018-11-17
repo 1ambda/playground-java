@@ -3,8 +3,8 @@ package com.github.lambda.gateway.swagger.client.api;
 import com.github.lambda.gateway.swagger.client.invoker.ApiClient;
 import com.github.lambda.gateway.swagger.client.invoker.EncodingUtils;
 
-import com.github.lambda.gateway.swagger.model.UserDTO;
-import com.github.lambda.gateway.swagger.model.WebsocketMessage;
+import com.github.lambda.gateway.swagger.model.WebsocketMessageBase;
+import com.github.lambda.gateway.swagger.model.WebsocketMessageInclusive;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,12 +20,12 @@ public interface WebsocketControllerApi extends ApiClient.Api {
    * 
    * 
     * @param body  (optional)
-   * @return WebsocketMessage
+   * @return WebsocketMessageInclusive
    */
-  @RequestLine("POST /websocket/connection")
+  @RequestLine("GET /pseudo/controller/websocket")
   @Headers({
     "Content-Type: application/json",
     "Accept: application/json",
   })
-  WebsocketMessage connection(UserDTO body);
+  WebsocketMessageInclusive connection(WebsocketMessageBase body);
 }

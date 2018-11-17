@@ -125,6 +125,7 @@ spring:
   redis.port: 6379
   redis.password: credential
   redis.ssl: false
+
 #
 # server
 #

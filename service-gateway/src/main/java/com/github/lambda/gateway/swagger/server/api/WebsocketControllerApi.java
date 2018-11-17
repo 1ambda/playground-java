@@ -5,8 +5,8 @@
  */
 package com.github.lambda.gateway.swagger.server.api;
 
-import com.github.lambda.gateway.swagger.model.UserDTO;
-import com.github.lambda.gateway.swagger.model.WebsocketMessage;
+import com.github.lambda.gateway.swagger.model.WebsocketMessageBase;
+import com.github.lambda.gateway.swagger.model.WebsocketMessageInclusive;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -47,18 +47,18 @@ public interface WebsocketControllerApi {
         return getRequest().map(r -> r.getHeader("Accept"));
     }
 
-    @ApiOperation(value = "", nickname = "connection", notes = "", response = WebsocketMessage.class, tags={ "websocket-controller", })
+    @ApiOperation(value = "", nickname = "connection", notes = "", response = WebsocketMessageInclusive.class, tags={ "websocket-controller", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = WebsocketMessage.class) })
-    @RequestMapping(value = "/websocket/connection",
+        @ApiResponse(code = 200, message = "OK", response = WebsocketMessageInclusive.class) })
+    @RequestMapping(value = "/pseudo/controller/websocket",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.POST)
-    default ResponseEntity<WebsocketMessage> connection(@ApiParam(value = ""  )  @Valid @RequestBody UserDTO body) {
+        method = RequestMethod.GET)
+    default ResponseEntity<WebsocketMessageInclusive> connection(@ApiParam(value = ""  )  @Valid @RequestBody WebsocketMessageBase body) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"failure\" : {    \"path\" : \"path\",    \"code\" : 6,    \"stacktrace\" : \"stacktrace\",    \"message\" : \"message\",    \"type\" : \"type\",    \"timestamp\" : 0  },  \"type\" : { }}", WebsocketMessage.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"notification\" : {    \"header\" : {      \"failure\" : {        \"path\" : \"path\",        \"code\" : 6,        \"stacktrace\" : \"stacktrace\",        \"message\" : \"message\",        \"type\" : \"type\",        \"timestamp\" : 0      },      \"type\" : { }    },    \"body\" : {      \"message\" : \"message\"    }  }}", WebsocketMessageInclusive.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

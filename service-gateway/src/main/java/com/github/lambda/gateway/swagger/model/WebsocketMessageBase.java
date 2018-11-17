@@ -3,8 +3,7 @@ package com.github.lambda.gateway.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.github.lambda.gateway.swagger.model.Failure;
-import com.github.lambda.gateway.swagger.model.WebsocketMessageType;
+import com.github.lambda.gateway.swagger.model.WebsocketMessageHeader;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * WebsocketMessage
+ * WebsocketMessageBase
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,47 +25,46 @@ import lombok.ToString;
 @ToString
 @Validated
 
-public class WebsocketMessage   {
-  @JsonProperty(value = "failure")
-  private Failure failure;
+public class WebsocketMessageBase   {
+  @JsonProperty(value = "header")
+  private WebsocketMessageHeader header;
 
-  @JsonProperty(value = "type")
-  private WebsocketMessageType type;
+  @JsonProperty(value = "body")
+  private Object body;
 
 
 
   /**
-   * Get failure
-   * @return failure
+   * Get header
+   * @return header
   **/
   @ApiModelProperty(value = "")
 
   @Valid
 
-  public Failure getFailure() {
-    return failure;
+  public WebsocketMessageHeader getHeader() {
+    return header;
   }
 
-  public void setFailure(Failure failure) {
-    this.failure = failure;
+  public void setHeader(WebsocketMessageHeader header) {
+    this.header = header;
   }
 
 
 
   /**
-   * Get type
-   * @return type
+   * Get body
+   * @return body
   **/
   @ApiModelProperty(value = "")
 
-  @Valid
 
-  public WebsocketMessageType getType() {
-    return type;
+  public Object getBody() {
+    return body;
   }
 
-  public void setType(WebsocketMessageType type) {
-    this.type = type;
+  public void setBody(Object body) {
+    this.body = body;
   }
 
 

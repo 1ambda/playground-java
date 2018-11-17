@@ -5,7 +5,6 @@ import com.github.lambda.gateway.security.SecurityLogoutHandler;
 import com.github.lambda.gateway.security.UserDetailsServiceImpl;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;

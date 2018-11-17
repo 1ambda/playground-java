@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -26,7 +27,7 @@ public class GatewayApplication {
   private ProfileManager profileManager;
 
   @PostConstruct
-  void after() {
+  void afterStartup() {
     // setup Timezone
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
@@ -37,4 +38,8 @@ public class GatewayApplication {
     environment.setup();
   }
 
+  @PreDestroy
+  void beforeShutdown() {
+
+  }
 }
