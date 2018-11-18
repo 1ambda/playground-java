@@ -58,7 +58,7 @@ public interface WebsocketControllerApi {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"notification\" : {    \"header\" : {      \"failure\" : {        \"path\" : \"path\",        \"code\" : 6,        \"stacktrace\" : \"stacktrace\",        \"message\" : \"message\",        \"type\" : \"type\",        \"timestamp\" : 0      },      \"type\" : { }    },    \"body\" : {      \"message\" : \"message\"    }  }}", WebsocketMessageInclusive.class), HttpStatus.NOT_IMPLEMENTED);
+                    return new ResponseEntity<>(getObjectMapper().get().readValue("{  \"notification\" : {    \"header\" : {      \"stage\" : { },      \"failure\" : {        \"path\" : \"path\",        \"code\" : 6,        \"stacktrace\" : \"stacktrace\",        \"message\" : \"message\",        \"type\" : \"type\",        \"timestamp\" : 0      },      \"segment\" : { },      \"destination\" : [ \"destination\", \"destination\" ],      \"type\" : { }    },    \"body\" : {      \"message\" : \"message\"    }  }}", WebsocketMessageInclusive.class), HttpStatus.NOT_IMPLEMENTED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

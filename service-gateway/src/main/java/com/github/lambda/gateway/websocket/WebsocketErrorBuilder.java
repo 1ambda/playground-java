@@ -20,17 +20,15 @@ public class WebsocketErrorBuilder {
   }
 
   public WebsocketMessageBase buildBadRequestError(Throwable t,
-                                                   String message,
-                                                   WebsocketMessageType type) {
+                                                   String message) {
 
-    return build(t, message, type, HttpStatus.BAD_REQUEST);
+    return build(t, message, WebsocketMessageType.ERROR, HttpStatus.BAD_REQUEST);
   }
 
   public WebsocketMessageBase buildInternalServerError(Throwable t,
-                                                       String message,
-                                                       WebsocketMessageType type) {
+                                                       String message) {
 
-    return build(t, message, type, HttpStatus.INTERNAL_SERVER_ERROR);
+    return build(t, message, WebsocketMessageType.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   public WebsocketMessageBase build(Throwable throwable,

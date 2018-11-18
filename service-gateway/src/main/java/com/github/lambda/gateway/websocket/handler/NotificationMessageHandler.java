@@ -1,24 +1,24 @@
 package com.github.lambda.gateway.websocket.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.lambda.gateway.swagger.model.NotificationWebsocketMessage;
+import com.github.lambda.gateway.swagger.model.*;
 import com.github.lambda.gateway.websocket.WebsocketErrorBuilder;
 import com.github.lambda.gateway.websocket.WebsocketMessageSerializer;
+import com.github.lambda.gateway.websocket.exception.WebsocketInvalidPayloadException;
+import com.github.lambda.gateway.websocket.pubsub.WebsocketProducer;
+import com.github.lambda.gateway.websocket.pubsub.kafka.WebsocketKafkaProducer;
 import com.github.lambda.gateway.websocket.session.WebsocketSessionManager;
 import com.github.lambda.gateway.websocket.session.WebsocketSessionRegistry;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.List;
+import java.util.Collections;
 
 @Component
 public class NotificationMessageHandler
-    implements WebsocketMessageHandler<NotificationWebsocketMessage> {
-
-  private static ObjectMapper mapper = new ObjectMapper();
+    implements WebsocketMessageHandler<NotificationWebsocketMessageBody> {
 
   @Getter
   private WebsocketErrorBuilder errorBuilder;
@@ -29,23 +29,39 @@ public class NotificationMessageHandler
   @Getter
   private WebsocketSessionRegistry registry;
 
+  @Getter
+  private WebsocketProducer producer;
+
   @Autowired
-  public NotificationMessageHandler(WebsocketMessageSerializer messageSerializer,
-                                    WebsocketSessionRegistry registry) {
+  public NotificationMessageHandler(WebsocketErrorBuilder errorBuilder,
+                                    WebsocketMessageSerializer messageSerializer,
+                                    WebsocketSessionRegistry registry,
+                                    @Qualifier(WebsocketKafkaProducer.TYPE)
+                                        WebsocketProducer producer) {
+    this.errorBuilder = errorBuilder;
     this.messageSerializer = messageSerializer;
     this.registry = registry;
+    this.producer = producer;
   }
 
   @Override
   public void dispatch(WebSocketSession session,
-                       NotificationWebsocketMessage message) {
+                       NotificationWebsocketMessageBody body) {
+
+    Throwable t = WebsocketInvalidPayloadException.create("Hello");
+    WebsocketMessageBase errorMessage = errorBuilder.buildBadRequestError(t, null);
 
     String username = WebsocketSessionManager.extractUsername(session);
-    List<WebSocketSession> userSessions = registry.getUserSessions(username);
 
-    final TextMessage serialized = messageSerializer.serialize(message);
-    userSessions.parallelStream().forEach(s -> {
-      send(s, serialized);
-    });
+    // set target
+    WebsocketMessageHeader header = errorMessage.getHeader().toBuilder()
+        .stage(WebsocketMessageStage.BEFOREPRODUCE)
+        .segment(WebsocketMessageSegment.USER)
+        .destination(Collections.singletonList(username))
+        .build();
+    errorMessage.setHeader(header);
+
+    String serialized = messageSerializer.serialize(errorMessage);
+    producer.send(serialized, username);
   }
 }

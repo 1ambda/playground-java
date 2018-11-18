@@ -1,10 +1,7 @@
 package com.github.lambda.gateway.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.lambda.gateway.swagger.model.NotificationWebsocketMessage;
-import com.github.lambda.gateway.swagger.model.WebsocketMessageBase;
-import com.github.lambda.gateway.swagger.model.WebsocketMessageHeader;
-import com.github.lambda.gateway.swagger.model.WebsocketMessageType;
+import com.github.lambda.gateway.swagger.model.*;
 import com.github.lambda.gateway.websocket.exception.WebsocketInvalidPayloadException;
 import com.github.lambda.gateway.websocket.handler.NotificationMessageHandler;
 import com.github.lambda.gateway.websocket.session.WebsocketSessionManager;
@@ -18,6 +15,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -80,42 +78,40 @@ public class WebsocketRootHandler extends TextWebSocketHandler {
     Principal principal = session.getPrincipal();
     String payload = raw.getPayload();
 
+    WebsocketMessageBase parsed = null;
+
     try {
-      WebsocketMessageBase parsed = null;
       parsed = mapper.readValue(payload, WebsocketMessageBase.class);
 
-      if (log.isDebugEnabled()) {
-        String username = principal.getName();
-        log.info("Websocket payload (session {} / username {})\n{}",
-                 sessionId, username, parsed);
+      Optional<WebsocketMessageBase> opt = messageSerializer.deserialize(payload);
+      if (!opt.isPresent()) {
+        Throwable t = WebsocketInvalidPayloadException.create("Websocket header or type is empty");
+        sendBadRequestError(session, t, null, null);
+        return;
       }
 
       WebsocketMessageHeader header = parsed.getHeader();
-      if (header == null) {
-        Throwable t = WebsocketInvalidPayloadException.create("Websocket header is empty");
-        sendBadRequestError(session, t, null, null);
-        return;
-      }
-
       WebsocketMessageType type = header.getType();
-      if (type == null) {
-        Throwable t = WebsocketInvalidPayloadException.create("Websocket type is empty");
-        sendBadRequestError(session, t, null, null);
-        return;
-      }
 
       switch (type) {
         case NOTIFICATION:
           NotificationWebsocketMessage message =
-              mapper.readValue(payload, NotificationWebsocketMessage.class);
+              messageSerializer.deserialize(NotificationWebsocketMessage.class, payload);
+          NotificationWebsocketMessageBody body = message.getBody();
 
-          notificationMessageHandler.dispatch(session, message);
+          notificationMessageHandler.dispatch(session, body);
           break;
       }
 
     } catch (Exception e) {
       log.error("Failed to dispatch payload {}", payload, e);
       sendInternalServerError(session, e, "Failed to dispatch payload", null);
+    }
+
+    if (log.isDebugEnabled()) {
+      String username = principal.getName();
+      log.info("Websocket payload (session {} / username {})\n{}",
+               sessionId, username, parsed);
     }
   }
 
@@ -124,8 +120,8 @@ public class WebsocketRootHandler extends TextWebSocketHandler {
                            String message,
                            WebsocketMessageType type) {
 
-    WebsocketMessageBase base = errorBuilder.buildBadRequestError(t, message, type);
-    TextMessage serialized = messageSerializer.serialize(base);
+    WebsocketMessageBase base = errorBuilder.buildBadRequestError(t, message);
+    TextMessage serialized = messageSerializer.toTextMessage(base);
 
     try {
       session.sendMessage(serialized);
@@ -141,8 +137,8 @@ public class WebsocketRootHandler extends TextWebSocketHandler {
                                String message,
                                WebsocketMessageType type) {
 
-    WebsocketMessageBase base = errorBuilder.buildInternalServerError(t, message, type);
-    TextMessage serialized = messageSerializer.serialize(base);
+    WebsocketMessageBase base = errorBuilder.buildInternalServerError(t, message);
+    TextMessage serialized = messageSerializer.toTextMessage(base);
 
     try {
       session.sendMessage(serialized);

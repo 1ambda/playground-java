@@ -63,6 +63,7 @@ ext {
 
     // storage
     mysqlConnectorVersion = '8.0.13'
+    springKafkaVersion = '2.2.0.RELEASE'
 
     // test
     testcontainersVersion = '1.9.1'
@@ -87,9 +88,12 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-websocket')
 
     compile('org.springframework.retry:spring-retry')
-
+    
+    compile('org.springframework.security:spring-security-messaging')
     compile('org.springframework.session:spring-session-core')
     compile('org.springframework.session:spring-session-data-redis')
+
+    compile("org.springframework.kafka:spring-kafka:${springKafkaVersion}")
 
     compile("de.codecentric:spring-boot-admin-starter-client:${springBootAdminVersion}")
     runtime('org.springframework.boot:spring-boot-devtools')

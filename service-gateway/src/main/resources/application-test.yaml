@@ -19,6 +19,9 @@ logging:
     # security
     org.springframework.security: DEBUG
 
+    # kafka
+    org.apache.kafka.clients: INFO
+
 spring.jpa.show-sql: false # Use logger output instead
 spring.jpa.properties.hibernate.format_sql: true
 spring.jpa.properties.hibernate.generate_statistics: false

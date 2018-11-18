@@ -49,14 +49,27 @@ compose.clean:
 	@ echo "\n-----------------------------------------"
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Finished: Cleaning docker resources"
 
-.PHONY: mycli
-mycli:
+.PHONY: mysql.cli
+mysql.cli:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Connecting to mysql"
 	@ $(MYSQLCLIENT) -u root -h localhost application -p root
 
-.PHONY: redis-cli
-redis-cli:
+.PHONY: redis.cli
+redis.cli:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Connecting to redis"
 	@ redis-cli
 
+.PHONY: kafka.consume.websocket
+kafka.consume.websocket:
+	@ KT_BROKERS=0.0.0.0:9092 kt consume \
+		-topic application.gateway.websocket.raw \
+		-group makefile | jq
+
+.PHONY: kafka.topic
+kafka.topic:
+	@ KT_BROKERS=0.0.0.0:9092 kt topic | jq
+
+.PHONY: kafka.partition
+kafka.partition:
+	@ KT_BROKERS=0.0.0.0:9092 kt group
 

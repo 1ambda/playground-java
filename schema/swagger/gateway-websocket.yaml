@@ -27,6 +27,19 @@ definitions:
     - Error
     - Notification
 
+  WebsocketMessageSegment:
+    type: string
+    enum:
+    - User
+    - Group
+    - Universe
+
+  WebsocketMessageStage:
+    type: string
+    enum:
+    - BeforeProduce
+    - BeforeBroadcast
+
   # add all websocket messages here to generate models
   WebsocketMessageInclusive:
     type: object
@@ -50,6 +63,14 @@ definitions:
         $ref: "./common.yaml#/definitions/Failure"
       type:
         $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageType"
+      segment:
+        $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageSegment"
+      destination:
+        type: array
+        items:
+          type: string
+      stage:
+        $ref: "./gateway-websocket.yaml#/definitions/WebsocketMessageStage"
 
   NotificationWebsocketMessage:
     type: object

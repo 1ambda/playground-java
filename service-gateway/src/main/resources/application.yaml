@@ -18,6 +18,9 @@ logging:
     # security
     org.springframework.security: INFO
 
+    # kafka
+    org.apache.kafka.clients: WARN
+
 spring.jpa.show-sql: false # Use logger output instead
 spring.jpa.properties.hibernate.format_sql: true
 
@@ -125,6 +128,17 @@ spring:
   redis.port: 6379
   redis.password: credential
   redis.ssl: false
+
+#
+# kafka related
+#
+spring.autoconfigure.exclude:
+  org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+
+application.gateway.websocket:
+  kafka.brokers: ${GATEWAY_KAFKA_BROKERS:localhost:9092}
+  kafka.client-id: gateway
+  kafka.consumer-group: ${GATEWAY_WEBSOCKET_KAFKA_GROUP:gateway-local}
 
 #
 # server

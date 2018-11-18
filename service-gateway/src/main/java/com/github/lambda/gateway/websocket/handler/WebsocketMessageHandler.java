@@ -1,17 +1,18 @@
 package com.github.lambda.gateway.websocket.handler;
 
 import com.github.lambda.gateway.swagger.model.WebsocketMessageBase;
-import com.github.lambda.gateway.swagger.model.WebsocketMessageType;
 import com.github.lambda.gateway.websocket.WebsocketErrorBuilder;
 import com.github.lambda.gateway.websocket.WebsocketMessageSerializer;
 import com.github.lambda.gateway.websocket.exception.WebsocketMessageSendException;
+import com.github.lambda.gateway.websocket.pubsub.WebsocketProducer;
 import com.github.lambda.gateway.websocket.session.WebsocketSessionRegistry;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.util.List;
 
-public interface WebsocketMessageHandler<M> {
+public interface WebsocketMessageHandler<B> {
 
   WebsocketSessionRegistry getRegistry();
 
@@ -19,34 +20,37 @@ public interface WebsocketMessageHandler<M> {
 
   WebsocketErrorBuilder getErrorBuilder();
 
-  void dispatch(WebSocketSession session, M message);
+  WebsocketProducer getProducer();
+
+  void dispatch(WebSocketSession session, B body);
 
   default void sendBadRequestError(WebSocketSession session,
                                    Throwable t,
-                                   String message,
-                                   WebsocketMessageType type) {
+                                   String message) {
 
     WebsocketErrorBuilder errorBuilder = getErrorBuilder();
-    WebsocketMessageBase base = errorBuilder.buildBadRequestError(t, message, type);
+    WebsocketMessageBase base = errorBuilder.buildBadRequestError(t, message);
 
     WebsocketMessageSerializer messageSerializer = getMessageSerializer();
-    TextMessage serialized = messageSerializer.serialize(base);
+    TextMessage serialized = messageSerializer.toTextMessage(base);
 
-    send(session, serialized);
+    sendBack(session, serialized);
   }
 
-  default void send(WebSocketSession session, M message) {
-    try {
-      WebsocketMessageSerializer serializer = getMessageSerializer();
-      TextMessage serialized = serializer.serialize(message);
-      session.sendMessage(serialized);
+  default void sendInternalServerError(WebSocketSession session,
+                                       Throwable t,
+                                       String message) {
 
-    } catch (IOException e) {
-      throw WebsocketMessageSendException.create(e);
-    }
+    WebsocketErrorBuilder errorBuilder = getErrorBuilder();
+    WebsocketMessageBase base = errorBuilder.buildInternalServerError(t, message);
+
+    WebsocketMessageSerializer messageSerializer = getMessageSerializer();
+    TextMessage serialized = messageSerializer.toTextMessage(base);
+
+    sendBack(session, serialized);
   }
 
-  default void send(WebSocketSession session, TextMessage message) {
+  default void sendBack(WebSocketSession session, TextMessage message) {
     try {
       session.sendMessage(message);
 
@@ -54,4 +58,5 @@ public interface WebsocketMessageHandler<M> {
       throw WebsocketMessageSendException.create(e);
     }
   }
+
 }
